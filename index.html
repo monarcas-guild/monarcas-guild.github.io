@@ -9,6 +9,25 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
 
   <style>
+    body::before {
+  background: linear-gradient(to top, rgba(0,0,0,0.85), rgba(0,0,0,0.4));
+}
+
+    .content {
+  animation: fadeUp 1s ease forwards;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
     .content {
   backdrop-filter: blur(8px);
   background: rgba(0,0,0,0.4);
@@ -114,6 +133,10 @@
     <a href="#" class="discord-btn">
       🚀 Unirse ahora
     </a>
+    <p class="subtext">
+Servidor 05 • PvP activo • Comunidad competitiva
+</p>
+
   </div>
 
 </body>
