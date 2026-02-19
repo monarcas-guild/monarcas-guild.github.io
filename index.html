@@ -1,1 +1,102 @@
-<h1>hola monarcas<h1>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guild Monarcas</title>
+
+  <!-- Fuente moderna -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      height: 100vh;
+      background: url('./assets/bg-desktop.jpg') no-repeat center center;
+      background-size: cover;
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-start;
+      color: white;
+    }
+
+    /* Overlay oscuro para mejorar legibilidad */
+    body::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.2));
+      z-index: 0;
+    }
+
+    .content {
+      position: relative;
+      z-index: 1;
+      padding: 60px;
+      max-width: 500px;
+    }
+
+    .content h1 {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      line-height: 1.2;
+    }
+
+    .discord-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #5865F2;
+      color: white;
+      text-decoration: none;
+      padding: 14px 22px;
+      border-radius: 12px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 30px rgba(88, 101, 242, 0.5);
+    }
+
+    .discord-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 40px rgba(88, 101, 242, 0.7);
+      background: #4752c4;
+    }
+
+    /* RESPONSIVE MOBILE */
+    @media (max-width: 768px) {
+      body {
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+
+      .content {
+        padding: 30px;
+      }
+
+      .content h1 {
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="content">
+    <h1>Únete a nuestro Discord</h1>
+    
+    <a href="#" class="discord-btn">
+      🚀 Unirse ahora
+    </a>
+  </div>
+
+</body>
+</html>
