@@ -54,6 +54,7 @@
          color: white;
       }
 
+
       /* Overlay oscuro para mejorar legibilidad */
       body::before {
          content: "";
@@ -113,11 +114,30 @@
 
       /* RESPONSIVE MOBILE */
       @media (max-width: 768px) {
-         body {
-            align-items: center;
-            justify-content: center;
-            text-align: center;
+         .content {
+            background: black;
+            margin: 0 !important;
+            bottom: 0 !important;
+            height: 330px !important;
+            border-radius: 0 !important;
          }
+
+         .content h1 {
+            margin-top: 50px;
+
+         }
+
+         body {
+            height: 100vh;
+            background: url('https://i.ibb.co/99N7s7zq/df6ec5b4-f2e0-480a-8fe5-b5c66ddaa29b.png') no-repeat !important;
+            background-size: cover;
+            display: flex;
+            align-items: flex-end;
+            justify-content: flex-start;
+            color: white;
+            background-size: contain !important;
+         }
+
 
          .content {
             padding: 30px;
