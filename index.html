@@ -1,175 +1,534 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 
 <head>
-   <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>Guild Monarcas</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TransBot | Discord Translator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&family=Inter:wght@400;700&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            background-color: #000000;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
 
-   <!-- Fuente moderna -->
-   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+        .heading {
+            font-family: 'Space Grotesk', sans-serif;
+            text-transform: uppercase;
+        }
 
-   <style>
-      body::before {
-         background: linear-gradient(to top, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.4));
-      }
+        .neon-border {
+            border: 1px solid #00FF41;
+            box-shadow: 0 0 15px rgba(0, 255, 65, 0.1);
+        }
 
-      .content {
-         animation: fadeUp 1s ease forwards;
-      }
+        @keyframes scroll {
+            0% {
+                transform: translateX(0);
+            }
 
-      @keyframes fadeUp {
-         from {
-            opacity: 0;
-            transform: translateY(40px);
-         }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
 
-         to {
-            opacity: 1;
-            transform: translateY(0);
-         }
-      }
-
-      .content {
-         backdrop-filter: blur(8px);
-         background: rgba(0, 0, 0, 0.4);
-         padding: 40px;
-         border-radius: 16px;
-      }
-
-      * {
-         margin: 0;
-         padding: 0;
-         box-sizing: border-box;
-         font-family: 'Poppins', sans-serif;
-      }
-
-      body {
-         height: 100vh;
-         background: url('https://i.ibb.co/svLF9HyP/9aef5457-85d1-45af-898b-d801a8309378.png') no-repeat center center;
-         background-size: cover;
-         display: flex;
-         align-items: flex-end;
-         justify-content: flex-start;
-         color: white;
-      }
-
-
-      /* Overlay oscuro para mejorar legibilidad */
-      body::before {
-         content: "";
-         position: absolute;
-         inset: 0;
-         z-index: 0;
-      }
-
-      .content {
-         position: relative;
-         z-index: 1;
-         padding: 40px;
-         max-width: 500px;
-         margin-left: 40px;
-         margin-bottom: 40px;
-      }
-
-      .content h1 {
-         font-size: 32px;
-         font-weight: 700;
-         margin-bottom: 20px;
-         line-height: 1.2;
-      }
-
-      .discord-btn {
-         font-size: 18px;
-         padding: 16px 28px;
-         border-radius: 14px;
-         background: linear-gradient(135deg, #5865F2, #7b86ff);
-         box-shadow: 0 0 25px rgba(88, 101, 242, 0.7);
-      }
-
-      .discord-btn:hover {
-         transform: scale(1.05);
-         box-shadow: 0 0 40px rgba(88, 101, 242, 1);
-      }
-
-      .discord-btn {
-         display: inline-flex;
-         align-items: center;
-         gap: 10px;
-         background: #5865F2;
-         color: white;
-         text-decoration: none;
-         padding: 14px 22px;
-         border-radius: 12px;
-         font-weight: 500;
-         transition: all 0.3s ease;
-         box-shadow: 0 10px 30px rgba(88, 101, 242, 0.5);
-      }
-
-      .discord-btn:hover {
-         transform: translateY(-3px);
-         box-shadow: 0 15px 40px rgba(88, 101, 242, 0.7);
-         background: #4752c4;
-      }
-
-      /* RESPONSIVE MOBILE */
-      @media (max-width: 768px) {
-         .content {
-            background: black;
-            margin: 0 !important;
-            bottom: 0 !important;
-            height: 330px !important;
-            border-radius: 0 !important;
-         }
-
-         .content h1 {
-            margin-top: 50px;
-
-         }
-
-         body {
-            height: 100vh;
-            background: url('https://i.ibb.co/99N7s7zq/df6ec5b4-f2e0-480a-8fe5-b5c66ddaa29b.png') no-repeat !important;
-            background-size: cover;
+        .animate-infinite-scroll {
             display: flex;
-            align-items: flex-end;
-            justify-content: flex-start;
-            color: white;
-            background-size: contain !important;
-         }
-
-
-         .content {
-            padding: 30px;
-            margin-left: 10px;
-            margin-bottom: 0px;
-            margin-right: 10px;
-            max-width: 100%;
-            position: absolute;
-            bottom: 50px;
-         }
-
-         .content h1 {
-            font-size: 24px;
-         }
-      }
-   </style>
+            width: max-content;
+            animation: scroll 25s linear infinite;
+        }
+    </style>
 </head>
 
-<body>
+<body class="text-white">
 
-   <div class="content">
-      <h1>Únete a nuestro Discord</h1>
+    <nav id="top"
+        class="flex justify-between items-center p-6 md:p-8 max-w-7xl mx-auto sticky top-0 bg-black/80 backdrop-blur-md z-50">
+        <a onclick="scrollToTop()"
+            class="text-xl md:text-2xl font-bold tracking-tighter italic hover:opacity-80 transition-opacity cursor-pointer select-none">
+            NEO<span class="text-[#00FF41]">TRANSLATOR</span>
+        </a>
 
-      <a href="#" class="discord-btn">
-         🚀 Unirse ahora
-      </a><br><br>
-      <p class="subtext">
-         Servidor 05 • PvP activo • Comunidad competitiva
-      </p>
+        <div class="flex items-center gap-4 md:gap-8">
+            <div class="hidden md:flex gap-8 text-xs font-bold uppercase tracking-widest text-gray-400">
+                <a href="#features" class="hover:text-[#00FF41] transition" data-i18n="nav-features">Features</a>
+                <a href="#pricing" class="hover:text-[#00FF41] transition" data-i18n="nav-pricing">Pricing</a>
+            </div>
 
-   </div>
+            <select id="languageSelector" onchange="changeLanguage(this.value)"
+                class="bg-black border border-white/20 text-[10px] font-bold uppercase p-1.5 outline-none cursor-pointer hover:border-[#00FF41] transition rounded-sm">
+                <option value="en">English</option>
+                <option value="es">Español</option>
+                <option value="pt">Português</option>
+                <option value="fr">Français</option>
+                <option value="de">Deutsch</option>
+                <option value="ja">日本語</option>
+            </select>
 
+            <button
+                class="bg-[#5865F2] px-5 py-2 font-bold uppercase text-[10px] tracking-widest hover:bg-white hover:text-black transition"
+                data-i18n="nav-add">Add Bot</button>
+        </div>
+    </nav>
+
+    <section
+        class="max-w-[1600px] mx-auto px-6 pt-16 md:pt-24 pb-20 md:pb-32 flex flex-col items-center border-b border-white/5">
+        <div class="text-center max-w-3xl mx-auto mb-16 md:mb-24">
+            <h1 class="heading text-5xl sm:text-6xl md:text-7xl leading-[0.9] mb-6 tracking-tighter"
+                data-i18n="hero-title">
+                Break <br> <span class="text-[#00FF41]">Language</span> <br> Barriers.
+            </h1>
+            <p class="text-gray-400 text-lg md:text-xl mb-10 mx-auto max-w-md" data-i18n="hero-desc">
+                Automatically translate messages between your community members in real time. One chat. All languages.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button
+                    class="bg-[#00FF41] text-black font-black px-8 py-5 text-lg uppercase tracking-tighter hover:scale-105 transition-transform w-full sm:w-auto"
+                    data-i18n="btn-add">Add to Discord</button>
+                <button
+                    class="border-2 border-white text-white font-black px-8 py-5 text-lg uppercase tracking-tighter hover:bg-white hover:text-black transition w-full sm:w-auto"
+                    data-i18n="btn-how">See how it works</button>
+            </div>
+        </div>
+
+        <div class="w-full max-w-[1400px] mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6 md:gap-2 relative">
+                <div class="w-full md:w-[31%] bg-[#313338] border border-white/10 rounded-lg shadow-2xl flex flex-col">
+                    <div
+                        class="bg-[#2b2d31] p-3 px-4 rounded-t-lg flex items-center justify-between border-b border-black/20">
+                        <div class="flex items-center gap-2"><span class="text-gray-400 text-xl font-mono">#</span><span
+                                class="text-sm font-bold text-white">english-chat</span></div>
+                        <div class="w-2 h-2 rounded-full bg-green-500"></div>
+                    </div>
+                    <div class="p-5 min-h-[160px]">
+                        <div class="flex gap-4">
+                            <div
+                                class="w-10 h-10 rounded-full bg-[#5865F2] shrink-0 flex items-center justify-center font-bold text-xl text-white">
+                                G</div>
+                            <div>
+                                <div class="flex items-center gap-2 mb-0.5"><span
+                                        class="text-[14px] font-semibold text-white">Global Gamer</span><span
+                                        class="text-[11px] text-gray-500">7:45 PM</span></div>
+                                <p class="text-[14px] text-[#dbdee1] leading-snug">Hey team, are we still on for the
+                                    raid in 20 minutes?</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center justify-center text-[#00FF41] animate-pulse py-2 md:py-0"><svg
+                        class="w-8 h-8 rotate-90 md:rotate-0" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="3">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg></div>
+                <div class="w-full md:w-[31%] bg-[#313338] border border-white/10 rounded-lg shadow-2xl flex flex-col">
+                    <div
+                        class="bg-[#2b2d31] p-3 px-4 rounded-t-lg flex items-center justify-between border-b border-black/20">
+                        <div class="flex items-center gap-2"><span class="text-gray-400 text-xl font-mono">#</span><span
+                                class="text-sm font-bold text-white">español-chat</span></div>
+                        <span
+                            class="text-[9px] bg-white/10 text-gray-400 px-1.5 py-0.5 rounded font-bold uppercase">Linked</span>
+                    </div>
+                    <div class="p-5 min-h-[160px]">
+                        <div class="flex gap-4 opacity-90">
+                            <div
+                                class="w-10 h-10 rounded-full bg-[#5865F2]/70 shrink-0 flex items-center justify-center font-bold text-xl text-white/80">
+                                G</div>
+                            <div>
+                                <div class="flex items-center gap-2 mb-0.5"><span
+                                        class="text-[14px] font-semibold text-white">Global Gamer</span><span
+                                        class="bg-[#5865f2] text-white text-[9px] px-1.5 py-0.5 rounded-[3px] font-bold">APP</span>
+                                </div>
+                                <p class="text-[14px] text-[#b5bac1] leading-snug">Hola equipo, ¿seguimos en pie para la
+                                    incursión en 20 minutos?</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center justify-center text-[#00FF41] animate-pulse py-2 md:py-0"><svg
+                        class="w-8 h-8 rotate-90 md:rotate-0" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="3">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg></div>
+                <div class="w-full md:w-[31%] bg-[#313338] border border-white/10 rounded-lg shadow-2xl flex flex-col">
+                    <div
+                        class="bg-[#2b2d31] p-3 px-4 rounded-t-lg flex items-center justify-between border-b border-black/20">
+                        <div class="flex items-center gap-2"><span class="text-gray-400 text-xl font-mono">#</span><span
+                                class="text-sm font-bold text-white">japonés-chat</span></div>
+                        <div class="w-2 h-2 rounded-full bg-green-500"></div>
+                    </div>
+                    <div class="p-5 min-h-[160px]">
+                        <div class="flex gap-4 opacity-90">
+                            <div
+                                class="w-10 h-10 rounded-full bg-[#5865F2]/70 shrink-0 flex items-center justify-center font-bold text-xl text-white/80">
+                                G</div>
+                            <div>
+                                <div class="flex items-center gap-2 mb-0.5"><span
+                                        class="text-[14px] font-semibold text-white">Global Gamer</span><span
+                                        class="bg-[#5865f2] text-white text-[9px] px-1.5 py-0.5 rounded-[3px] font-bold">APP</span>
+                                </div>
+                                <p class="text-[14px] text-[#b5bac1] leading-snug">チームのみなさん、20分後のレイドはまだ有効ですか？</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="bg-[#00FF41] text-black py-10 border-y-4 border-black overflow-hidden">
+        <div class="animate-infinite-scroll">
+            <h2 class="heading text-6xl md:text-8xl font-black px-10" data-i18n="banner-text">REAL-TIME • 100+ LANGUAGES
+                • NO LAG • SMART DETECTION</h2>
+            <h2 class="heading text-6xl md:text-8xl font-black px-10" data-i18n="banner-text">REAL-TIME • 100+ LANGUAGES
+                • NO LAG • SMART DETECTION</h2>
+        </div>
+    </section>
+
+    <section id="features" class="max-w-7xl mx-auto px-6 py-24 md:py-32">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-px bg-white/10 border border-white/10">
+            <div class="bg-black p-10 hover:bg-[#00FF41] hover:text-black transition group text-center md:text-left">
+                <span class="text-3xl mb-4 block">⚡</span>
+                <h3 class="heading text-xl mb-2" data-i18n="feat-1-t">Instant</h3>
+                <p class="text-gray-500 group-hover:text-black/70 text-sm" data-i18n="feat-1-d">Real-time translation
+                    with no perceptible latency.</p>
+            </div>
+            <div class="bg-black p-10 hover:bg-[#5865F2] transition group text-center md:text-left">
+                <span class="text-3xl mb-4 block">🌍</span>
+                <h3 class="heading text-xl mb-2" data-i18n="feat-2-t">100+ Langs</h3>
+                <p class="text-gray-500 group-hover:text-white/70 text-sm" data-i18n="feat-2-d">Full support for the
+                    world's most spoken languages.</p>
+            </div>
+            <div class="bg-black p-10 hover:bg-[#00FF41] hover:text-black transition group text-center md:text-left">
+                <span class="text-3xl mb-4 block">🤖</span>
+                <h3 class="heading text-xl mb-2" data-i18n="feat-3-t">Auto-Detect</h3>
+                <p class="text-gray-500 group-hover:text-black/70 text-sm" data-i18n="feat-3-d">Smart language detection
+                    without commands.</p>
+            </div>
+            <div class="bg-black p-10 hover:bg-[#5865F2] transition group text-center md:text-left">
+                <span class="text-3xl mb-4 block">🔗</span>
+                <h3 class="heading text-xl mb-2" data-i18n="feat-4-t">Linking</h3>
+                <p class="text-gray-500 group-hover:text-white/70 text-sm" data-i18n="feat-4-d">Connect multiple
+                    channels seamlessly.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="pricing" class="max-w-5xl mx-auto px-6 py-20 text-center">
+        <h2 class="heading text-4xl md:text-6xl mb-16 italic underline decoration-[#00FF41]" data-i18n="pricing-h">The
+            Pricing</h2>
+        <div class="grid md:grid-cols-2 gap-12">
+            <div class="border border-white/20 p-10 flex flex-col items-center">
+                <h3 class="heading text-2xl mb-2" data-i18n="plan-f-t">Free Plan</h3>
+                <div class="text-5xl font-black mb-6">$0</div>
+                <ul class="text-gray-500 space-y-3 mb-10 text-sm uppercase font-bold tracking-widest"
+                    data-i18n="plan-f-l">
+                    <li>Basic Translation</li>
+                    <li>5 Channels</li>
+                    <li>Community Support</li>
+                </ul>
+                <button class="w-full border border-white py-4 font-bold hover:bg-white hover:text-black transition"
+                    data-i18n="btn-current">Current Plan</button>
+            </div>
+            <div class="neon-border bg-[#00FF41] text-black p-10 flex flex-col items-center scale-105">
+                <h3 class="heading text-2xl mb-2" data-i18n="plan-p-t">Pro Plan</h3>
+                <div class="text-5xl font-black mb-6">$9<span class="text-xl">/mo</span></div>
+                <ul class="space-y-3 mb-10 text-sm uppercase font-bold tracking-widest" data-i18n="plan-p-l">
+                    <li>Unlimited Channels</li>
+                    <li>AI Engine</li>
+                    <li>Priority Support</li>
+                </ul>
+                <button class="w-full bg-black text-white py-4 font-bold hover:bg-gray-800 transition"
+                    data-i18n="btn-upgrade">Upgrade Now</button>
+            </div>
+        </div>
+    </section>
+
+
+    <section id="comparison" class="max-w-6xl mx-auto px-6 py-24 border-t border-white/5">
+        <section id="comparison" class="max-w-6xl mx-auto px-6 py-24 border-t border-white/5">
+            <div class="text-center mb-16">
+                <h2 class="heading text-4xl md:text-6xl italic mb-4" data-i18n="comp-h2">The Real Difference</h2>
+                <p class="text-gray-500 uppercase tracking-widest font-bold text-xs" data-i18n="comp-sub">Visual &
+                    Functional Comparison</p>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-8">
+
+                <div class="bg-black border border-red-500/20 p-8 rounded-xl relative">
+                    <div
+                        class="absolute -top-3 left-6 bg-red-600 text-white text-[10px] px-3 py-1 font-black uppercase rounded">
+                        Competencia</div>
+
+                    <div class="discord-bg p-4 rounded-md space-y-4 font-['Inter']">
+                        <div class="flex gap-3">
+                            <img src="https://ui-avatars.com/api/?name=Carlos&background=random"
+                                class="w-10 h-10 rounded-full shrink-0">
+                            <div class="text-sm">
+                                <span class="font-bold text-white">Carlos [ES]</span> <span
+                                    class="text-[10px] text-gray-500 ml-2">13:04</span>
+                                <p class="text-[#dbdee1]">¿Vamos a hacer raid hoy?</p>
+                            </div>
+                        </div>
+
+                        <div class="ml-12 border-l-4 border-[#1e1f22] bg-[#2b2d31] p-3 rounded-r-md max-w-[90%]">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="text-[11px] font-bold text-white">Carlos [EN]</span>
+                                <span class="bg-[#5865f2] text-[9px] px-1 rounded-sm font-bold uppercase">BOT</span>
+                            </div>
+                            <p class="text-[13px] text-[#b5bac1] italic">Are we doing a raid today?</p>
+                        </div>
+
+                        <div class="mt-6 p-3 bg-red-500/10 border border-red-500/30 rounded text-[11px] text-red-400">
+                            <strong class="block mb-1">❌ LIMITACIÓN:</strong>
+                            No soporta respuestas (replies). El contexto se pierde y el chat se llena de rectángulos
+                            rígidos.
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    class="bg-black border border-[#00FF41]/30 p-8 rounded-xl relative shadow-[0_0_30px_rgba(0,255,65,0.05)]">
+                    <div
+                        class="absolute -top-3 left-6 bg-[#00FF41] text-black text-[10px] px-3 py-1 font-black uppercase rounded">
+                        NeoTranslator</div>
+
+                    <div class="discord-bg p-4 rounded-md space-y-4 font-['Inter']">
+                        <div class="relative pt-4">
+                            <div
+                                class="absolute top-0 left-5 w-6 h-4 border-t-2 border-l-2 border-[#4e5058] rounded-tl-lg">
+                            </div>
+                            <div class="flex items-center gap-2 ml-12 mb-1 opacity-60">
+                                <img src="https://ui-avatars.com/api/?name=Carlos&background=random"
+                                    class="w-4 h-4 rounded-full">
+                                <span class="text-[11px] text-gray-400 truncate">¿Vamos a hacer raid hoy?</span>
+                            </div>
+
+                            <div class="flex gap-3">
+                                <img src="https://ui-avatars.com/api/?name=Carlos&background=random"
+                                    class="w-10 h-10 rounded-full shrink-0">
+                                <div class="text-sm">
+                                    <div class="flex items-center gap-2">
+                                        <span class="font-bold text-white">Carlos</span>
+                                        <span
+                                            class="bg-[#5865f2] text-[9px] px-1 rounded-sm font-bold uppercase">APP</span>
+                                        <span class="text-[10px] text-gray-500">Today at 13:04</span>
+                                    </div>
+                                    <p class="text-[#dbdee1] mt-0.5">Are we doing a raid today?</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div
+                            class="mt-6 p-3 bg-[#00FF41]/10 border border-[#00FF41]/30 rounded text-[11px] text-[#00FF41]">
+                            <strong class="block mb-1">✅ INTEGRACIÓN TOTAL:</strong>
+                            Se ve y se comporta como un usuario real. Soporta hilos, respuestas y mantiene la estética
+                            limpia de Discord.
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <div
+            class="bg-[#00FF41]/5 p-8 rounded-2xl border border-[#00FF41]/30 relative overflow-hidden shadow-[0_0_50px_rgba(0,255,65,0.05)]">
+            <div class="absolute top-4 right-6 text-[10px] font-black uppercase text-[#00FF41] tracking-tighter"
+                data-i18n="comp-good">NeoTranslator</div>
+            <h3 class="heading text-xl mb-8 text-[#00FF41]" data-i18n="comp-good-t">Native Replies</h3>
+
+            <div class="discord-bg p-4 rounded-md space-y-6">
+                <div class="relative">
+                    <div class="flex items-center gap-2 ml-4 mb-1 opacity-50">
+                        <div class="w-4 h-1 border-t-2 border-l-2 border-gray-500 rounded-tl-md"></div>
+                        <div class="w-4 h-4 rounded-full bg-blue-500/20"></div>
+                        <span class="text-[10px] text-gray-400 truncate">Ya comenzamos con la raid?...</span>
+                    </div>
+                    <div class="flex gap-3">
+                        <div
+                            class="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center text-[10px] font-bold shrink-0">
+                            A</div>
+                        <div class="text-xs">
+                            <div class="flex items-center gap-1">
+                                <span class="font-bold">Tadeu</span>
+                                <span class="bg-[#5865f2] text-[8px] px-1 rounded-sm font-bold uppercase">App</span>
+                                <span class="text-[9px] text-gray-500 ml-1">Today at 13:04</span>
+                            </div>
+                            <p class="text-gray-100 mt-1 leading-relaxed">Ya estámos comenzando, solo faltas tu </p>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-[10px] text-[#00FF41] font-bold uppercase mt-4" data-i18n="comp-good-note">✔ Full
+                    Reply Context • Clean Interface • Identity Preserved</p>
+            </div>
+        </div>
+        </div>
+    </section>
+
+    <section class="py-32 text-center px-6">
+        <div class="max-w-4xl mx-auto border-t-2 border-white/10 pt-20">
+            <h2 class="heading text-4xl md:text-7xl mb-10 leading-none" data-i18n="cta-title">
+                Your community speaks different languages. <br>
+                <span class="text-gray-600">Your Discord shouldn't.</span>
+            </h2>
+            <button
+                class="bg-[#00FF41] text-black font-black px-12 py-6 text-2xl uppercase tracking-tighter hover:scale-110 transition-transform"
+                data-i18n="btn-start">Get Started Now</button>
+        </div>
+    </section>
+
+    <footer class="p-10 text-center text-gray-700 text-[10px] tracking-widest uppercase">
+        &copy; 2026 Transbot AI • Discord Translator
+    </footer>
+
+    <script>
+        const translations = {
+            en: {
+                "nav-features": "Features", "nav-pricing": "Pricing", "nav-add": "Add Bot",
+                "hero-title": "Break <br> <span class='text-[#00FF41]'>Language</span> <br> Barriers.",
+                "hero-desc": "Automatically translate messages between your community members in real time. One chat. All languages.",
+                "btn-add": "Add to Discord", "btn-how": "See how it works",
+                "banner-text": "REAL-TIME • 100+ LANGUAGES • NO LAG • SMART DETECTION",
+                "feat-1-t": "Instant", "feat-1-d": "Real-time translation with no perceptible latency.",
+                "feat-2-t": "100+ Langs", "feat-2-d": "Full support for the world's most spoken languages.",
+                "feat-3-t": "Auto-Detect", "feat-3-d": "Smart language detection without commands.",
+                "feat-4-t": "Linking", "feat-4-d": "Connect multiple channels seamlessly.",
+                "pricing-h": "The Pricing", "plan-f-t": "Free Plan", "plan-f-l": "<li>Basic Translation</li><li>5 Channels</li><li>Community Support</li>",
+                "plan-p-t": "Pro Plan", "plan-p-l": "<li>Unlimited Channels</li><li>AI Engine</li><li>Priority Support</li>",
+                "btn-current": "Current Plan", "btn-upgrade": "Upgrade Now",
+                "cta-title": "Your community speaks different languages. <br><span class='text-gray-600'>Your Discord shouldn't.</span>",
+                "btn-start": "Get Started Now"
+            },
+            es: {
+                "nav-features": "Funciones", "nav-pricing": "Precios", "nav-add": "Añadir Bot",
+                "hero-title": "Rompe las <br> <span class='text-[#00FF41]'>Barreras</span> <br> del Idioma.",
+                "hero-desc": "Traduce mensajes automáticamente entre miembros de tu comunidad en tiempo real. Un chat. Todos los idiomas.",
+                "btn-add": "Añadir a Discord", "btn-how": "Cómo funciona",
+                "banner-text": "TIEMPO REAL • 100+ IDIOMAS • SIN LAG • DETECCIÓN INTELIGENTE",
+                "feat-1-t": "Instante", "feat-1-d": "Traducción en tiempo real sin latencia perceptible.",
+                "feat-2-t": "100+ Idiomas", "feat-2-d": "Soporte total para los idiomas más hablados del mundo.",
+                "feat-3-t": "Auto-Detección", "feat-3-d": "Detección inteligente de idioma sin comandos.",
+                "feat-4-t": "Vinculación", "feat-4-d": "Conecta múltiples canales de forma fluida.",
+                "pricing-h": "Precios", "plan-f-t": "Plan Gratuito", "plan-f-l": "<li>Traducción Básica</li><li>5 Canales</li><li>Soporte de Comunidad</li>",
+                "plan-p-t": "Plan Pro", "plan-p-l": "<li>Canales Ilimitados</li><li>Motor de IA</li><li>Soporte Prioritario</li>",
+                "btn-current": "Plan Actual", "btn-upgrade": "Mejorar Ahora",
+                "cta-title": "Tu comunidad habla diferentes idiomas. <br><span class='text-gray-600'>Tu Discord no debería.</span>",
+                "btn-start": "Empezar Ahora"
+            },
+            pt: {
+                "nav-features": "Funcionalidades", "nav-pricing": "Preços", "nav-add": "Adicionar Bot",
+                "hero-title": "Quebre as <br> <span class='text-[#00FF41]'>Barreiras</span> <br> de Idioma.",
+                "hero-desc": "Traduza mensagens automaticamente entre membros da sua comunidade em tempo real. Um chat. Todos os idiomas.",
+                "btn-add": "Adicionar ao Discord", "btn-how": "Como funciona",
+                "banner-text": "TEMPO REAL • 100+ IDIOMAS • SEM LAG • DETECÇÃO INTELIGENTE",
+                "feat-1-t": "Instante", "feat-1-d": "Tradução em tempo real sem latência perceptível.",
+                "feat-2-t": "100+ Idiomas", "feat-2-d": "Suporte total para os idiomas mais falados do mundo.",
+                "feat-3-t": "Auto-Detecção", "feat-3-d": "Detecção inteligente de idioma sem comandos.",
+                "feat-4-t": "Vinculação", "feat-4-d": "Conecte múltiplos canais de forma fluida.",
+                "pricing-h": "Preços", "plan-f-t": "Plano Grátis", "plan-f-l": "<li>Tradução Básica</li><li>5 Canais</li><li>Suporte Comunitário</li>",
+                "plan-p-t": "Plano Pro", "plan-p-l": "<li>Canais Ilimitados</li><li>Motor de IA</li><li>Suporte Prioritário</li>",
+                "btn-current": "Plano Atual", "btn-upgrade": "Atualizar Agora",
+                "cta-title": "Sua comunidade fala idiomas diferentes. <br><span class='text-gray-600'>Seu Discord não deveria.</span>",
+                "btn-start": "Começar Agora"
+            },
+            fr: {
+                "nav-features": "Fonctions", "nav-pricing": "Tarifs", "nav-add": "Ajouter Bot",
+                "hero-title": "Brisez les <br> <span class='text-[#00FF41]'>Barrières</span> <br> de la Langue.",
+                "hero-desc": "Traduisez automatiquement les messages de votre communauté en temps réel. Un chat. Toutes les langues.",
+                "btn-add": "Ajouter à Discord", "btn-how": "Comment ça marche",
+                "banner-text": "TEMPS RÉEL • 100+ LANGUES • SANS DÉLAI • DÉTECTION INTELLIGENTE",
+                "feat-1-t": "Instantané", "feat-1-d": "Traduction en temps réel sans latence perceptible.",
+                "feat-2-t": "100+ Langues", "feat-2-d": "Support complet pour les langues les plus parlées au monde.",
+                "feat-3-t": "Auto-Détection", "feat-3-d": "Détection intelligente de la langue sans commandes.",
+                "feat-4-t": "Liaison", "feat-4-d": "Connectez plusieurs canaux de manière fluide.",
+                "pricing-h": "Tarifs", "plan-f-t": "Plan Gratuit", "plan-f-l": "<li>Traduction de base</li><li>5 canaux</li><li>Support communautaire</li>",
+                "plan-p-t": "Plan Pro", "plan-p-l": "<li>Canaux illimités</li><li>Moteur IA</li><li>Support prioritaire</li>",
+                "btn-current": "Plan Actuel", "btn-upgrade": "Améliorer Maintenant",
+                "cta-title": "Votre communauté parle différentes langues. <br><span class='text-gray-600'>Votre Discord ne devrait pas.</span>",
+                "btn-start": "Commencer Maintenant"
+            },
+            de: {
+                "nav-features": "Funktionen", "nav-pricing": "Preise", "nav-add": "Bot Hinzufügen",
+                "hero-title": "Überwinde <br> <span class='text-[#00FF41]'>Sprach</span> <br> Barrieren.",
+                "hero-desc": "Übersetzen Sie Nachrichten zwischen Ihren Community-Mitgliedern automatisch in Echtzeit. Ein Chat. Alle Sprachen.",
+                "btn-add": "Zu Discord hinzufügen", "btn-how": "Wie es funktioniert",
+                "banner-text": "ECHTZEIT • 100+ SPRACHEN • KEIN LAG • INTELLIGENTE ERKENNUNG",
+                "feat-1-t": "Sofort", "feat-1-d": "Echtzeit-Übersetzung ohne spürbare Latenz.",
+                "feat-2-t": "100+ Sprachen", "feat-2-d": "Volle Unterstützung für die meistgesprochenen Sprachen der Welt.",
+                "feat-3-t": "Auto-Erkennung", "feat-3-d": "Intelligente Spracherkennung ohne Befehle.",
+                "feat-4-t": "Verknüpfung", "feat-4-d": "Mehrere Kanäle nahtlos verbinden.",
+                "pricing-h": "Preise", "plan-f-t": "Kostenloser Plan", "plan-f-l": "<li>Basis-Übersetzung</li><li>5 Kanäle</li><li>Community-Support</li>",
+                "plan-p-t": "Pro-Plan", "plan-p-l": "<li>Unbegrenzte Kanäle</li><li>KI-Engine</li><li>Prioritäts-Support</li>",
+                "btn-current": "Aktueller Plan", "btn-upgrade": "Jetzt Upgraden",
+                "cta-title": "Ihre Community spricht verschiedene Sprachen. <br><span class='text-gray-600'>Ihr Discord sollte das nicht.</span>",
+                "btn-start": "Jetzt Starten"
+            },
+            ja: {
+                "nav-features": "機能", "nav-pricing": "料金", "nav-add": "Botを追加",
+                "hero-title": "言語の <br> <span class='text-[#00FF41]'>壁を</span> <br> 打ち破る",
+                "hero-desc": "コミュニティメンバー間のメッセージをリアルタイムで自動翻訳。1つのチャット、すべての言語。",
+                "btn-add": "Discordに追加", "btn-how": "仕組みを見る",
+                "banner-text": "リアルタイム • 100以上の言語 • ラグなし • スマート検出",
+                "feat-1-t": "即時", "feat-1-d": "遅延のないリアルタイム翻訳。",
+                "feat-2-t": "100以上の言語", "feat-2-d": "世界中の主要な言語を完全にサポート。",
+                "feat-3-t": "自動検出", "feat-3-d": "コマンドなしのスマートな言語検出。",
+                "feat-4-t": "連携", "feat-4-d": "複数のチャンネルをシームレスに接続。",
+                "pricing-h": "料金プラン", "plan-f-t": "無料プラン", "plan-f-l": "<li>基本翻訳</li><li>5チャンネル</li><li>コミュニティサポート</li>",
+                "plan-p-t": "プロプラン", "plan-p-l": "<li>無制限のチャンネル</li><li>AIエンジン</li><li>優先サポート</li>",
+                "btn-current": "現在のプラン", "btn-upgrade": "今すぐアップグレード",
+                "cta-title": "コミュニティは多言語で話します。<br><span class='text-gray-600'>Discordもそうあるべきです。</span>",
+                "btn-start": "今すぐ始める"
+            }
+        };
+
+        function changeLanguage(lang) {
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang] && translations[lang][key]) {
+                    el.innerHTML = translations[lang][key];
+                }
+            });
+            localStorage.setItem('preferredLang', lang);
+            document.documentElement.lang = lang;
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedLang = localStorage.getItem('preferredLang');
+            const browserLang = navigator.language.split('-')[0];
+            const defaultLang = savedLang || (translations[browserLang] ? browserLang : 'en');
+
+            document.getElementById('languageSelector').value = defaultLang;
+            changeLanguage(defaultLang);
+        });
+        // Función para volver arriba sin cambiar la URL
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Opcional: Para que los links de Features y Pricing tampoco pongan el #
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80, // Ajuste para el nav sticky
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
