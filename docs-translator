@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="es" style="scroll-behavior: smooth;">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeoTranslator | Guía Visual de Configuración</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&family=Inter:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            background-color: #1a1b1e;
+            font-family: 'Inter', sans-serif;
+            color: #dbdee1;
+            overflow-x: hidden;
+        }
+
+        .heading {
+            font-family: 'Space Grotesk', sans-serif;
+            text-transform: uppercase;
+        }
+
+        .text-neo {
+            color: #00FF41;
+        }
+
+        .bg-neo {
+            background-color: #00FF41;
+        }
+
+        .border-neo {
+            border-color: #00FF41;
+        }
+
+        .Step-container:hover {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        @keyframes pulse-slow {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.8;
+            }
+        }
+
+        .animate-pulse-slow {
+            animation: pulse-slow 3s infinite;
+        }
+    </style>
+</head>
+
+<body class="antialiased">
+
+    <nav class="fixed top-0 w-full z-50 bg-[#1a1b1e]/80 backdrop-blur-md border-b border-white/5">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div
+                    class="w-10 h-10 bg-neo rounded-lg flex items-center justify-center shadow-[0_0_20px_rgba(0,255,65,0.3)]">
+                    <span class="text-black font-black text-xl italic">N</span>
+                </div>
+                <span class="heading text-xl text-white tracking-tighter">NeoTranslator <span
+                        class="text-neo">Docs</span></span>
+            </div>
+            <select id="languageSelector" onchange="changeLanguage(this.value)"
+                class="bg-[#2b2d31] text-xs font-bold text-white border border-white/10 rounded-md px-3 py-2 outline-none">
+                <option value="es">Español</option>
+                <option value="en">English</option>
+                <option value="pt">Português</option>
+            </select>
+        </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto px-6 pt-32 pb-20">
+
+        <div id="paso1"
+            class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center py-12 border-b border-white/5 Step-container relative transition-all duration-300 rounded-lg p-6">
+            <div class="md:col-span-5 space-y-4">
+                <span class="text-neo font-mono text-xs tracking-widest uppercase">/ <span
+                        data-i18n="step-label">PASO</span> 1</span>
+                <h2 class="heading text-3xl text-white" data-i18n="step1-title">INVITA Y PREPARA</h2>
+                <p class="text-gray-400 text-sm leading-relaxed">
+                    <span data-i18n="step1-desc-1">Primero,</span> <a href="#"
+                        class="text-neo hover:underline font-medium" data-i18n="step1-link">añade NeoTranslator</a>
+                    <span data-i18n="step1-desc-2">a tu servidor usando el botón de invitación. Una vez dentro, crea los
+                        canales de texto que quieras vincular.</span>
+                </p>
+                <a href="#"
+                    class="inline-flex items-center gap-2.5 bg-[#5865F2] text-white text-xs font-semibold px-4 py-2.5 rounded-sm hover:bg-[#4752C4] transition-colors shadow-sm tracking-wide uppercase"
+                    data-i18n="btn-invite">Invitar NeoTranslator</a>
+                <p class="text-gray-500 text-[12px] italic mt-2">
+                    <span data-i18n="step1-example">Ejemplo: Crea</span> <span
+                        class="bg-black/30 px-1.5 py-0.5 rounded text-gray-300 font-mono text-xs">#chat-es</span>, <span
+                        class="bg-black/30 px-1.5 py-0.5 rounded text-gray-300 font-mono text-xs">#chat-en</span> <span
+                        data-i18n="and">y</span> <span
+                        class="bg-black/30 px-1.5 py-0.5 rounded text-gray-300 font-mono text-xs">#chat-br</span>.
+                </p>
+            </div>
+            <div class="md:col-span-7 bg-[#313338] p-6 rounded-lg border border-white/5 shadow-inner">
+                <div class="flex items-center gap-1.5 mb-3">
+                    <span class="text-[11px] font-bold uppercase text-gray-500 tracking-wider"
+                        data-i18n="ui-translations">Traducciones</span>
+                </div>
+                <div class="space-y-1">
+                    <div
+                        class="flex items-center gap-2.5 py-1.5 px-2 rounded hover:bg-[#393c42] cursor-pointer group transition-colors">
+                        <span class="text-gray-500 font-light font-mono opacity-60 text-2xl">#</span>
+                        <div class="flex items-baseline gap-1.5"><span
+                                class="text-gray-300 font-medium text-[15px]">chat-es</span><span
+                                class="text-gray-600 text-sm">|</span><span class="text-gray-400 text-[13px]"
+                                data-i18n="ui-spanish-chat">spanish-chat</span></div>
+                    </div>
+                    <div
+                        class="flex items-center gap-2.5 py-1.5 px-2 rounded hover:bg-[#393c42] cursor-pointer group transition-colors">
+                        <span class="text-gray-500 font-light font-mono opacity-60 text-2xl">#</span>
+                        <div class="flex items-baseline gap-1.5"><span
+                                class="text-gray-300 font-medium text-[15px]">chat-en</span><span
+                                class="text-gray-600 text-sm">|</span><span class="text-gray-400 text-[13px]"
+                                data-i18n="ui-english-chat">english-chat</span></div>
+                    </div>
+                    <div
+                        class="flex items-center gap-2.5 py-1.5 px-2 rounded hover:bg-[#393c42] cursor-pointer group transition-colors">
+                        <span class="text-gray-500 font-light font-mono opacity-60 text-2xl">#</span>
+                        <div class="flex items-baseline gap-1.5"><span
+                                class="text-gray-300 font-medium text-[15px]">chat-br</span><span
+                                class="text-gray-600 text-sm">|</span><span class="text-gray-400 text-[13px]"
+                                data-i18n="ui-portuguese-chat">portuguese-chat</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="paso2"
+            class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start py-12 border-b border-white/5 Step-container relative transition-all duration-300 rounded-lg p-6">
+            <div class="md:col-span-5 space-y-4 sticky top-24">
+                <span class="text-neo font-mono text-xs tracking-widest uppercase">/ <span
+                        data-i18n="step-label">PASO</span> 2</span>
+                <h2 class="heading text-3xl text-white" data-i18n="step2-title">INVOCANDO EL MENÚ</h2>
+                <p class="text-gray-400 text-sm leading-relaxed">
+                    <span data-i18n="step2-desc-1">Escribe</span> <span
+                        class="text-neo font-mono bg-black/30 px-1.5 py-0.5 rounded">/menu</span> <span
+                        data-i18n="step2-desc-2">en cualquier canal. NeoTranslator responderá con un panel privado
+                        (efímero) solo para ti.</span>
+                </p>
+            </div>
+            <div class="md:col-span-7 space-y-4">
+                <div class="bg-[#313338] rounded-lg border border-white/5 overflow-hidden shadow-xl">
+                    <div class="bg-[#2b2d31] p-2 border-b border-[#1e1f22]">
+                        <div class="flex items-center gap-3 p-2 bg-[#393c41] rounded-md border border-[#00FF41]/30">
+                            <div
+                                class="w-8 h-8 bg-neo rounded-full flex items-center justify-center text-black font-bold text-xs">
+                                NT</div>
+                            <div class="flex-1 text-sm"><span class="text-white font-semibold">/menu</span>
+                                <p class="text-gray-400 text-[10px]" data-i18n="ui-bot-config">Administra la
+                                    configuración del bot.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-[#313338] p-4 rounded-lg border border-white/5 shadow-2xl">
+                    <div class="flex gap-4">
+                        <div
+                            class="w-10 h-10 bg-neo rounded-full flex-shrink-0 flex items-center justify-center text-black font-black text-sm">
+                            NT</div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-2"><span
+                                    class="text-neo font-semibold text-[15px]">NeoTranslator</span><span
+                                    class="bg-[#5865F2] text-white text-[10px] px-1.5 py-0.5 rounded-sm font-bold">APP</span>
+                            </div>
+                            <div class="border-l-4 border-neo bg-[#2b2d31] p-4 rounded-r-md max-w-sm">
+                                <h4 class="text-white font-bold text-sm mb-1" data-i18n="ui-admin-menu">Menú de
+                                    administración</h4>
+                                <p class="text-gray-400 text-xs" data-i18n="ui-admin-desc">Configura nuevos grupos o
+                                    gestiona los activos.</p>
+                            </div>
+                            <div
+                                class="mt-4 bg-[#1e1f22] p-2.5 rounded flex justify-between items-center text-gray-300 text-sm">
+                                <span data-i18n="ui-selection">Haz una selección</span>
+                            </div>
+                            <div class="mt-1 bg-[#2b2d31] border border-[#1e1f22] rounded overflow-hidden shadow-xl">
+                                <div class="p-3 flex items-center gap-3"><span class="text-xl">➕</span>
+                                    <div class="text-gray-200 text-sm font-semibold" data-i18n="ui-add-group">Añadir par
+                                        o grupo</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="paso3"
+            class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start py-12 border-b border-white/5 Step-container relative transition-all duration-300 rounded-lg p-6">
+            <div class="md:col-span-5 space-y-4 sticky top-24">
+                <span class="text-neo font-mono text-xs tracking-widest uppercase">/ <span
+                        data-i18n="step-label">PASO</span> 3</span>
+                <h2 class="heading text-3xl text-white" data-i18n="step3-title">VÍNCULO MULTILINGÜE</h2>
+                <div class="space-y-4 text-gray-400 text-sm leading-relaxed">
+                    <p><span data-i18n="step3-desc-1">En este ejemplo usaremos</span> <span
+                            class="text-neo font-bold underline" data-i18n="step3-group">GRUPO</span> <span
+                            data-i18n="step3-desc-2">(3+ canales). Sigue este orden:</span></p>
+                    <ol class="space-y-3 list-decimal list-inside border-l border-white/10 pl-4">
+                        <li><strong class="text-gray-200" data-i18n="step3-name">Nombre:</strong> <span
+                                data-i18n="step3-name-desc">Ponle un nombre interno al grupo.</span></li>
+                        <li><strong class="text-gray-200" data-i18n="step3-sel">Selección:</strong> <span
+                                data-i18n="step3-sel-desc">Elige los canales (#chat-es, #chat-en, #chat-br).</span></li>
+                        <li><strong class="text-gray-200" data-i18n="step3-langs">Idiomas:</strong> <span
+                                data-i18n="step3-langs-desc">Define el idioma de cada canal en el formulario.</span>
+                        </li>
+                    </ol>
+                    <div class="bg-neo/5 border border-neo/20 p-4 rounded-lg mt-6">
+                        <div class="flex items-center gap-2 mb-2">
+                            <strong class="text-white text-sm uppercase tracking-wider" data-i18n="all-set">¡Todo
+                                Listo!</strong>
+                        </div>
+                        <p class="text-[13px] text-gray-300" data-i18n="all-set-desc">Una vez completado este paso y
+                            enviado el formulario de idiomas, el bot ya estará funcionando al 100%.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="md:col-span-7 space-y-6">
+                <div class="bg-[#313338] rounded-lg border border-white/10 shadow-xl overflow-hidden">
+                    <div class="p-3 bg-[#2b2d31] text-white font-bold text-xs" data-i18n="ui-group-id">Identificación de
+                        Grupo</div>
+                    <div class="p-4 space-y-3">
+                        <label class="text-[10px] font-bold text-gray-400 uppercase block"
+                            data-i18n="ui-group-name">Nombre del grupo</label>
+                        <input type="text" placeholder="Ej: Soporte Global" data-i18n-placeholder="ui-example-name"
+                            class="w-full bg-[#1e1f22] border border-black/20 p-2 rounded text-sm text-gray-200 outline-none">
+                    </div>
+                </div>
+                <div class="bg-[#313338] p-5 rounded-lg border border-white/5 shadow-xl">
+                    <div class="space-y-2 text-gray-200 text-sm">
+                        <div class="bg-[#1e1f22] p-2.5 rounded border border-neo/40 flex justify-between"><span>#
+                                chat-es</span>
+                            <div
+                                class="w-4 h-4 bg-neo rounded-sm flex items-center justify-center text-black font-bold text-[10px]">
+                                ✓</div>
+                        </div>
+                        <div class="bg-[#1e1f22] p-2.5 rounded border border-neo/40 flex justify-between"><span>#
+                                chat-en</span>
+                            <div
+                                class="w-4 h-4 bg-neo rounded-sm flex items-center justify-center text-black font-bold text-[10px]">
+                                ✓</div>
+                        </div>
+                        <div class="bg-[#1e1f22] p-2.5 rounded border border-neo/40 flex justify-between"><span>#
+                                chat-br</span>
+                            <div
+                                class="w-4 h-4 bg-neo rounded-sm flex items-center justify-center text-black font-bold text-[10px]">
+                                ✓</div>
+                        </div>
+                    </div>
+                    <button class="mt-4 w-full bg-[#4e5058] text-white text-xs font-bold py-2 rounded-sm uppercase"
+                        data-i18n="ui-def-langs">Definir idiomas</button>
+                </div>
+                <div class="bg-[#313338] rounded-xl border border-neo/30 shadow-2xl overflow-hidden animate-pulse-slow">
+                    <div class="p-4 bg-[#2b2d31] text-white font-bold text-sm" data-i18n="ui-lang-config">Configuración
+                        de Idiomas</div>
+                    <div class="p-4 space-y-4 text-gray-200 text-sm">
+                        <div><label class="text-[10px] text-gray-500 uppercase block mb-1">Idioma para
+                                #chat-es</label><input type="text" value="Español" data-i18n-value="lang-es"
+                                class="w-full bg-[#1e1f22] border border-neo/10 p-2 rounded outline-none"></div>
+                        <div><label class="text-[10px] text-gray-500 uppercase block mb-1">Idioma para
+                                #chat-en</label><input type="text" value="Inglés" data-i18n-value="lang-en"
+                                class="w-full bg-[#1e1f22] border border-neo/10 p-2 rounded outline-none"></div>
+                        <div><label class="text-[10px] text-gray-500 uppercase block mb-1">Idioma para
+                                #chat-br</label><input type="text" value="Portugués" data-i18n-value="lang-pt"
+                                class="w-full bg-[#1e1f22] border border-neo/10 p-2 rounded outline-none"></div>
+                        <div class="flex justify-end pt-2"><button
+                                class="bg-[#5865F2] text-white text-xs font-bold px-8 py-2 rounded-sm uppercase"
+                                data-i18n="ui-send">Enviar</button></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="py-16 flex flex-col items-center">
+            <span
+                class="bg-neo/10 text-neo border border-neo/20 px-4 py-1 rounded-full text-[10px] font-bold uppercase mb-4"
+                data-i18n="mgmt-label">Herramientas de Control</span>
+            <h2 class="heading text-4xl text-white text-center" data-i18n="mgmt-main-title">Gestión y Mantenimiento</h2>
+            <p class="text-gray-500 text-center mt-2 max-w-lg text-sm" data-i18n="mgmt-lead">Tu bot ya funciona. Ahora
+                aprende a supervisar y editar tus traducciones en tiempo real.</p>
+        </div>
+
+        <div id="paso4"
+            class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start py-12 border-b border-white/5 Step-container rounded-lg p-6 transition-all duration-300">
+            <div class="md:col-span-5 space-y-4 sticky top-24">
+                <span class="text-neo font-mono text-xs tracking-widest uppercase">/ <span
+                        data-i18n="step-label">PASO</span> 4</span>
+                <h2 class="heading text-3xl text-white" data-i18n="step4-title">ACCESO A GESTIÓN</h2>
+                <p class="text-gray-400 text-sm leading-relaxed">
+                    <span data-i18n="step4-desc-1">Para modificar algo ya configurado, usa nuevamente el comando</span>
+                    <span class="text-neo font-mono">/menu</span>. <span data-i18n="step4-desc-2">Esta vez, selecciona
+                        la segunda opción:</span> <strong class="text-white font-semibold" data-i18n="step4-opt">"Listar
+                        y gestionar"</strong>.
+                </p>
+            </div>
+            <div class="md:col-span-7 space-y-4">
+                <div class="bg-[#313338] p-4 rounded-lg border border-white/5 shadow-xl">
+                    <div class="flex gap-3 items-center mb-3 text-gray-400 text-xs">
+                        <div
+                            class="w-8 h-8 bg-neo rounded-full flex items-center justify-center text-black font-bold text-xs">
+                            NT</div>
+                        <span data-i18n="ui-bot-sent">NeoTranslator ha enviado un mensaje</span>
+                    </div>
+                    <div class="bg-[#1e1f22] p-2.5 rounded flex justify-between items-center text-gray-200 text-sm">
+                        <span data-i18n="step4-opt">Listar y gestionar</span>
+                    </div>
+                </div>
+                <div class="bg-[#313338] p-4 rounded-lg border border-[#00FF41]/20 shadow-2xl animate-pulse-slow">
+                    <p class="text-gray-200 text-xs font-bold mb-3 uppercase text-center" data-i18n="ui-sel-group">
+                        Selecciona el grupo</p>
+                    <div class="bg-[#2b2d31] border border-[#1e1f22] rounded overflow-hidden">
+                        <div class="p-3 bg-[#35373c] flex items-center gap-3 border-l-4 border-neo">
+                            <span class="text-xl">📁</span>
+                            <div>
+                                <div class="text-white text-sm font-bold">Spanish</div>
+                                <div class="text-gray-400 text-[10px]" data-i18n="ui-configured">Configurado actualmente
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="paso4-1"
+            class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start py-12 border-b border-white/5 Step-container rounded-lg p-6 transition-all duration-300">
+            <div class="md:col-span-5 space-y-4 sticky top-24">
+                <span class="text-neo font-mono text-xs tracking-widest uppercase">/ <span
+                        data-i18n="step-label">PASO</span> 4.1</span>
+                <h2 class="heading text-3xl text-white" data-i18n="step4-1-title">CONTROL TOTAL</h2>
+                <p class="text-gray-400 text-sm leading-relaxed" data-i18n="step4-1-desc">Una vez dentro del grupo,
+                    NeoTranslator te muestra los canales vinculados y una botonera completa:</p>
+                <ul class="grid grid-cols-1 gap-2 text-[13px] text-gray-300">
+                    <li><span class="text-neo">●</span> <span data-i18n="feat-pause">Pausar/Reanudar
+                            traducciones.</span></li>
+                    <li><span class="text-neo">●</span> <span data-i18n="feat-edit">Editar los idiomas
+                            configurados.</span></li>
+                    <li><span class="text-neo">●</span> <span data-i18n="feat-channels">Añadir o Quitar canales.</span>
+                    </li>
+                    <li><span class="text-red-500">●</span> <span data-i18n="feat-del" class="text-red-400">Borrar el
+                            grupo completo.</span></li>
+                </ul>
+            </div>
+            <div class="md:col-span-7">
+                <div class="bg-[#313338] rounded-xl border border-white/5 shadow-2xl overflow-hidden">
+                    <div class="p-4 bg-[#2b2d31] border-b border-white/5 flex items-center justify-between">
+                        <div class="flex items-center gap-3 text-white font-bold text-sm">
+                            <div
+                                class="w-8 h-8 bg-neo rounded-full flex items-center justify-center text-black font-bold text-[10px]">
+                                NT</div>
+                            <span>Gestionando: Spanish</span>
+                        </div>
+                        <span class="bg-neo/10 text-neo text-[9px] px-2 py-0.5 rounded font-bold"
+                            data-i18n="ui-active">ACTIVO</span>
+                    </div>
+                    <div class="p-6 space-y-6 text-gray-200 text-sm">
+                        <div class="grid grid-cols-2 gap-3 text-sm">
+                            <div class="bg-[#1e1f22] p-3 rounded">
+                                <p class="text-[10px] text-gray-500 uppercase font-bold">Idioma: ES</p>#chat-es
+                            </div>
+                            <div class="bg-[#1e1f22] p-3 rounded">
+                                <p class="text-[10px] text-gray-500 uppercase font-bold">Idioma: EN</p>#chat-en
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 text-white text-[11px] font-bold uppercase">
+                            <button class="bg-[#4e5058] py-2 rounded-sm" data-i18n="ui-btn-pause">Pausar</button>
+                            <button class="bg-[#4e5058] py-2 rounded-sm" data-i18n="ui-btn-edit">Editar</button>
+                            <button class="bg-[#4e5058] py-2 rounded-sm" data-i18n="ui-btn-add">Añadir Canal</button>
+                            <button class="bg-[#4e5058] py-2 rounded-sm" data-i18n="ui-btn-rem">Quitar Canal</button>
+                            <button class="md:col-span-2 bg-[#da373c] py-2 rounded-sm" data-i18n="ui-btn-del">Borrar
+                                Grupo</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="paso5"
+            class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start py-12 border-b border-white/5 Step-container rounded-lg p-6 transition-all duration-300">
+            <div class="md:col-span-5 space-y-4 sticky top-24">
+                <span class="text-neo font-mono text-xs tracking-widest uppercase">/ <span
+                        data-i18n="step-label">PASO</span> 5</span>
+                <h2 class="heading text-3xl text-white" data-i18n="step5-title">ENFORCEMENT GLOBAL</h2>
+                <p class="text-gray-400 text-sm leading-relaxed">
+                    <span data-i18n="step5-desc-1">La tercera opción del menú es el sistema de</span> <strong
+                        class="text-white font-semibold" data-i18n="step5-mod">Moderación Estricta</strong>.
+                </p>
+                <div class="bg-[#2b2d31] p-3 rounded border-l-2 border-yellow-500 text-xs text-gray-300">
+                    <strong class="text-yellow-500" data-i18n="how-works">¿Cómo funciona?</strong> <span
+                        data-i18n="how-works-desc">Si está Activado, el bot eliminará mensajes en idiomas incorrectos y
+                        los reenviará traducidos.</span>
+                </div>
+            </div>
+            <div class="md:col-span-7 space-y-6">
+                <div class="bg-[#313338] p-5 rounded-lg border border-white/5 shadow-xl">
+                    <div class="flex items-center gap-3 mb-4 text-gray-400 text-[11px] font-bold uppercase">
+                        <div
+                            class="w-8 h-8 bg-neo rounded-full flex items-center justify-center text-black font-bold text-xs">
+                            NT</div>
+                        <span data-i18n="ui-main-menu">Menú Principal</span>
+                    </div>
+                    <div class="bg-[#1e1f22] p-2.5 rounded border border-neo/50 text-white text-sm">🛡️ Enforcement
+                        Global</div>
+                </div>
+                <div class="bg-[#313338] rounded-xl border border-white/5 shadow-2xl overflow-hidden">
+                    <div class="p-4 bg-[#2b2d31] border-b border-white/5 text-white">
+                        <h4 class="font-bold text-sm" data-i18n="ui-enf-config">Configuración de Enforcement</h4>
+                    </div>
+                    <div class="p-6 text-center space-y-4 text-sm text-gray-300">
+                        <div class="p-4 bg-[#1e1f22] rounded-lg border border-white/5 w-full">
+                            <p data-i18n="ui-enf-status">El Enforcement Global se encuentra actualmente:</p>
+                            <div class="flex justify-center mt-2">
+                                <span
+                                    class="bg-red-500/10 text-red-500 text-[10px] px-3 py-1 rounded-full font-bold uppercase"
+                                    data-i18n="ui-disabled">Desactivado</span>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3 text-white text-xs font-bold uppercase">
+                            <button class="bg-[#248046] py-3 rounded-sm" data-i18n="ui-enable">Activar</button>
+                            <button class="bg-[#4e5058] opacity-50 py-3 rounded-sm"
+                                data-i18n="ui-disable">Desactivar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        const translations = {
+            es: {
+                "step-label": "PASO", "and": "y",
+                "step1-title": "INVITA Y PREPARA", "step1-desc-1": "Primero,", "step1-link": "añade NeoTranslator", "step1-desc-2": "a tu servidor usando el botón de invitación. Una vez dentro, crea los canales de texto que quieras vincular.", "btn-invite": "Invitar NeoTranslator", "step1-example": "Ejemplo: Crea",
+                "ui-translations": "Traducciones", "ui-spanish-chat": "spanish-chat", "ui-english-chat": "english-chat", "ui-portuguese-chat": "portuguese-chat",
+                "step2-title": "INVOCANDO EL MENÚ", "step2-desc-1": "Escribe", "step2-desc-2": "en cualquier canal. NeoTranslator responderá con un panel privado (efímero) solo para ti.",
+                "ui-bot-config": "Administra la configuración del bot.", "ui-admin-menu": "Menú de administración", "ui-admin-desc": "Configura nuevos grupos o gestiona los activos.", "ui-selection": "Haz una selección", "ui-add-group": "Añadir par o grupo",
+                "step3-title": "VÍNCULO MULTILINGÜE", "step3-desc-1": "En este ejemplo usaremos", "step3-group": "GRUPO", "step3-desc-2": "(3+ canales). Sigue este orden:", "step3-name": "Nombre:", "step3-name-desc": "Ponle un nombre interno al grupo.", "step3-sel": "Selección:", "step3-sel-desc": "Elige los canales (#chat-es, #chat-en, #chat-br).", "step3-langs": "Idiomas:", "step3-langs-desc": "Define el idioma de cada canal en el formulario.", "all-set": "¡Todo Listo!", "all-set-desc": "Una vez completado este paso y enviado el formulario de idiomas, el bot ya estará funcionando al 100%.",
+                "ui-group-id": "Identificación de Grupo", "ui-group-name": "Nombre del grupo", "ui-example-name": "Ej: Soporte Global", "ui-def-langs": "Definir idiomas", "ui-lang-config": "Configuración de Idiomas", "lang-es": "Español", "lang-en": "Inglés", "lang-pt": "Português", "ui-send": "Enviar",
+                "mgmt-label": "Herramientas de Control", "mgmt-main-title": "Gestión y Mantenimiento", "mgmt-lead": "Tu bot ya funciona. Ahora aprende a supervisar y editar tus traducciones en tiempo real.",
+                "step4-title": "ACCESO A GESTIÓN", "step4-desc-1": "Para modificar algo ya configurado, usa nuevamente el comando", "step4-desc-2": "Esta vez, selecciona la segunda opción:", "step4-opt": "Listar y gestionar", "ui-bot-sent": "NeoTranslator ha enviado un mensaje", "ui-sel-group": "Selecciona el grupo", "ui-configured": "Configurado actualmente",
+                "step4-1-title": "CONTROL TOTAL", "step4-1-desc": "Una vez dentro del grupo, NeoTranslator te muestra los canales vinculados y una botonera completa:", "feat-pause": "Pausar/Reanudar traducciones.", "feat-edit": "Editar los idiomas configurados.", "feat-channels": "Añadir o Quitar canales del grupo.", "feat-del": "Borrar el grupo completo.",
+                "ui-active": "ACTIVO", "ui-btn-pause": "Pausar", "ui-btn-edit": "Editar", "ui-btn-add": "Añadir Canal", "ui-btn-rem": "Quitar Canal", "ui-btn-del": "Borrar Grupo",
+                "step5-title": "ENFORCEMENT GLOBAL", "step5-desc-1": "La tercera opción del menú es el sistema de", "step5-mod": "Moderación Estricta", "how-works": "¿Cómo funciona?", "how-works-desc": "Si está Activado, el bot eliminará mensajes en idiomas incorrectos y los reenviará traducidos.", "ui-main-menu": "Menú Principal", "ui-enf-config": "Configuración de Enforcement", "ui-enf-status": "El Enforcement Global se encuentra actualmente:", "ui-disabled": "Desactivado", "ui-enable": "Activar", "ui-disable": "Desactivar"
+            },
+            en: {
+                "step-label": "STEP", "and": "and",
+                "step1-title": "INVITE & PREPARE", "step1-desc-1": "First,", "step1-link": "add NeoTranslator", "step1-desc-2": "to your server using the invite button. Once inside, create the text channels you want to link.", "btn-invite": "Invite NeoTranslator", "step1-example": "Example: Create",
+                "ui-translations": "Translations", "ui-spanish-chat": "spanish-chat", "ui-english-chat": "english-chat", "ui-portuguese-chat": "portuguese-chat",
+                "step2-title": "INVOKING THE MENU", "step2-desc-1": "Type", "step2-desc-2": "in any channel. NeoTranslator will respond with a private (ephemeral) panel just for you.",
+                "ui-bot-config": "Manage bot configuration.", "ui-admin-menu": "Administration Menu", "ui-admin-desc": "Configure new groups or manage active ones.", "ui-selection": "Make a selection", "ui-add-group": "Add pair or group",
+                "step3-title": "MULTILINGUAL LINK", "step3-desc-1": "In this example we will use", "step3-group": "GROUP", "step3-desc-2": "(3+ channels). Follow this order:", "step3-name": "Name:", "step3-name-desc": "Give the group an internal name.", "step3-sel": "Selection:", "step3-sel-desc": "Choose the channels (#chat-es, #chat-en, #chat-br).", "step3-langs": "Languages:", "step3-langs-desc": "Define the language for each channel in the form.", "all-set": "All Set!", "all-set-desc": "Once this step is completed and the language form is sent, the bot will be 100% functional.",
+                "ui-group-id": "Group Identification", "ui-group-name": "Group name", "ui-example-name": "Eg: Global Support", "ui-def-langs": "Define languages", "ui-lang-config": "Language Configuration", "lang-es": "Spanish", "lang-en": "English", "lang-pt": "Portuguese", "ui-send": "Send",
+                "mgmt-label": "Control Tools", "mgmt-main-title": "Management & Maintenance", "mgmt-lead": "Your bot is now working. Now learn how to monitor and edit your translations in real time.",
+                "step4-title": "MANAGEMENT ACCESS", "step4-desc-1": "To modify something already configured, use the command", "step4-desc-2": "This time, select the second option:", "step4-opt": "List and manage", "ui-bot-sent": "NeoTranslator has sent a message", "ui-sel-group": "Select the group", "ui-configured": "Currently configured",
+                "step4-1-title": "TOTAL CONTROL", "step4-1-desc": "Once inside the group, NeoTranslator shows you the linked channels and a complete button panel:", "feat-pause": "Pause/Resume translations.", "feat-edit": "Edit configured languages.", "feat-channels": "Add or Remove channels from the group.", "feat-del": "Delete the entire group.",
+                "ui-active": "ACTIVE", "ui-btn-pause": "Pause", "ui-btn-edit": "Edit", "ui-btn-add": "Add Channel", "ui-btn-rem": "Remove Channel", "ui-btn-del": "Delete Group",
+                "step5-title": "GLOBAL ENFORCEMENT", "step5-desc-1": "The third menu option is the", "step5-mod": "Strict Moderation", "how-works": "How does it work?", "how-works-desc": "If Enabled, the bot will delete messages in incorrect languages and resend them translated.", "ui-main-menu": "Main Menu", "ui-enf-config": "Enforcement Configuration", "ui-enf-status": "Global Enforcement is currently:", "ui-disabled": "Disabled", "ui-enable": "Enable", "ui-disable": "Disable"
+            },
+            pt: {
+                "step-label": "PASSO", "and": "e",
+                "step1-title": "CONVIDE E PREPARE", "step1-desc-1": "Primeiro,", "step1-link": "adicione o NeoTranslator", "step1-desc-2": "ao seu servidor usando o botão de convite. Uma vez dentro, crie os canais de texto que deseja vincular.", "btn-invite": "Convidar NeoTranslator", "step1-example": "Exemplo: Crie",
+                "ui-translations": "Traduções", "ui-spanish-chat": "spanish-chat", "ui-english-chat": "english-chat", "ui-portuguese-chat": "portuguese-chat",
+                "step2-title": "INVOCANDO O MENU", "step2-desc-1": "Digite", "step2-desc-2": "em qualquer canal. O NeoTranslator responderá com um painel privado (efêmero) apenas para você.",
+                "ui-bot-config": "Gerencie a configuração do bot.", "ui-admin-menu": "Menu de administração", "ui-admin-desc": "Configure novos grupos ou gerencie os ativos.", "ui-selection": "Faça uma seleção", "ui-add-group": "Adicionar par ou grupo",
+                "step3-title": "VÍNCULO MULTILÍNGUE", "step3-desc-1": "Neste exemplo usaremos", "step3-group": "GRUPO", "step3-desc-2": "(3+ canais). Siga esta ordem:", "step3-name": "Nome:", "step3-name-desc": "Dê um nome interno ao grupo.", "step3-sel": "Seleção:", "step3-sel-desc": "Escolha os canais (#chat-es, #chat-en, #chat-br).", "step3-langs": "Idiomas:", "step3-langs-desc": "Defina o idioma de cada canal no formulário.", "all-set": "Tudo Pronto!", "all-set-desc": "Assim que este passo for concluído e o formulário de idiomas enviado, o bot estará 100% funcional.",
+                "ui-group-id": "Identificação do Grupo", "ui-group-name": "Nome do grupo", "ui-example-name": "Ex: Suporte Global", "ui-def-langs": "Definir idiomas", "ui-lang-config": "Configuração de Idiomas", "lang-es": "Espanhol", "lang-en": "Inglês", "lang-pt": "Português", "ui-send": "Enviar",
+                "mgmt-label": "Ferramentas de Controle", "mgmt-main-title": "Gestão e Manutenção", "mgmt-lead": "Seu bot já está funcionando. Agora aprenda a monitorar e editar suas traduções em tempo real.",
+                "step4-title": "ACESSO À GESTÃO", "step4-desc-1": "Para modificar algo configurado, use o comando", "step4-desc-2": "Desta vez, selecione a segunda opção:", "step4-opt": "Listar e gerenciar", "ui-bot-sent": "O NeoTranslator enviou uma mensagem", "ui-sel-group": "Selecione o grupo", "ui-configured": "Configurado atualmente",
+                "step4-1-title": "CONTROLE TOTAL", "step4-1-desc": "Uma vez dentro do grupo, o NeoTranslator mostra os canais vinculados e um painel de botões completo:", "feat-pause": "Pausar/Retomar traduções.", "feat-edit": "Editar idiomas configurados.", "feat-channels": "Adicionar ou Remover canais do grupo.", "feat-del": "Excluir o grupo completo.",
+                "ui-active": "ATIVO", "ui-btn-pause": "Pausar", "ui-btn-edit": "Editar", "ui-btn-add": "Adicionar Canal", "ui-btn-rem": "Remover Canal", "ui-btn-del": "Excluir Grupo",
+                "step5-title": "ENFORCEMENT GLOBAL", "step5-desc-1": "A terceira opção do menu é o sistema de", "step5-mod": "Moderação Estrita", "how-works": "Como funciona?", "how-works-desc": "Se Ativado, o bot excluirá mensagens em idiomas incorretos e as reenviará traduzidas.", "ui-main-menu": "Menu Principal", "ui-enf-config": "Configuração de Enforcement", "ui-enf-status": "O Enforcement Global está atualmente:", "ui-disabled": "Desativado", "ui-enable": "Ativar", "ui-disable": "Desativar"
+            }
+        };
+
+        function changeLanguage(lang) {
+            document.querySelectorAll("[data-i18n]").forEach(el => {
+                const key = el.dataset.i18n;
+                if (translations[lang] && translations[lang][key]) el.innerHTML = translations[lang][key];
+            });
+            // Traducir Placeholders y Values de inputs
+            document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
+                const key = el.dataset.i18nPlaceholder;
+                if (translations[lang] && translations[lang][key]) el.placeholder = translations[lang][key];
+            });
+            document.querySelectorAll("[data-i18n-value]").forEach(el => {
+                const key = el.dataset.i18nValue;
+                if (translations[lang] && translations[lang][key]) el.value = translations[lang][key];
+            });
+            document.documentElement.lang = lang;
+            localStorage.setItem("preferredLangDoc", lang);
+        }
+
+        window.addEventListener("DOMContentLoaded", () => {
+            const lang = localStorage.getItem("preferredLangDoc") || "es";
+            document.getElementById("languageSelector").value = lang;
+            changeLanguage(lang);
+        });
+    </script>
+</body>
+
+</html>
