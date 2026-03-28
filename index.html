@@ -9,6 +9,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&family=Inter:wght@400;700&display=swap"
         rel="stylesheet">
     <style>
+        html {
+            scroll-behavior: smooth !important;
+        }
+
+        section[id] {
+            scroll-margin-top: 100px;
+        }
+
         body {
             background-color: #000000;
             font-family: 'Inter', sans-serif;
@@ -59,8 +67,10 @@
 
         <div class="flex items-center gap-4 md:gap-8">
             <div class="hidden md:flex gap-8 text-xs font-bold uppercase tracking-widest text-gray-400">
-                <a href="#features" class="hover:text-[#00FF41] transition" data-i18n="nav-features">Features</a>
-                <a href="#pricing" class="hover:text-[#00FF41] transition" data-i18n="nav-pricing">Pricing</a>
+                <a href="javascript:void(0)" onclick="scrollToSection('features')"
+                    class="hover:text-[#00FF41] transition" data-i18n="nav-features">Features</a>
+                <a href="javascript:void(0)" onclick="scrollToSection('pricing')"
+                    class="hover:text-[#00FF41] transition" data-i18n="nav-pricing">Pricing</a>
             </div>
 
             <select id="languageSelector" onchange="changeLanguage(this.value)"
@@ -72,10 +82,11 @@
                 <option value="de">Deutsch</option>
                 <option value="ja">日本語</option>
             </select>
-
-            <button
-                class="bg-[#5865F2] px-5 py-2 font-bold uppercase text-[10px] tracking-widest hover:bg-white hover:text-black transition"
-                data-i18n="nav-add">Add Bot</button>
+            <a href="https://discord.com/oauth2/authorize?client_id=1402734761004499015" target="_blank">
+                <button
+                    class="bg-[#5865F2] px-5 py-2 font-bold uppercase text-[10px] tracking-widest hover:bg-white hover:text-black transition"
+                    data-i18n="nav-add">Add Bot</button>
+            </a>
         </div>
     </nav>
 
@@ -83,12 +94,9 @@
         class="max-w-[1600px] mx-auto px-6 pt-16 md:pt-24 pb-20 md:pb-32 flex flex-col items-center border-b border-white/5">
         <div class="text-center max-w-3xl mx-auto mb-16 md:mb-24">
             <h1 class="heading text-5xl sm:text-6xl md:text-7xl leading-[0.9] mb-6 tracking-tighter"
-                data-i18n="hero-title">
-                Break <br> <span class="text-[#00FF41]">Language</span> <br> Barriers.
-            </h1>
-            <p class="text-gray-400 text-lg md:text-xl mb-10 mx-auto max-w-md" data-i18n="hero-desc">
-                Automatically translate messages between your community members in real time. One chat. All languages.
-            </p>
+                data-i18n="hero-title">Break <br> <span class="text-[#00FF41]">Language</span> <br> Barriers.</h1>
+            <p class="text-gray-400 text-lg md:text-xl mb-10 mx-auto max-w-md" data-i18n="hero-desc">Automatically
+                translate messages between your community members in real time. One chat. All languages.</p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
                 <button
                     class="bg-[#00FF41] text-black font-black px-8 py-5 text-lg uppercase tracking-tighter hover:scale-105 transition-transform w-full sm:w-auto"
@@ -101,7 +109,9 @@
 
         <div class="w-full max-w-[1400px] mx-auto px-4">
             <div class="flex flex-col md:flex-row items-center justify-between gap-6 md:gap-2 relative">
-                <div class="w-full md:w-[31%] bg-[#313338] border border-white/10 rounded-lg shadow-2xl flex flex-col">
+
+                <div
+                    class="w-full md:w-[31%] bg-[#313338] border border-white/10 rounded-lg shadow-2xl flex flex-col animate-float delay-1">
                     <div
                         class="bg-[#2b2d31] p-3 px-4 rounded-t-lg flex items-center justify-between border-b border-black/20">
                         <div class="flex items-center gap-2"><span class="text-gray-400 text-xl font-mono">#</span><span
@@ -123,12 +133,17 @@
                         </div>
                     </div>
                 </div>
-                <div class="text-[#00FF41] animate-pulse py-2 md:py-0"><svg class="w-8 h-8 rotate-90 md:rotate-0"
-                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+
+                <div class="text-[#00FF41] animate-pulse py-2 md:py-0">
+                    <svg class="w-8 h-8 rotate-90 md:rotate-0" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="3">
                         <line x1="5" y1="12" x2="19" y2="12"></line>
                         <polyline points="12 5 19 12 12 19"></polyline>
-                    </svg></div>
-                <div class="w-full md:w-[31%] bg-[#313338] border border-white/10 rounded-lg shadow-2xl flex flex-col">
+                    </svg>
+                </div>
+
+                <div
+                    class="w-full md:w-[31%] bg-[#313338] border border-white/10 rounded-lg shadow-2xl flex flex-col animate-float delay-2">
                     <div
                         class="bg-[#2b2d31] p-3 px-4 rounded-t-lg flex items-center justify-between border-b border-black/20">
                         <div class="flex items-center gap-2"><span class="text-gray-400 text-xl font-mono">#</span><span
@@ -152,12 +167,17 @@
                         </div>
                     </div>
                 </div>
-                <div class="text-[#00FF41] animate-pulse py-2 md:py-0"><svg class="w-8 h-8 rotate-90 md:rotate-0"
-                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+
+                <div class="text-[#00FF41] animate-pulse py-2 md:py-0">
+                    <svg class="w-8 h-8 rotate-90 md:rotate-0" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="3">
                         <line x1="5" y1="12" x2="19" y2="12"></line>
                         <polyline points="12 5 19 12 12 19"></polyline>
-                    </svg></div>
-                <div class="w-full md:w-[31%] bg-[#313338] border border-white/10 rounded-lg shadow-2xl flex flex-col">
+                    </svg>
+                </div>
+
+                <div
+                    class="w-full md:w-[31%] bg-[#313338] border border-white/10 rounded-lg shadow-2xl flex flex-col animate-float delay-3">
                     <div
                         class="bg-[#2b2d31] p-3 px-4 rounded-t-lg flex items-center justify-between border-b border-black/20">
                         <div class="flex items-center gap-2"><span class="text-gray-400 text-xl font-mono">#</span><span
@@ -179,6 +199,7 @@
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </section>
@@ -192,76 +213,153 @@
         </div>
     </section>
 
+    <section id="features" class="max-w-6xl mx-auto px-6 py-24 border-t border-white/5">
+        <div class="text-center mb-16">
+            <h2 class="heading text-4xl md:text-6xl italic mb-4" data-i18n="features-h2">Core Features</h2>
+            <p class="text-gray-500 uppercase tracking-widest font-bold text-xs" data-i18n="features-sub">Everything you
+                need for a global community</p>
+        </div>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="border border-white/10 p-6">
+                <h3 class="heading text-xl mb-3" data-i18n="ft1-t">AI Translation</h3>
+                <p class="text-gray-400 text-sm" data-i18n="f1">Natural translations with context awareness.</p>
+            </div>
+            <div class="border border-white/10 p-6">
+                <h3 class="heading text-xl mb-3" data-i18n="ft2-t">Real-time Messages</h3>
+                <p class="text-gray-400 text-sm" data-i18n="f2">Messages translated instantly with no lag.</p>
+            </div>
+            <div class="border border-white/10 p-6">
+                <h3 class="heading text-xl mb-3" data-i18n="ft3-t">Role Language System</h3>
+                <p class="text-gray-400 text-sm" data-i18n="f3">Users see messages in their own language.</p>
+            </div>
+            <div class="border border-white/10 p-6">
+                <h3 class="heading text-xl mb-3" data-i18n="ft4-t">Dashboard</h3>
+                <p class="text-gray-400 text-sm" data-i18n="f4">Manage languages, channels and users.</p>
+            </div>
+            <div class="border border-white/10 p-6">
+                <h3 class="heading text-xl mb-3" data-i18n="ft5-t">No Commands</h3>
+                <p class="text-gray-400 text-sm" data-i18n="f5">Setup with clicks, not commands.</p>
+            </div>
+            <div class="border border-white/10 p-6">
+                <h3 class="heading text-xl mb-3" data-i18n="ft6-t">100+ Languages</h3>
+                <p class="text-gray-400 text-sm" data-i18n="f6">Support for global communities.</p>
+            </div>
+        </div>
+    </section>
+
     <section id="comparison" class="max-w-6xl mx-auto px-6 py-24 border-t border-white/5">
         <div class="text-center mb-16">
             <h2 class="heading text-4xl md:text-6xl italic mb-4" data-i18n="comp-h2">The Real Difference</h2>
             <p class="text-gray-500 uppercase tracking-widest font-bold text-xs" data-i18n="comp-sub">Visual &
                 Functional Comparison</p>
         </div>
-
         <div class="grid lg:grid-cols-2 gap-8">
             <div class="bg-black border border-red-500/20 p-8 rounded-xl relative">
                 <div class="absolute -top-3 left-6 bg-red-600 text-white text-[10px] px-3 py-1 font-black uppercase rounded"
                     data-i18n="comp-bad-label">Competitors</div>
                 <div class="discord-bg p-4 rounded-md space-y-4">
                     <div class="flex gap-3">
-                        <div class="w-10 h-10 rounded-full bg-gray-600"></div>
-                        <div class="text-sm">
+                        <div
+                            class="w-10 h-10 rounded-full bg-gray-600 flex items-center justify-center p-2 text-red-500 text-left">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path
+                                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm1-13h-2v2h2v-2zm0 4h-2v6h2v-6z">
+                                </path>
+                            </svg>
+                        </div>
+                        <div class="text-sm text-left">
                             <span class="font-bold text-white">Carlos [ES]</span> <span
                                 class="text-[10px] text-gray-500 ml-2">13:04</span>
-                            <p class="text-[#dbdee1]">¿Vamos a hacer raid hoy?</p>
+                            <p class="text-[#dbdee1]" data-i18n="comp-msg-orig">¿Vamos a hacer raid hoy?</p>
                         </div>
                     </div>
-                    <div class="ml-12 border-l-4 border-[#1e1f22] bg-[#2b2d31] p-3 rounded-r-md max-w-[90%]">
+                    <div class="ml-12 border-l-4 border-[#1e1f22] bg-[#2b2d31] p-3 rounded-r-md max-w-[90%] text-left">
                         <div class="flex items-center gap-2 mb-1">
                             <span class="text-[11px] font-bold text-white">Carlos [EN]</span>
-                            <span class="bg-[#5865f2] text-[9px] px-1 rounded-sm font-bold uppercase">BOT</span>
+                            <span class="bg-[#5865f2] text-[9px] px-1 rounded-sm font-bold uppercase"
+                                data-i18n="comp-tr-bot">Bot</span>
                         </div>
-                        <p class="text-[13px] text-[#b5bac1] italic">Are we doing a raid today?</p>
+                        <p class="text-[13px] text-[#b5bac1] italic" data-i18n="comp-msg-bad">Are we doing a raid today?
+                        </p>
                     </div>
-                    <div class="mt-6 p-3 bg-red-500/10 border border-red-500/30 rounded text-[11px] text-red-400">
+                    <div
+                        class="mt-6 p-3 bg-red-500/10 border border-red-500/30 rounded text-[11px] text-red-400 text-left">
                         <strong class="block mb-1" data-i18n="comp-bad-tag">❌ LIMITATION:</strong>
                         <span data-i18n="comp-bad-desc">Does not support replies. Context is lost and chat becomes
-                            cluttered with rigid boxes.</span>
+                            cluttered.</span>
                     </div>
                 </div>
             </div>
-
-
             <div
-                class="bg-black border border-[#00FF41]/30 p-8 rounded-xl relative shadow-[0_0_30px_rgba(0,255,65,0.05)] ">
+                class="bg-black border border-[#00FF41]/30 p-8 rounded-xl relative shadow-[0_0_30px_rgba(0,255,65,0.05)]">
                 <div
                     class="absolute -top-3 left-6 bg-[#00FF41] text-black text-[10px] px-3 py-1 font-black uppercase rounded">
                     NeoTranslator</div>
                 <div class="discord-bg p-4 rounded-md space-y-4">
-                    <div class="relative pt-4">
+                    <div class="relative pt-4 text-left">
                         <div class="absolute top-0 left-5 w-6 h-4 border-t-2 border-l-2 border-[#4e5058] rounded-tl-lg">
                         </div>
                         <div class="flex items-center gap-2 ml-12 mb-1 opacity-60">
-                            <div class="w-4 h-4 rounded-full bg-gray-600"></div>
-                            <span class="text-[11px] text-gray-400 truncate">We're at the base, are you coming?</span>
+                            <div
+                                class="w-4 h-4 rounded-full bg-gray-600 flex items-center justify-center p-1 text-[white]">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path
+                                        d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z">
+                                    </path>
+                                </svg>
+                            </div>
+                            <span class="text-[12px] text-gray-400 truncate" data-i18n="comp-reply-to">We're at the
+                                base, are you coming?</span>
                         </div>
                         <div class="flex gap-3">
-                            <div class="w-10 h-10 rounded-full bg-gray-600"></div>
+                            <div
+                                class="w-10 h-10 rounded-full bg-gray-600 flex items-center justify-center p-2 text-[#00FF41]">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path
+                                        d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z">
+                                    </path>
+                                </svg>
+                            </div>
                             <div class="text-sm">
                                 <div class="flex items-center gap-2">
                                     <span class="font-bold text-white">Carlos</span>
                                     <span class="bg-[#5865f2] text-[9px] px-1 rounded-sm font-bold uppercase">APP</span>
-                                    <span class="text-[10px] text-gray-500">Today at 13:04</span>
+                                    <span class="text-[10px] text-gray-500" data-i18n="comp-date">Today at 13:04</span>
                                 </div>
-                                <p class="text-[#dbdee1] mt-0.5">Yes, I'm already on my way</p>
+                                <p class="text-[#dbdee1] mt-0.5" data-i18n="comp-msg-good">Yes, I'm already on my way
+                                </p>
                             </div>
                         </div>
                     </div>
-                    <div class="mt-6 p-3 bg-[#00FF41]/10 border border-[#00FF41]/30 rounded text-[11px] text-[#00FF41]">
+                    <div
+                        class="mt-6 p-3 bg-[#00FF41]/10 border border-[#00FF41]/30 rounded text-[11px] text-[#00FF41] text-left">
                         <strong class="block mb-1" data-i18n="comp-good-tag">✅ TOTAL INTEGRATION:</strong>
-                        <span data-i18n="comp-good-desc">Looks and behaves like a real user. Supports threads, replies,
-                            and keeps Discord's aesthetic clean.</span>
+                        <span data-i18n="comp-good-desc">Looks and behaves like a real user. Supports threads and
+                            replies.</span>
                     </div>
                 </div>
             </div>
+        </div>
+    </section>
 
-
+    <section class="max-w-6xl mx-auto px-6 py-24 border-t border-white/5 text-center">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-10">
+            <div>
+                <div class="text-4xl font-black text-[#00FF41]">120+</div>
+                <div class="text-gray-500 text-xs uppercase tracking-widest" data-i18n="stat1">Servers</div>
+            </div>
+            <div>
+                <div class="text-4xl font-black text-[#00FF41]">15K+</div>
+                <div class="text-gray-500 text-xs uppercase tracking-widest" data-i18n="stat2">Users</div>
+            </div>
+            <div>
+                <div class="text-4xl font-black text-[#00FF41]">2M+</div>
+                <div class="text-gray-500 text-xs uppercase tracking-widest" data-i18n="stat3">Messages Translated</div>
+            </div>
+            <div>
+                <div class="text-4xl font-black text-[#00FF41]">100+</div>
+                <div class="text-gray-500 text-xs uppercase tracking-widest" data-i18n="stat4">Languages</div>
+            </div>
         </div>
     </section>
 
@@ -295,12 +393,45 @@
         </div>
     </section>
 
+    <section id="faq" class="max-w-4xl mx-auto px-6 py-24 border-t border-white/5">
+        <h2 class="heading text-4xl md:text-6xl text-center mb-16 italic" data-i18n="faq-h">FAQ</h2>
+        <div class="grid md:grid-cols-2 gap-8">
+            <div
+                class="border border-white/10 p-6 rounded-lg hover:border-[#00FF41]/50 transition-all duration-300 group">
+                <h3 class="font-bold text-[#00FF41] text-lg mb-2 group-hover:translate-x-1 transition-transform"
+                    data-i18n="faq1-q">¿Por qué NeoTranslator es mejor?</h3>
+                <p class="text-gray-400 text-sm leading-relaxed" data-i18n="faq1">Porque no ensucia el chat. Nuestra
+                    tecnología de 'Integración Total' hace que las traducciones parezcan mensajes reales, no bloques de
+                    bot molestos.</p>
+            </div>
+            <div
+                class="border border-white/10 p-6 rounded-lg hover:border-[#00FF41]/50 transition-all duration-300 group">
+                <h3 class="font-bold text-[#00FF41] text-lg mb-2 group-hover:translate-x-1 transition-transform"
+                    data-i18n="faq2-q">¿Soporta respuestas e hilos?</h3>
+                <p class="text-gray-400 text-sm leading-relaxed" data-i18n="faq2">Sí, mantenemos el contexto completo de
+                    la conversación, permitiendo responder directamente a mensajes traducidos sin perder el hilo.</p>
+            </div>
+            <div
+                class="border border-white/10 p-6 rounded-lg hover:border-[#00FF41]/50 transition-all duration-300 group">
+                <h3 class="font-bold text-[#00FF41] text-lg mb-2 group-hover:translate-x-1 transition-transform"
+                    data-i18n="faq3-q">¿Es difícil de configurar?</h3>
+                <p class="text-gray-400 text-sm leading-relaxed" data-i18n="faq3">Cero comandos. Todo es visual y
+                    mediante clics. Olvídate de escribir prefijos largos y complicados en tu chat.</p>
+            </div>
+            <div
+                class="border border-white/10 p-6 rounded-lg hover:border-[#00FF41]/50 transition-all duration-300 group">
+                <h3 class="font-bold text-[#00FF41] text-lg mb-2 group-hover:translate-x-1 transition-transform"
+                    data-i18n="faq4-q">¿Cuántos idiomas maneja?</h3>
+                <p class="text-gray-400 text-sm leading-relaxed" data-i18n="faq4">Soportamos más de 100 idiomas con
+                    detección automática inteligente de IA para una comunicación global fluida.</p>
+            </div>
+        </div>
+    </section>
+
     <section class="py-30 text-center px-6">
         <div class="max-w-4xl mx-auto border-t-2 border-white/10 pt-20">
-            <h2 class="heading text-4xl md:text-7xl mb-10 leading-none" data-i18n="cta-title">
-                Your community speaks different languages. <br>
-                <span class="text-gray-600">Your Discord shouldn't.</span>
-            </h2>
+            <h2 class="heading text-4xl md:text-7xl mb-10 leading-none" data-i18n="cta-title">Your community speaks
+                different languages. <br><span class="text-gray-600">Your Discord shouldn't.</span></h2>
             <button
                 class="bg-[#00FF41] text-black font-black px-12 py-6 text-2xl uppercase tracking-tighter hover:scale-110 transition-transform"
                 data-i18n="btn-start">Get Started Now</button>
@@ -313,108 +444,151 @@
 
     <script>
         const translations = {
-
             en: {
                 "nav-features": "Features", "nav-pricing": "Pricing", "nav-add": "Add Bot",
                 "hero-title": "Break <br> <span class='text-[#00FF41]'>Language</span> <br> Barriers.",
-                "hero-desc": "Automatically translate messages between your community members in real time. One chat. All languages.",
+                "hero-desc": "Automatically translate messages in real time. One chat. All languages.",
                 "btn-add": "Add to Discord", "btn-how": "See how it works",
-                "banner-text": "REAL-TIME • 100+ LANGUAGES • NO LAG • SMART DETECTION",
-                "pricing-h": "The Pricing", "plan-f-t": "Free Plan", "plan-f-l": "<li>Basic Translation</li><li>5 Channels</li><li>Community Support</li>",
-                "plan-p-t": "Pro Plan", "plan-p-l": "<li>Unlimited Channels</li><li>AI Engine</li><li>Priority Support</li>",
-                "btn-current": "Current Plan", "btn-upgrade": "Upgrade Now",
-                "cta-title": "Your community speaks different languages. <br><span class='text-gray-600'>Your Discord shouldn't.</span>",
-                "btn-start": "Get Started Now",
-                "comp-h2": "The Real Difference", "comp-sub": "Visual & Functional Comparison",
-                "comp-bad-label": "Competitors", "comp-bad-tag": "❌ LIMITATION:",
-                "comp-bad-desc": "Does not support replies. Context is lost and chat becomes cluttered with rigid boxes.",
-                "comp-good-tag": "✅ TOTAL INTEGRATION:",
-                "comp-good-desc": "Looks and behaves like a real user. Supports threads, replies, and keeps Discord's aesthetic clean."
+                "chat-linked": "Linked", "banner-text": "REAL-TIME • 100+ LANGUAGES • NO LAG • SMART DETECTION",
+                "features-h2": "Core Features", "features-sub": "Everything you need",
+                "ft1-t": "AI Translation", "ft2-t": "Real-time Messages", "ft3-t": "Role System", "ft4-t": "Dashboard", "ft5-t": "No Commands", "ft6-t": "100+ Languages",
+                "f1": "Natural translations with context awareness.", "f2": "Instant messages with no lag.", "f3": "Users see messages in their language.", "f4": "Manage channels and users.", "f5": "Setup with clicks.", "f6": "Support for global communities.",
+                "comp-h2": "The Difference", "comp-sub": "Visual Comparison", "comp-bad-label": "Competitors", "comp-msg-orig": "¿Vamos a hacer raid hoy?", "comp-msg-bad": "Are we doing a raid today?", "comp-bad-tag": "❌ LIMITATION:", "comp-bad-desc": "Does not support replies.", "comp-tr-bot": "Bot",
+                "comp-reply-to": "We're at the base, are you coming?", "comp-date": "Today at 13:04", "comp-msg-good": "Yes, I'm already on my way", "comp-good-tag": "✅ INTEGRATION:", "comp-good-desc": "Looks like a real user.",
+                "stat1": "Servers", "stat2": "Users", "stat3": "Translated", "stat4": "Languages",
+                "pricing-h": "The Pricing", "plan-f-t": "Free Plan", "plan-f-l": "<li>Basic Translation</li><li>5 Channels</li>", "plan-p-t": "Pro Plan", "plan-p-l": "<li>Unlimited Channels</li><li>AI Engine</li>",
+                "btn-current": "Current Plan", "btn-upgrade": "Upgrade Now", "faq-h": "FAQ", "faq1-q": "How it works?", "faq1": "Uses AI instantly.", "faq2-q": "Replies?", "faq2": "Yes, full support.", "faq3-q": "Languages?", "faq3": "Over 100.",
+                "cta-title": "Your community speaks languages. <br><span class='text-gray-600'>Your Discord shouldn't.</span>", "btn-start": "Get Started",
+                "faq-h": "FAQ",
+                "faq1-q": "Why is NeoTranslator better?",
+                "faq1": "Because it doesn't clutter the chat. Our 'Total Integration' technology makes translations look like real messages, not annoying bot blocks.",
+                "faq2-q": "Does it support replies and threads?",
+                "faq2": "Yes, we keep the full context of the conversation, allowing you to reply directly to translated messages without losing the thread.",
+                "faq3-q": "Is it hard to set up?",
+                "faq3": "Zero commands. Everything is visual and click-based. Forget about typing long and complicated prefixes in your chat.",
+                "faq4-q": "How many languages does it handle?",
+                "faq4": "We support more than 100 languages with smart AI auto-detection for seamless global communication."
             },
             es: {
                 "nav-features": "Funciones", "nav-pricing": "Precios", "nav-add": "Añadir Bot",
                 "hero-title": "Rompe las <br> <span class='text-[#00FF41]'>Barreras</span> <br> del Idioma.",
-                "hero-desc": "Traduce mensajes automáticamente entre miembros de tu comunidad en tiempo real. Un chat. Todos los idiomas.",
+                "hero-desc": "Traduce mensajes automáticamente en tiempo real. Un chat. Todos los idiomas.",
                 "btn-add": "Añadir a Discord", "btn-how": "Cómo funciona",
-                "banner-text": "TIEMPO REAL • 100+ IDIOMAS • SIN LAG • DETECCIÓN INTELIGENTE",
-                "pricing-h": "Precios", "plan-f-t": "Plan Gratuito", "plan-f-l": "<li>Traducción Básica</li><li>5 Canales</li><li>Soporte de Comunidad</li>",
-                "plan-p-t": "Plan Pro", "plan-p-l": "<li>Canales Ilimitados</li><li>Motor de IA</li><li>Soporte Prioritario</li>",
-                "btn-current": "Plan Actual", "btn-upgrade": "Mejorar Ahora",
-                "cta-title": "Tu comunidad habla diferentes idiomas. <br><span class='text-gray-600'>Tu Discord no debería.</span>",
-                "btn-start": "Empezar Ahora",
-                "comp-h2": "La Diferencia Real", "comp-sub": "Comparativa Visual y Funcional",
-                "comp-bad-label": "Competencia", "comp-bad-tag": "❌ LIMITACIÓN:",
-                "comp-bad-desc": "No soporta respuestas (replies). El contexto se pierde y el chat se llena de rectángulos rígidos.",
-                "comp-good-tag": "✅ INTEGRACIÓN TOTAL:",
-                "comp-good-desc": "Se ve y se comporta como un usuario real. Soporta hilos, respuestas y mantiene la estética de Discord."
+                "chat-linked": "Vinculado", "banner-text": "TIEMPO REAL • 100+ IDIOMAS • SIN LAG • DETECCIÓN INTELIGENTE",
+                "features-h2": "Funciones", "features-sub": "Todo lo que necesitas",
+                "ft1-t": "Traducción IA", "ft2-t": "Tiempo Real", "ft3-t": "Sistema de Roles", "ft4-t": "Panel", "ft5-t": "Sin Comandos", "ft6-t": "100+ Idiomas",
+                "f1": "Traducciones con contexto.", "f2": "Mensajes al instante.", "f3": "Vista en tu idioma.", "f4": "Gestiona canales.", "f5": "Configura con clics.", "f6": "Para todo el mundo.",
+                "comp-h2": "La Diferencia", "comp-sub": "Comparativa Visual", "comp-bad-label": "Competencia", "comp-msg-orig": "¿Vamos a hacer raid hoy?", "comp-msg-bad": "¿Vamos a hacer una incursión hoy?", "comp-bad-tag": "❌ LIMITACIÓN:", "comp-bad-desc": "No soporta respuestas.", "comp-tr-bot": "Bot",
+                "comp-reply-to": "Estamos en la base, ¿vienes?", "comp-date": "Hoy a las 13:04", "comp-msg-good": "Sí, ya voy de camino", "comp-good-tag": "✅ INTEGRACIÓN:", "comp-good-desc": "Se ve como un usuario real.",
+                "stat1": "Servidores", "stat2": "Usuarios", "stat3": "Traducidos", "stat4": "Idiomas",
+                "pricing-h": "Precios", "plan-f-t": "Plan Gratis", "plan-f-l": "<li>Traducción Básica</li><li>5 Canales</li>", "plan-p-t": "Plan Pro", "plan-p-l": "<li>Canales Ilimitados</li><li>IA Engine</li>",
+                "btn-current": "Plan Actual", "btn-upgrade": "Mejorar Ahora", "faq-h": "FAQ", "faq1-q": "¿Cómo funciona?", "faq1": "Usa IA al instante.", "faq2-q": "¿Respuestas?", "faq2": "Sí, total soporte.", "faq3-q": "¿Idiomas?", "faq3": "Más de 100.",
+                "cta-title": "Tu comunidad habla idiomas. <br><span class='text-gray-600'>Tu Discord no debería.</span>", "btn-start": "Empezar Ahora",
+                "faq-h": "Preguntas Frecuentes",
+                "faq1-q": "¿Por qué NeoTranslator es mejor?",
+                "faq1": "Porque no ensucia el chat. Nuestra tecnología de 'Integración Total' hace que las traducciones parezcan mensajes reales, no bloques de bot molestos.",
+                "faq2-q": "¿Soporta respuestas e hilos?",
+                "faq2": "Sí, mantenemos el contexto completo de la conversación, permitiendo responder directamente a mensajes traducidos sin perder el hilo.",
+                "faq3-q": "¿Es difícil de configurar?",
+                "faq3": "Cero comandos. Todo es visual y mediante clics. Olvídate de escribir prefijos largos y complicados en tu chat.",
+                "faq4-q": "¿Cuántos idiomas maneja?",
+                "faq4": "Soportamos más de 100 idiomas con detección automática inteligente de IA para una comunicación global fluida."
             },
             pt: {
-                "nav-features": "Funcionalidades", "nav-pricing": "Preços", "nav-add": "Adicionar Bot",
+                "nav-features": "Recursos", "nav-pricing": "Preços", "nav-add": "Adicionar Bot",
                 "hero-title": "Quebre as <br> <span class='text-[#00FF41]'>Barreiras</span> <br> de Idioma.",
-                "hero-desc": "Traduza mensagens automaticamente entre membros da sua comunidade em tempo real. Um chat. Todos os idiomas.",
+                "hero-desc": "Traduza mensagens automaticamente em tempo real. Um chat. Todos os idiomas.",
                 "btn-add": "Adicionar ao Discord", "btn-how": "Como funciona",
-                "banner-text": "TEMPO REAL • 100+ IDIOMAS • SEM LAG • DETECÇÃO INTELIGENTE",
-                "pricing-h": "Preços", "plan-f-t": "Plano Grátis", "plan-f-l": "<li>Tradução Básica</li><li>5 Canais</li><li>Suporte Comunitário</li>",
-                "plan-p-t": "Plano Pro", "plan-p-l": "<li>Canais Ilimitados</li><li>Motor de IA</li><li>Suporte Prioritário</li>",
-                "btn-current": "Plano Atual", "btn-upgrade": "Atualizar Agora",
-                "cta-title": "Sua comunidade fala idiomas diferentes. <br><span class='text-gray-600'>Seu Discord não deveria.</span>",
-                "btn-start": "Começar Agora",
-                "comp-h2": "A Diferença Real", "comp-sub": "Comparação Visual e Funcional",
-                "comp-bad-label": "Competência", "comp-bad-tag": "❌ LIMITAÇÃO:",
-                "comp-bad-desc": "Não suporta respostas. O contexto é perdido e o chat fica cheio de caixas rígidas.",
-                "comp-good-tag": "✅ INTEGRAÇÃO TOTAL:",
-                "comp-good-desc": "Parece e age como um usuário real. Suporta tópicos e respostas mantendo o visual do Discord."
+                "chat-linked": "Vinculado", "banner-text": "TEMPO REAL • 100+ IDIOMAS • SEM LAG • DETECÇÃO INTELIGENTE",
+                "features-h2": "Recursos", "features-sub": "Tudo o que você precisa",
+                "ft1-t": "Tradução IA", "ft2-t": "Tempo Real", "ft3-t": "Sistema de Roles", "ft4-t": "Painel", "ft5-t": "Sem Comandos", "ft6-t": "100+ Idiomas",
+                "f1": "Traduções com contexto.", "f2": "Mensagens instantâneas.", "f3": "Visualização local.", "f4": "Gerenciar canais.", "f5": "Configuração simples.", "f6": "Comunidades globais.",
+                "comp-h2": "A Diferença", "comp-sub": "Comparação Visual", "comp-bad-label": "Competidores", "comp-msg-orig": "Vamos fazer raid hoje?", "comp-msg-bad": "Vamos fazer uma incursão hoje?", "comp-bad-tag": "❌ LIMITAÇÃO:", "comp-bad-desc": "Não suporta respostas.", "comp-tr-bot": "Bot",
+                "comp-reply-to": "Estamos na base, você vem?", "comp-date": "Hoje às 13:04", "comp-msg-good": "Sim, já estou a caminho", "comp-good-tag": "✅ INTEGRAÇÃO:", "comp-good-desc": "Parece um usuário real.",
+                "stat1": "Servidores", "stat2": "Usuários", "stat3": "Traduzidos", "stat4": "Idiomas",
+                "pricing-h": "Preços", "plan-f-t": "Plano Grátis", "plan-f-l": "<li>Tradução Básica</li><li>5 Canais</li>", "plan-p-t": "Plano Pro", "plan-p-l": "<li>Canais Ilimitados</li><li>Motor de IA</li>",
+                "btn-current": "Plano Atual", "btn-upgrade": "Atualizar Agora", "faq-h": "FAQ", "faq1-q": "Como funciona?", "faq1": "Usa IA instantânea.", "faq2-q": "Respostas?", "faq2": "Sim, suporte total.", "faq3-q": "Idiomas?", "faq3": "Mais de 100.",
+                "faq-h": "Perguntas Frequentes",
+                "faq1-q": "Por que o NeoTranslator é melhor?",
+                "faq1": "Porque não polui o chat. Nossa tecnologia de 'Integração Total' faz com que as traduções pareçam mensagens reais, não blocos de bot irritantes.",
+                "faq2-q": "Suporta respostas e tópicos?",
+                "faq2": "Sim, mantemos o contexto total da conversa, permitindo responder diretamente a mensagens traduzidas sem perder o fio.",
+                "faq3-q": "É difícil de configurar?",
+                "faq3": "Zero comandos. Tudo é visual e baseado em cliques. Esqueça a digitação de prefixos longos e complicados no seu chat.",
+                "faq4-q": "Quantos idiomas ele suporta?",
+                "faq4": "Suportamos mais de 100 idiomas com detecção automática inteligente de IA para uma comunicação global perfeita."
             },
             fr: {
                 "nav-features": "Fonctions", "nav-pricing": "Tarifs", "nav-add": "Ajouter Bot",
-                "hero-title": "Brisez les <br> <span class='text-[#00FF41]'>Barrières</span> <br> de la Langue.",
-                "hero-desc": "Traduisez automatiquement les messages de votre communauté en temps réel.",
+                "hero-title": "Brisez les <br> <span class='text-[#00FF41]'>Barrières</span> <br> de Langue.",
+                "hero-desc": "Traduisez les messages en temps réel. Un chat. Toutes les langues.",
                 "btn-add": "Ajouter à Discord", "btn-how": "Comment ça marche",
-                "banner-text": "TEMPS RÉEL • 100+ LANGUES • SANS DÉLAI • DÉTECTION INTELLIGENTE",
-                "pricing-h": "Tarifs", "plan-f-t": "Plan Gratuit", "plan-f-l": "<li>Traduction de base</li><li>5 canaux</li><li>Support communautaire</li>",
-                "plan-p-t": "Plan Pro", "plan-p-l": "<li>Canaux illimités</li><li>Moteur IA</li><li>Support prioritaire</li>",
-                "btn-current": "Plan Actuel", "btn-upgrade": "Améliorer Maintenant",
-                "cta-title": "Votre communauté parle différentes langues. <br><span class='text-gray-600'>Votre Discord ne devrait pas.</span>",
-                "btn-start": "Commencer Maintenant",
-                "comp-h2": "La Vraie Différence", "comp-sub": "Comparaison visuelle et fonctionnelle",
-                "comp-bad-label": "Concurrence", "comp-bad-tag": "❌ LIMITATION:",
-                "comp-bad-desc": "Ne supporte pas les réponses. Le contexte est perdu et le chat devient encombré.",
-                "comp-good-tag": "✅ INTÉGRATION TOTALE:",
-                "comp-good-desc": "Ressemble et se comporte comme un utilisateur réel. Supporte les fils et les réponses."
+                "chat-linked": "Lié", "banner-text": "TEMPS RÉEL • 100+ LANGUES • SANS LAG • DÉTECTION INTELLIGENTE",
+                "features-h2": "Fonctions", "features-sub": "Tout ce qu'il faut",
+                "ft1-t": "Traduction IA", "ft2-t": "Temps Réel", "ft3-t": "Système de Rôles", "ft4-t": "Tableau", "ft5-t": "Sans Commandes", "ft6-t": "100+ Langues",
+                "f1": "Traductions avec contexte.", "f2": "Messages instantanés.", "f3": "Vue localisée.", "f4": "Gérer les salons.", "f5": "Config par clics.", "f6": "Pour le monde entier.",
+                "comp-h2": "La Différence", "comp-sub": "Comparaison Visuelle", "comp-bad-label": "Concurrents", "comp-msg-orig": "On fait un raid aujourd'hui ?", "comp-msg-bad": "On fait une incursion ?", "comp-bad-tag": "❌ LIMITATION:", "comp-bad-desc": "Pas de réponses.", "comp-tr-bot": "Bot",
+                "comp-reply-to": "On est à la base, tu viens ?", "comp-date": "Aujourd'hui à 13:04", "comp-msg-good": "Oui, j'arrive", "comp-good-tag": "✅ INTÉGRATION:", "comp-good-desc": "Comme un vrai utilisateur.",
+                "stat1": "Serveurs", "stat2": "Membres", "stat3": "Traduits", "stat4": "Langues",
+                "pricing-h": "Tarifs", "plan-f-t": "Gratuit", "plan-f-l": "<li>Traduction de base</li><li>5 Salons</li>", "plan-p-t": "Pro", "plan-p-l": "<li>Salons illimités</li><li>Moteur IA</li>",
+                "btn-current": "Actuel", "btn-upgrade": "Améliorer", "faq-h": "FAQ", "faq1-q": "Comment ça marche ?", "faq1": "IA en temps réel.",
+                "faq-h": "Questions Fréquentes",
+                "faq1-q": "Pourquoi NeoTranslator est-il meilleur ?",
+                "faq1": "Parce qu'il n'encombre pas le chat. Notre technologie d'Intégration Totale rend les traductions semblables à de vrais messages, pas à des blocs de bot ennuyeux.",
+                "faq2-q": "Prend-il en charge les réponses et les fils ?",
+                "faq2": "Oui, nous gardons le contexte complet de la conversation, vous permettant de répondre directement aux messages traduits sans perdre le fil.",
+                "faq3-q": "Est-ce difficile à configurer ?",
+                "faq3": "Zéro commande. Tout est visuel et basé sur des clics. Oubliez la saisie de préfixes longs et compliqués dans votre chat.",
+                "faq4-q": "Combien de langues gère-t-il ?",
+                "faq4": "Nous prenons en charge plus de 100 langues avec une détection automatique intelligente par IA pour une communication mondiale fluide."
             },
             de: {
-                "nav-features": "Funktionen", "nav-pricing": "Preise", "nav-add": "Bot Hinzufügen",
-                "hero-title": "Überwinde <br> <span class='text-[#00FF41]'>Sprach</span> <br> Barrieren.",
-                "hero-desc": "Übersetzen Sie Nachrichten automatisch in Echtzeit.",
-                "btn-add": "Zu Discord hinzufügen", "btn-how": "Wie es funktioniert",
-                "banner-text": "ECHTZEIT • 100+ SPRACHEN • KEIN LAG • INTELLIGENTE ERKENNUNG",
-                "pricing-h": "Preise", "plan-f-t": "Kostenloser Plan", "plan-f-l": "<li>Basis-Übersetzung</li><li>5 Kanäle</li><li>Community-Support</li>",
-                "plan-p-t": "Pro-Plan", "plan-p-l": "<li>Unbegrenzte Kanäle</li><li>KI-Engine</li><li>Prioritäts-Support</li>",
-                "btn-current": "Aktueller Plan", "btn-upgrade": "Jetzt Upgraden",
-                "cta-title": "Ihre Community spricht verschiedene Sprachen. <br><span class='text-gray-600'>Ihr Discord sollte das nicht.</span>",
-                "btn-start": "Jetzt Starten",
-                "comp-h2": "Der wahre Unterschied", "comp-sub": "Visueller und funktionaler Vergleich",
-                "comp-bad-label": "Konkurrenz", "comp-bad-tag": "❌ EINSCHRÄNKUNG:",
-                "comp-bad-desc": "Unterstützt keine Antworten. Der Kontext geht verloren und der Chat wird unübersichtlich.",
-                "comp-good-tag": "✅ VOLLE INTEGRATION:",
-                "comp-good-desc": "Sieht aus und verhält sich wie ein echter Benutzer. Unterstützt Threads und Antworten."
+                "nav-features": "Funktionen", "nav-pricing": "Preise", "nav-add": "Bot hinzufügen",
+                "hero-title": "Sprach <br> <span class='text-[#00FF41]'>Barrieren</span> <br> brechen.",
+                "hero-desc": "Nachrichten in Echtzeit übersetzen. Ein Chat. Alle Sprachen.",
+                "btn-add": "Zu Discord", "btn-how": "Funktionsweise",
+                "chat-linked": "Verbunden", "banner-text": "ECHTZEIT • 100+ SPRACHEN • KEIN LAG • INTELLIGENT",
+                "features-h2": "Funktionen", "features-sub": "Alles Nötige",
+                "ft1-t": "KI-Übersetzung", "ft2-t": "Echtzeit", "ft3-t": "Rollensystem", "ft4-t": "Panel", "ft5-t": "Keine Befehle", "ft6-t": "100+ Sprachen",
+                "f1": "Kontext-Übersetzung.", "f2": "Sofort-Nachrichten.", "f3": "Lokale Ansicht.", "f4": "Kanäle verwalten.", "f5": "Klick-Setup.", "f6": "Globaler Support.",
+                "comp-h2": "Der Unterschied", "comp-sub": "Vergleich", "comp-bad-label": "Konkurrenz", "comp-msg-orig": "Machen wir heute Raid?", "comp-msg-bad": "Incursion heute?", "comp-bad-tag": "❌ LIMIT:", "comp-bad-desc": "Keine Antworten.", "comp-tr-bot": "Bot",
+                "comp-reply-to": "Sind an der Basis, kommst du?", "comp-date": "Heute um 13:04", "comp-msg-good": "Ja, bin unterwegs", "comp-good-tag": "✅ INTEGRATION:", "comp-good-desc": "Wie ein echter User.",
+                "stat1": "Server", "stat2": "Nutzer", "stat3": "Übersetzt", "stat4": "Sprachen",
+                "pricing-h": "Preise", "plan-f-t": "Kostenlos", "plan-f-l": "<li>Basis</li><li>5 Kanäle</li>", "plan-p-t": "Pro", "plan-p-l": "<li>Unbegrenzt</li><li>KI-Engine</li>",
+                "btn-current": "Aktuell", "btn-upgrade": "Upgrade", "faq-h": "FAQ", "faq1-q": "Wie klappt das?", "faq1": "KI-Echtzeit.",
+                "faq-h": "Häufig Gestellte Fragen",
+                "faq1-q": "Warum ist NeoTranslator besser?",
+                "faq1": "Weil er den Chat nicht überlädt. Unsere 'Total Integration'-Technologie lässt Übersetzungen wie echte Nachrichten aussehen, nicht wie nervige Bot-Blöcke.",
+                "faq2-q": "Werden Antworten und Threads unterstützt?",
+                "faq2": "Ja, wir behalten den vollen Kontext der Konversation bei, sodass Sie direkt auf übersetzte Nachrichten antworten können, ohne den Faden zu verlieren.",
+                "faq3-q": "Ist die Einrichtung schwierig?",
+                "faq3": "Null Befehle. Alles ist visuell und klickbasiert. Vergessen Sie das Tippen von langen und komplizierten Präfixen in Ihrem Chat.",
+                "faq4-q": "Wie viele Sprachen werden unterstützt?",
+                "faq4": "Wir unterstützen mehr als 100 Sprachen mit intelligenter KI-Auto-Erkennung für eine nahtlose globale Kommunikation."
             },
             ja: {
-                "nav-features": "機能", "nav-pricing": "料金", "nav-add": "Botを追加",
-                "hero-title": "言語の <br> <span class='text-[#00FF41]'>壁を</span> <br> 打ち破る",
-                "hero-desc": "コミュニティメンバー間のメッセージをリアルタイムで自動翻訳。",
-                "btn-add": "Discordに追加", "btn-how": "仕組みを見る",
-                "banner-text": "リアルタイム • 100以上の言語 • ラグなし • スマート検出",
-                "pricing-h": "料金プラン", "plan-f-t": "無料プラン", "plan-f-l": "<li>基本翻訳</li><li>5チャンネル</li><li>コミュニティサポート</li>",
-                "plan-p-t": "プロプラン", "plan-p-l": "<li>無制限のチャンネル</li><li>AIエンジン</li><li>優先サポート</li>",
-                "btn-current": "現在のプラン", "btn-upgrade": "今すぐアップグレード",
-                "cta-title": "コミュニティは多言語で話します。<br><span class='text-gray-600'>Discordもそうあるべきです。</span>",
-                "btn-start": "今すぐ始める",
-                "comp-h2": "本当の違い", "comp-sub": "視覚的および機能的な比較",
-                "comp-bad-label": "他社", "comp-bad-tag": "❌ 制限事項:",
-                "comp-bad-desc": "返信をサポートしていません。コンテキストが失われ、チャットが乱雑になります。",
-                "comp-good-tag": "✅ 完全な統合:",
-                "comp-good-desc": "実際のユーザーのように動作します。スレッドや返信をサポートし、美しさを維持します。"
+                "nav-features": "機能", "nav-pricing": "料金", "nav-add": "ボット追加",
+                "hero-title": "言葉の <br> <span class='text-[#00FF41]'>壁を</span> <br> 壊す。",
+                "hero-desc": "メッセージをリアルタイム翻訳。一つのチャット、全言語。",
+                "btn-add": "Discordに追加", "btn-how": "使い方",
+                "chat-linked": "リンク済み", "banner-text": "リアルタイム • 100言語以上 • 遅延なし • スマート検出",
+                "features-h2": "主な機能", "features-sub": "必要なものすべて",
+                "ft1-t": "AI翻訳", "ft2-t": "リアルタイム", "ft3-t": "ロールシステム", "ft4-t": "パネル", "ft5-t": "コマンド不要", "ft6-t": "100+ 言語",
+                "f1": "文脈翻訳。", "f2": "即時メッセージ。", "f3": "ローカライズ表示。", "f4": "チャンネル管理。", "f5": "クリック設定。", "f6": "グローバル対応。",
+                "comp-h2": "違い", "comp-sub": "比較", "comp-bad-label": "他社", "comp-msg-orig": "今日レイドやる？", "comp-msg-bad": "今日行きますか？", "comp-bad-tag": "❌ 制限:", "comp-bad-desc": "返信非対応。", "comp-tr-bot": "ボット",
+                "comp-reply-to": "基地にいるよ、来る？", "comp-date": "今日 13:04", "comp-msg-good": "はい、向かってます", "comp-good-tag": "✅ 統合:", "comp-good-desc": "本物のユーザーのよう。",
+                "stat1": "鯖", "stat2": "ユーザー", "stat3": "翻訳済み", "stat4": "言語",
+                "pricing-h": "料金", "plan-f-t": "無料", "plan-f-l": "<li>基本翻訳</li><li>5ch</li>", "plan-p-t": "プロ", "plan-p-l": "<li>無制限</li><li>AIエンジン</li>",
+                "btn-current": "現在", "btn-upgrade": "アップグレード", "faq-h": "FAQ", "faq1-q": "仕組みは？", "faq1": "即時AI翻訳。",
+                "faq-h": "よくある質問",
+                "faq1-q": "NeoTranslatorが優れている理由は？",
+                "faq1": "チャットを汚さないからです。「完全統合」技術により、翻訳が単なるボットの塊ではなく、実際のメッセージのように表示されます。",
+                "faq2-q": "返信やスレッドに対応していますか？",
+                "faq2": "はい、会話の文脈を完全に保持するため、スレッドを失うことなく翻訳されたメッセージに直接返信できます。",
+                "faq3-q": "設定は難しいですか？",
+                "faq3": "コマンドは一切不要です。すべてが視覚的でクリック操作のみ。チャットで長くて複雑なプレフィックスを入力する必要はありません。",
+                "faq4-q": "何カ国語に対応していますか？",
+                "faq4": "シームレスなグローバルコミュニケーションのために、AIによるスマート自動検出で100以上の言語をサポートしています。"
             }
         };
 
@@ -427,15 +601,33 @@
             });
             localStorage.setItem('preferredLang', lang);
             document.documentElement.lang = lang;
+            document.getElementById('languageSelector').value = lang;
         }
 
         window.addEventListener('DOMContentLoaded', () => {
             const savedLang = localStorage.getItem('preferredLang');
             const browserLang = navigator.language.split('-')[0];
             const defaultLang = savedLang || (translations[browserLang] ? browserLang : 'en');
-            document.getElementById('languageSelector').value = defaultLang;
             changeLanguage(defaultLang);
         });
+
+        function scrollToSection(sectionId) {
+            const element = document.getElementById(sectionId);
+            if (element) {
+                // Obtenemos la posición del elemento
+                const offset = 100; // El margen para que el menú no tape el título
+                const bodyRect = document.body.getBoundingClientRect().top;
+                const elementRect = element.getBoundingClientRect().top;
+                const elementPosition = elementRect - bodyRect;
+                const offsetPosition = elementPosition - offset;
+
+                // Hacemos el scroll manualmente
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+            }
+        }
     </script>
 </body>
 
