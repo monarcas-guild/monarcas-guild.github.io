@@ -74,27 +74,31 @@
                         
                         const filas = data.slice(headerIdx + 1);
 
-                        filas.forEach((row, index) => {
-                            const nombre = row[colNombre];
-                            const stockNum = row[colStock] ? row[colStock].toString().replace(/[^0-9]/g, '') : '0';
-                            const stock = parseInt(stockNum) || 0;
+// ... dentro de la función cargarAlmacen, en el bucle filas.forEach ...
 
-                            if (nombre && stock > 0) {
-                                // Lógica automática: Google nombra las imágenes por orden (0, 1, 2...) 
-                                // según aparecen en el Excel original.
-                                const imgPath = `./resources/cellimage_637359523_${index}.jpg`;
-                                
-                                html += `<tr>
-                                    <td class="text-center">
-                                        <img src="${imgPath}" 
-                                             class="item-img mx-auto" 
-                                             onerror="this.src='./resources/image_637359523_${index}.jpg'; this.onerror=function(){this.src='https://valhalla-rising.com/favicon.ico'};">
-                                    </td>
-                                    <td class="font-bold text-slate-200">${nombre}</td>
-                                    <td class="text-right stock-badge">${stock.toLocaleString()}</td>
-                                </tr>`;
-                            }
-                        });
+filas.forEach((row) => {
+    const nombre = row[colNombre];
+    const stockNum = row[colStock] ? row[colStock].toString().replace(/[^0-9]/g, '') : '0';
+    const stock = parseInt(stockNum) || 0;
+
+    // LEER COLUMNA AG (Índice 32)
+    // Aquí el código buscará el texto que escribas, ej: ./resources/cellImage_637359523_0.jpg
+    let imgPath = row[32] ? row[32].trim() : '';
+
+    if (nombre && stock > 0) {
+        html += `<tr>
+            <td class="text-center">
+                ${imgPath ? 
+                    `<img src="${imgPath}" class="item-img mx-auto" onerror="this.src='https://valhalla-rising.com/favicon.ico';">` : 
+                    `<div class="w-8 h-8 bg-slate-800 rounded mx-auto flex items-center justify-center">
+                        <i class="fas fa-box text-slate-600 text-xs"></i>
+                    </div>`}
+            </td>
+            <td class="font-bold text-slate-200">${nombre}</td>
+            <td class="text-right stock-badge">${stock.toLocaleString()}</td>
+        </tr>`;
+    }
+});
                     }
 
                     $('#dataAlmacen').html(html);
