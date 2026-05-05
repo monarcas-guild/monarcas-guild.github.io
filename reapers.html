@@ -89,111 +89,97 @@
         actividad: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTmqkTpsU-nFe_DmHlwG28zHEtZU_RkhD6VxNZGX4XdC2Di6JPSBrTXTF6pKeIP737mHOL6eZwqJuW6/pub?gid=801467735&single=true&output=csv'
     };
 
-    // Función para manejar errores de carga local
-    const handleEmpty = (id) => $(id).html('<tr><td colspan="4" class="text-center p-4">Cargando datos desde Google Sheets... si tarda, verifica tu conexión.</td></tr>');
-
-    // --- PROCESAR ALMACÉN ---
+    // --- CARGAR ALMACÉN ---
     Papa.parse(csvUrls.almacen, {
         download: true,
-        header: false, // Cambiamos a false para saltar filas vacías manualmente
         complete: function(results) {
             const data = results.data;
             let html = '';
-            // Buscamos la fila que contiene los encabezados reales
-            const startRow = data.findIndex(row => row.some(cell => cell.includes('EXISTENCIA') || cell.includes('DESCRIPCIÓN')));
+            // Buscamos la fila donde realmente empiezan los títulos (ej. DESCRIPCIÓN)
+            const headerIndex = data.findIndex(row => row.some(c => c && c.toUpperCase().includes('DESCRIPCIÓN')));
             
-            if (startRow !== -1) {
-                const headers = data[startRow].map(h => h.trim().toUpperCase());
-                const rows = data.slice(startRow + 1);
+            if (headerIndex !== -1) {
+                const headers = data[headerIndex].map(h => h.trim().toUpperCase());
+                const rows = data.slice(headerIndex + 1);
 
                 rows.forEach(row => {
-                    const desc = row[headers.indexOf('DESCRIPCIÓN')] || row[headers.indexOf('ITEMS')];
-                    const stock = parseInt(row[headers.indexOf('EXISTENCIA')] || 0);
+                    const item = row[headers.indexOf('DESCRIPCIÓN')] || row[0];
+                    const stock = parseInt(row[headers.indexOf('EXISTENCIA')]) || 0;
                     const boss = row[headers.indexOf('BOSS')] || '-';
-                    const receptor = row[headers.indexOf('A QUIEN SE ENTREGO')] || row[headers.indexOf('ENTREGADO A')] || '-';
-
-                    if (desc && desc.length > 2) {
+                    
+                    if (item && item.length > 2) {
                         html += `<tr>
-                            <td class="font-semibold">${desc}</td>
-                            <td class="${stock > 0 ? 'text-green-400 font-bold' : 'text-gray-500'}">${stock}</td>
-                            <td>${boss}</td>
-                            <td><span class="text-blue-300 text-sm">${receptor}</span></td>
+                            <td class="font-bold text-blue-100">${item}</td>
+                            <td class="${stock > 0 ? 'text-green-400 font-black' : 'text-gray-600'}">${stock}</td>
+                            <td class="text-gray-400">${boss}</td>
+                            <td class="text-xs text-blue-300">${row[headers.indexOf('A QUIEN SE ENTREGO')] || '-'}</td>
                         </tr>`;
                     }
                 });
             }
-            $('#dataAlmacen').html(html || '<tr><td colspan="4">No se encontraron datos en Almacén</td></tr>');
-            $('#tablaAlmacen').DataTable({ language: { search: "🔍 Buscar ítem:" } });
+            $('#dataAlmacen').html(html);
+            $('#tablaAlmacen').DataTable({ language: { search: "Buscar ítem:" }, pageLength: 10 });
         }
     });
 
-    // --- PROCESAR PUNTOS ---
+    // --- CARGAR PUNTOS ---
     Papa.parse(csvUrls.puntos, {
         download: true,
-        header: false,
         complete: function(results) {
             const data = results.data;
             let html = '';
-            // Buscar cabecera de puntos
-            const startRow = data.findIndex(row => row.some(cell => cell.includes('PUNTOS')));
+            const headerIndex = data.findIndex(row => row.some(c => c && c.toUpperCase().includes('PUNTOS')));
             
-            if (startRow !== -1) {
-                const headers = data[startRow].map(h => h.trim().toUpperCase());
-                const rows = data.slice(startRow + 1);
-
+            if (headerIndex !== -1) {
+                const rows = data.slice(headerIndex + 1);
                 rows.forEach(row => {
-                    const item = row[0]; // Usualmente la primera columna
-                    const val = row[headers.indexOf('PUNTOS')];
-                    if (item && val && !isNaN(val)) {
+                    const name = row[0]; // Ítem
+                    const pts = row[1];  // Puntos
+                    if (name && pts && !isNaN(pts)) {
                         html += `
-                        <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 shadow-lg">
-                            <h3 class="text-xs text-blue-400 font-bold uppercase mb-1">Ítem de Canje</h3>
-                            <p class="text-md font-medium leading-tight h-10 overflow-hidden">${item}</p>
-                            <p class="text-2xl font-black text-white mt-2">${val} <span class="text-xs text-gray-400 font-normal">PTS</span></p>
+                        <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 shadow-md">
+                            <h3 class="text-xs text-blue-400 font-bold uppercase">Ítem de Canje</h3>
+                            <p class="text-md font-semibold mb-2">${name}</p>
+                            <p class="text-2xl font-black text-white">${pts} <span class="text-xs font-normal text-gray-500">PTS</span></p>
                         </div>`;
                     }
                 });
             }
-            $('#gridPuntos').html(html || '<p class="col-span-full text-center">No se encontraron puntos</p>');
+            $('#gridPuntos').html(html);
         }
     });
 
-    // --- PROCESAR ACTIVIDAD ---
+    // --- CARGAR ACTIVIDAD ---
     Papa.parse(csvUrls.actividad, {
         download: true,
-        header: false,
         complete: function(results) {
             const data = results.data;
             let html = '';
-            const startRow = data.findIndex(row => row.some(cell => cell.includes('DISCORD')));
+            const headerIndex = data.findIndex(row => row.some(c => c && c.toUpperCase().includes('DISCORD')));
+            
+            if (headerIndex !== -1) {
+                const headers = data[headerIndex].map(h => h.trim().toUpperCase());
+                let rows = data.slice(headerIndex + 1).filter(r => r[headers.indexOf('DISCORD')]);
 
-            if (startRow !== -1) {
-                const headers = data[startRow].map(h => h.trim().toUpperCase());
-                let rows = data.slice(startRow + 1)
-                    .filter(row => row[headers.indexOf('DISCORD')] && row[headers.indexOf('ACTIVIDAD MEDIA TOTAL')]);
-
-                // Ordenar por ranking real
+                // Ordenar por actividad media (Ranking)
                 rows.sort((a, b) => {
-                    let valA = parseFloat(a[headers.indexOf('ACTIVIDAD MEDIA TOTAL')].replace('%', '')) || 0;
-                    let valB = parseFloat(b[headers.indexOf('ACTIVIDAD MEDIA TOTAL')].replace('%', '')) || 0;
+                    let valA = parseFloat(a[headers.indexOf('ACTIVIDAD MEDIA TOTAL')]) || 0;
+                    let valB = parseFloat(b[headers.indexOf('ACTIVIDAD MEDIA TOTAL')]) || 0;
                     return valB - valA;
                 });
 
                 rows.forEach((row, index) => {
                     const user = row[headers.indexOf('DISCORD')];
-                    const media = row[headers.indexOf('ACTIVIDAD MEDIA TOTAL')];
-                    const numMedia = parseFloat(media.replace('%', ''));
-                    const color = numMedia >= 80 ? 'text-green-400' : (numMedia >= 50 ? 'text-yellow-400' : 'text-red-400');
-
+                    const media = row[headers.indexOf('ACTIVIDAD MEDIA TOTAL')] || '0%';
                     html += `<tr>
                         <td class="text-gray-500 font-bold">#${index + 1}</td>
                         <td class="font-bold">${user}</td>
-                        <td class="${color} font-mono font-bold">${media}</td>
+                        <td class="text-green-400 font-mono">${media}</td>
                     </tr>`;
                 });
             }
             $('#dataActividad').html(html);
-            $('#tablaRanking').DataTable({ order: [[2, 'desc']], language: { search: "🔍 Buscar jugador:" } });
+            $('#tablaRanking').DataTable({ order: [[2, 'desc']] });
         }
     });
 
