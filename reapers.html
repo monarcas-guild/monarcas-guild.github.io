@@ -275,11 +275,48 @@
             $('#listaAH').html(hAH);
         }
     });
+
+    // CARGAR ACTIVIDAD (NUEVA LÓGICA RANKING)
+        function cargarActividad() {
+            const url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTmqkTpsU-nFe_DmHlwG28zHEtZU_RkhD6VxNZGX4XdC2Di6JPSBrTXTF6pKeIP737mHOL6eZwqJuW6/pub?gid=801467735&single=true&output=csv';
+            Papa.parse(url, { download: true, complete: function(results) {
+                const data = results.data;
+                let lista = [];
+
+                // Recorremos desde la fila 5 (índice 4) del Excel
+                for (let i = 4; i < data.length; i++) {
+                    const nick = data[i][7]; // Columna H[cite: 2]
+                    const avg = data[i][16]; // Columna Q (Actividad Media Total)[cite: 2]
+
+                    if (nick && avg && nick !== "Nick") {
+                        // Limpiamos el porcentaje para poder ordenar numéricamente
+                        const valNum = parseFloat(avg.replace('%', '').replace(',', '.'));
+                        lista.push({ nick, avg, valNum });
+                    }
+                }
+
+                // Ordenar de Mayor a Menor Actividad
+                lista.sort((a, b) => b.valNum - a.valNum);
+
+                let htmlRanking = '';
+                lista.forEach((user, index) => {
+                    const colorClass = user.valNum >= 50 ? 'pct-high' : 'pct-low';
+                    htmlRanking += `
+                        <div class="ranking-row">
+                            <div class="rank-number">#${index + 1}</div>
+                            <div class="rank-name">${user.nick}</div>
+                            <div class="rank-pct ${colorClass}">${user.avg}</div>
+                        </div>`;
+                });
+                $('#listaActividad').html(htmlRanking);
+            }});
+        }
 }
 
         $(document).ready(function() {
             cargarAlmacen();
             cargarReparto();
+            cargarActividad();
         });
     </script>
 </body>
