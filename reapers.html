@@ -3,62 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>REAPERS - Almacén Final</title>
+    <title>REAPERS - Almacén Oficial</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --dark: #0b1120; --card: #161f32; --accent: #3b82f6; }
-        body { background-color: var(--dark); color: #f1f5f9; font-family: 'Inter', sans-serif; }
+        :root { --bg: #0f172a; --panel: #1e293b; --accent: #3b82f6; }
+        body { background-color: var(--bg); color: #f8fafc; font-family: 'Inter', sans-serif; }
         
-        .table-container {
-            background: rgba(22, 31, 50, 0.8);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(51, 65, 85, 0.5);
-            border-radius: 12px;
-            padding: 20px;
+        .main-container {
+            max-width: 1000px; margin: 40px auto; padding: 20px;
+            background: var(--panel); border-radius: 12px;
+            border: 1px solid #334155; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
         }
 
-        .dataTables_wrapper .dataTables_filter input {
-            background: #1e293b; border: 1px solid #334155; border-radius: 8px;
-            padding: 8px 12px; color: white; margin-left: 10px; width: 250px; outline: none;
+        /* Estilo de la tabla igual a tu captura */
+        table.dataTable { border-collapse: collapse !important; border: none !important; }
+        table.dataTable thead th {
+            background-color: #334155 !important; color: #94a3b8 !important;
+            text-transform: uppercase; font-size: 0.75rem; padding: 15px !important;
+            border-bottom: 2px solid #1e293b !important;
         }
-        table.dataTable { border: none !important; width: 100% !important; }
-        table.dataTable thead th { 
-            background-color: #1e293b !important; color: #60a5fa !important; 
-            text-transform: uppercase; font-size: 0.75rem; padding: 15px !important; border: none !important;
-        }
-        table.dataTable tbody tr { background-color: transparent !important; border-bottom: 1px solid #1e293b !important; }
-        table.dataTable td { padding: 12px 15px !important; border: none !important; vertical-align: middle; }
+        table.dataTable tbody tr { background-color: #1e293b !important; border-bottom: 1px solid #334155 !important; }
+        table.dataTable tbody tr:hover { background-color: #2d3748 !important; }
+        table.dataTable td { padding: 12px 15px !important; vertical-align: middle; border: none !important; }
 
-        .item-img { 
-            width: 44px; height: 44px; object-fit: contain; 
-            border-radius: 8px; background: #0b1120;
-            border: 1px solid #334155; padding: 2px;
+        .item-icon { 
+            width: 40px; height: 40px; object-fit: contain; 
+            border-radius: 6px; background: #0f172a; border: 1px solid #475569;
         }
-        .stock-val { color: #4ade80; font-weight: 800; font-size: 1.1rem; }
+        .stock-number { color: #4ade80; font-weight: 700; font-size: 1.1rem; }
+        
+        /* Buscador personalizado */
+        .dataTables_filter input {
+            background: #0f172a; border: 1px solid #475569; border-radius: 6px;
+            padding: 6px 12px; color: white; outline: none; margin-bottom: 15px;
+        }
     </style>
 </head>
-<body class="p-4 md:p-8">
+<body>
 
-    <div class="max-w-6xl mx-auto">
-        <header class="mb-8 text-center">
-            <h1 class="text-5xl font-black tracking-tighter italic text-blue-500 mb-2">REAPERS</h1>
-            <p class="text-slate-400 font-medium">Existencias en Almacén</p>
-        </header>
-
-        <div class="table-container">
-            <table id="tablaAlmacen" class="display nowrap">
-                <thead>
-                    <tr>
-                        <th class="text-center" style="width: 60px;">Icono</th>
-                        <th>Descripción del Ítem</th>
-                        <th class="text-right">Existencia</th>
-                    </tr>
-                </thead>
-                <tbody id="dataAlmacen"></tbody>
-            </table>
+    <div class="main-container">
+        <div class="flex items-center justify-center gap-4 mb-6">
+            <img src="https://valhalla-rising.com/favicon.ico" class="w-10 h-10">
+            <h1 class="text-3xl font-black italic tracking-tighter text-blue-500">REAPERS ALMACÉN</h1>
         </div>
+
+        <table id="tablaReapers" class="display w-full">
+            <thead>
+                <tr>
+                    <th class="text-center" style="width: 70px;">Icono</th>
+                    <th class="text-left">Artículo / Item</th>
+                    <th class="text-right">Existencia / Stock</th>
+                </tr>
+            </thead>
+            <tbody id="cuerpoTabla">
+                <!-- Los datos se cargan aquí -->
+            </tbody>
+        </table>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
@@ -66,78 +68,61 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 
     <script>
-        const urlAlmacen = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTmqkTpsU-nFe_DmHlwG28zHEtZU_RkhD6VxNZGX4XdC2Di6JPSBrTXTF6pKeIP737mHOL6eZwqJuW6/pub?gid=2029872222&single=true&output=csv';
+        const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTmqkTpsU-nFe_DmHlwG28zHEtZU_RkhD6VxNZGX4XdC2Di6JPSBrTXTF6pKeIP737mHOL6eZwqJuW6/pub?gid=2029872222&single=true&output=csv';
 
-        function cargarAlmacen() {
-            Papa.parse(urlAlmacen, {
+        function cargarDatos() {
+            Papa.parse(csvUrl, {
                 download: true,
                 complete: function(results) {
-                    const data = results.data;
-                    const inventarioAgrupado = {}; 
+                    const rows = results.data;
+                    let html = '';
                     
-                    // Encontrar la fila de encabezados
-                    const headerIdx = data.findIndex(row => row.some(c => c && c.toString().toUpperCase().includes('DESCRIPCIÓN')));
+                    // Buscamos la fila donde empiezan los títulos (como "Artículo /Item")
+                    const headerRowIdx = rows.findIndex(r => r.some(c => c && c.includes('Artículo')));
                     
-                    if (headerIdx !== -1) {
-                        const headers = data[headerIdx].map(h => h ? h.trim().toUpperCase() : '');
-                        
-                        // Buscamos la descripción y la existencia (evitando la columna de "entrada")
-                        const colDesc = headers.findIndex(h => h.includes('DESCRIPCIÓN'));
-                        const colExistencia = headers.lastIndexOf('EXISTENCIA'); // lastIndexOf para tomar la columna final del Excel
+                    if (headerRowIdx !== -1) {
+                        const headers = rows[headerRowIdx];
+                        const colItem = headers.findIndex(h => h.includes('Artículo'));
+                        const colStock = headers.findIndex(h => h.includes('Existencia'));
 
-                        data.slice(headerIdx + 1).forEach((row) => {
-                            const descripcion = row[colDesc] ? row[colDesc].trim() : '';
-                            const stockRaw = row[colExistencia] ? row[colExistencia].toString().replace(/[^0-9-]/g, '') : '0';
-                            const stock = parseInt(stockRaw) || 0;
-                            const imgRuta = row[32] ? row[32].trim() : ''; // Columna AG
+                        // Procesamos desde la fila siguiente al título
+                        rows.slice(headerRowIdx + 1).forEach(row => {
+                            const nombre = row[colItem] ? row[colItem].trim() : '';
+                            const stock = row[colStock] ? row[colStock].trim() : '0';
+                            const imgPath = row[32] ? row[32].trim() : ''; // Columna AG es índice 32
 
-                            if (descripcion && descripcion !== "") {
-                                if (inventarioAgrupado[descripcion]) {
-                                    inventarioAgrupado[descripcion].stock += stock;
-                                    if (imgRuta && !inventarioAgrupado[descripcion].imagen) {
-                                        inventarioAgrupado[descripcion].imagen = imgRuta;
-                                    }
-                                } else {
-                                    inventarioAgrupado[descripcion] = {
-                                        stock: stock,
-                                        imagen: imgRuta
-                                    };
-                                }
-                            }
-                        });
-
-                        let htmlRows = '';
-                        for (const item in inventarioAgrupado) {
-                            const datos = inventarioAgrupado[item];
-                            if (datos.stock > 0) {
-                                htmlRows += `
+                            // Solo mostrar si tiene nombre y no es una fila vacía o de decorado
+                            if (nombre && nombre !== "" && !nombre.includes('Total de puntos')) {
+                                html += `
                                     <tr>
                                         <td class="text-center">
-                                            ${datos.imagen ? 
-                                                `<img src="${datos.imagen}" class="item-img mx-auto" onerror="this.src='https://valhalla-rising.com/favicon.ico';">` : 
-                                                `<div class="w-10 h-10 bg-slate-800 rounded flex items-center justify-center mx-auto"><i class="fas fa-box text-slate-600"></i></div>`
-                                            }
+                                            <img src="${imgPath}" class="item-icon mx-auto" onerror="this.src='https://valhalla-rising.com/favicon.ico';">
                                         </td>
-                                        <td class="font-bold text-slate-100">${item}</td>
-                                        <td class="text-right stock-val">${datos.stock.toLocaleString()}</td>
+                                        <td class="font-semibold text-slate-200">${nombre}</td>
+                                        <td class="text-right stock-number">${stock}</td>
                                     </tr>`;
                             }
-                        }
-
-                        $('#dataAlmacen').html(htmlRows);
-                        $('#tablaAlmacen').DataTable({
-                            pageLength: 100,
-                            destroy: true,
-                            order: [[2, 'desc']],
-                            language: { search: "🔍", zeroRecords: "No hay existencias" }
                         });
                     }
+
+                    $('#cuerpoTabla').html(html);
+                    
+                    $('#tablaReapers').DataTable({
+                        destroy: true,
+                        pageLength: 50,
+                        order: [[2, 'desc']], // Ordenar por stock de mayor a menor
+                        language: {
+                            search: "Buscar:",
+                            info: "Mostrando _TOTAL_ artículos",
+                            zeroRecords: "No se encontró nada"
+                        }
+                    });
                 }
             });
         }
 
         $(document).ready(function() {
-            cargarAlmacen();
+            cargarDatos();
         });
     </script>
 </body>
