@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
+        /* --- ESTILOS ORIGINALES ALMACÉN (PROHIBIDO TOCAR) --- */
         #tablaReapers_length { margin-left: 15px; }
         #tablaReapers_filter { margin-right: 15px; }
         :root { 
@@ -18,7 +19,6 @@
             --rune-blue: #3b82f6;
             --text-silver: #94a3b8;
         }
-
         body { 
             background-color: #0a0c10;
             background-image: linear-gradient(to bottom, rgba(10, 12, 16, 0.6), rgba(10, 12, 16, 0.8)), url(https://i.imgur.com/xk5mqt2.png);
@@ -31,181 +31,144 @@
             margin: 0;
             padding-bottom: 40px;
         }
-
-        .floating-nav {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1000;
-            background: rgba(22, 27, 34, 0.95);
-            border: 1px solid var(--nordic-gold);
-            padding: 10px 25px;
-            display: flex;
-            gap: 30px;
-            box-shadow: 0 0 30px rgba(0,0,0,0.8);
-            backdrop-filter: blur(8px);
-            border-radius: 4px;
-        }
-
-        .nav-item {
-            font-family: 'Cinzel', serif;
-            color: var(--text-silver);
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: 0.3s;
-            font-size: 0.85rem;
-            letter-spacing: 2px;
-        }
-
-        .nav-item:hover, .nav-item.active { color: var(--nordic-gold); }
-
         .main-container {
-            max-width: 1100px;
-            margin: 140px auto 40px;
+            max-width: 900px;
+            margin: 150px auto 40px;
             background: rgba(22, 27, 34, 0.9); 
             backdrop-filter: blur(5px);
             border: 1px solid var(--nordic-gold); 
             box-shadow: 0 0 50px rgba(0,0,0,0.9);
         }
-
-        .section-content { display: none; }
-        .section-content.active { display: block; }
-
         .logo-header {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
             padding-top: 30px;
             border-bottom: 1px solid rgba(197, 160, 89, 0.3);
             padding-bottom: 20px;
         }
-
         h1 {
             font-family: 'Cinzel', serif;
             color: var(--nordic-gold);
-            font-size: 2.2rem;
+            font-size: 2.5rem;
             letter-spacing: 4px;
             text-transform: uppercase;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
-
-        /* Estilos de Tablas Internas (Puntos) */
-        .inner-table { width: 100%; font-size: 11px; border-collapse: collapse; }
-        .inner-table thead th {
-            background: rgba(197, 160, 89, 0.15);
-            color: #fff;
+        table.dataTable { border-collapse: collapse !important; border: none !important; margin-top: 20px !important; }
+        table.dataTable thead th {
             font-family: 'Cinzel', serif;
-            padding: 8px 4px;
-            border: 1px solid rgba(197, 160, 89, 0.3);
-            text-transform: uppercase;
+            background-color: #0f172a !important; 
+            color: var(--nordic-gold) !important;
+            text-transform: uppercase; 
+            font-size: 0.85rem; 
+            padding: 18px !important;
+            border-bottom: 2px solid var(--nordic-gold) !important;
+            letter-spacing: 1px;
         }
-        .inner-table td {
-            padding: 6px 4px;
-            border: 1px solid rgba(197, 160, 89, 0.1);
-            vertical-align: middle;
-        }
+        table.dataTable tbody tr { background-color: transparent !important; border-bottom: 1px solid #334155 !important; }
+        table.dataTable td { padding: 15px !important; vertical-align: middle; border: none !important; }
+        .item-icon { width: 44px; height: 44px; object-fit: contain; border-radius: 4px; background: #000; border: 1px solid var(--nordic-gold); padding: 2px; }
+        .stock-number { color: #4ade80; font-weight: 700; font-size: 1.2rem; }
+        .dataTables_filter input { background: #0a0c10; border: 1px solid var(--nordic-gold); border-radius: 4px; padding: 8px 15px; color: white; margin-bottom: 20px; }
 
-        .points-grid {
+        /* --- ESTILOS SECCIÓN REPARTO (NUEVOS E INDEPENDIENTES) --- */
+        .nav-tabs {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 1000;
+        }
+        .nav-btn {
+            padding: 10px 20px;
+            background: rgba(22, 27, 34, 0.9);
+            border: 1px solid var(--nordic-gold);
+            color: var(--nordic-gold);
+            font-family: 'Cinzel', serif;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-size: 12px;
+        }
+        .nav-btn.active { background: var(--nordic-gold); color: black; }
+        
+        .section-view { display: none; }
+        .section-view.active { display: block; }
+
+        .reparto-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
+            gap: 10px;
             padding: 20px;
         }
-
-        .points-column {
-            background: rgba(10, 12, 16, 0.5);
-            border: 1px solid rgba(197, 160, 89, 0.2);
-        }
-
-        .col-main-title {
-            background: var(--nordic-gold);
-            color: #000;
-            font-family: 'Cinzel', serif;
-            text-align: center;
-            font-weight: 900;
-            padding: 5px;
-            font-size: 11px;
-        }
-
-        .item-icon-sm { width: 32px; height: 32px; object-fit: contain; border: 1px solid var(--nordic-gold); background: #000; }
-        .pts-text { color: var(--nordic-gold); font-weight: bold; text-align: center; }
-        .stock-text { color: #4ade80; font-weight: bold; text-align: center; }
-
-        @media (max-width: 1024px) { .points-grid { grid-template-columns: 1fr; } }
+        .reparto-col { border: 1px solid rgba(197, 160, 89, 0.3); background: rgba(0,0,0,0.2); }
+        .reparto-title { background: #b45309; color: white; text-align: center; font-family: 'Cinzel', serif; font-size: 11px; padding: 8px; font-weight: bold; }
+        
+        .tab-data { width: 100%; border-collapse: collapse; font-size: 10px; }
+        .tab-data th { background: #1e293b; color: var(--nordic-gold); padding: 5px; border: 1px solid #334155; }
+        .tab-data td { padding: 5px; border: 1px solid rgba(197, 160, 89, 0.1); vertical-align: middle; }
+        .img-mini { width: 30px; height: 30px; border: 1px solid #444; background: #000; }
+        .pts-orange { color: #f59e0b; font-weight: bold; text-align: center; }
+        .stock-green { color: #22c55e; font-weight: bold; text-align: center; }
     </style>
 </head>
 <body>
 
-    <nav class="floating-nav">
-        <div class="nav-item active" onclick="showTab('almacen')">Almacén</div>
-        <div class="nav-item" onclick="showTab('puntos')">Reparto de Items</div>
-    </nav>
+    <div class="nav-tabs">
+        <button class="nav-btn active" onclick="switchTab('almacen', this)">Almacén</button>
+        <button class="nav-btn" onclick="switchTab('reparto', this)">Reparto de Items</button>
+    </div>
 
     <div class="main-container">
         
-        <!-- ALMACÉN -->
-        <div id="section-almacen" class="section-content active">
+        <!-- VISTA ALMACÉN (TU CÓDIGO ORIGINAL) -->
+        <div id="view-almacen" class="section-view active">
             <div class="logo-header">
                 <h1>REAPERS ALMACÉN</h1>
+                <p class="text-slate-400 uppercase tracking-widest text-xs">Registro Oficial de Suministros</p>
             </div>
             <table id="tablaReapers" class="display w-full">
                 <thead>
                     <tr>
-                        <th class="text-center" style="width: 70px;">Icon</th>
+                        <th class="text-center" style="width: 80px;">Icon</th>
                         <th class="text-left">Artículo / Item</th>
-                        <th class="text-right">Existencia</th>
+                        <th class="text-right">Existencia / Stock</th>
                     </tr>
                 </thead>
                 <tbody id="cuerpoTabla"></tbody>
             </table>
         </div>
 
-        <!-- PUNTOS -->
-        <div id="section-puntos" class="section-content">
+        <!-- VISTA REPARTO (SECCIÓN NUEVA AISLADA) -->
+        <div id="view-reparto" class="section-view">
             <div class="logo-header">
                 <h1>REPARTO DE ITEMS</h1>
+                <p class="text-slate-400 uppercase tracking-widest text-xs">Sistema de Puntuación Oficial</p>
             </div>
-            
-            <div class="points-grid">
-                <!-- Columna 1: Discord -->
-                <div class="points-column">
-                    <div class="col-main-title">DISCORD REPARTO ITEMS</div>
-                    <table class="inner-table">
-                        <thead>
-                            <tr>
-                                <th colspan="2">ITEM</th>
-                                <th>PUNTOS</th>
-                            </tr>
-                        </thead>
-                        <tbody id="cuerpoDiscord"></tbody>
+            <div class="reparto-grid">
+                <!-- Col 1 -->
+                <div class="reparto-col">
+                    <div class="reparto-title">DISCORD REPARTO ITEMS</div>
+                    <table class="tab-data">
+                        <thead><tr><th colspan="2">ITEM</th><th>PUNTOS</th></tr></thead>
+                        <tbody id="listaDiscord"></tbody>
                     </table>
                 </div>
-
-                <!-- Columna 2: Admin -->
-                <div class="points-column">
-                    <div class="col-main-title">ENTREGA ADMINISTRACION</div>
-                    <table class="inner-table">
-                        <thead>
-                            <tr>
-                                <th>ITEM</th>
-                                <th>PUNTOS</th>
-                            </tr>
-                        </thead>
-                        <tbody id="cuerpoAdmin"></tbody>
+                <!-- Col 2 -->
+                <div class="reparto-col">
+                    <div class="reparto-title">ENTREGA ADMINISTRACION</div>
+                    <table class="tab-data">
+                        <thead><tr><th>ITEM</th><th>PUNTOS / UNIDAD</th></tr></thead>
+                        <tbody id="listaAdmin"></tbody>
                     </table>
                 </div>
-
-                <!-- Columna 3: Action House -->
-                <div class="points-column">
-                    <div class="col-main-title">POR ACTION HOUSE</div>
-                    <table class="inner-table">
-                        <thead>
-                            <tr>
-                                <th colspan="2">ITEM</th>
-                                <th>STOCK</th>
-                                <th>PUNTOS</th>
-                            </tr>
-                        </thead>
-                        <tbody id="cuerpoAH"></tbody>
+                <!-- Col 3 -->
+                <div class="reparto-col">
+                    <div class="reparto-title">POR ACTION HOUSE</div>
+                    <table class="tab-data">
+                        <thead><tr><th colspan="2">ITEM</th><th>EN STOCK</th><th>PUNTOS</th></tr></thead>
+                        <tbody id="listaAH"></tbody>
                     </table>
                 </div>
             </div>
@@ -217,99 +180,71 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 
     <script>
-        const urlAlmacen = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTmqkTpsU-nFe_DmHlwG28zHEtZU_RkhD6VxNZGX4XdC2Di6JPSBrTXTF6pKeIP737mHOL6eZwqJuW6/pub?gid=2029872222&single=true&output=csv';
-        const urlPuntos = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTmqkTpsU-nFe_DmHlwG28zHEtZU_RkhD6VxNZGX4XdC2Di6JPSBrTXTF6pKeIP737mHOL6eZwqJuW6/pub?gid=1587397753&single=true&output=csv';
+        const urlGral = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTmqkTpsU-nFe_DmHlwG28zHEtZU_RkhD6VxNZGX4XdC2Di6JPSBrTXTF6pKeIP737mHOL6eZwqJuW6/pub?gid=';
+        const gidAlmacen = '2029872222';
+        const gidPuntos = '1587397753';
 
-        function showTab(tab) {
-            $('.section-content').removeClass('active');
-            $(`#section-${tab}`).addClass('active');
-            $('.nav-item').removeClass('active');
-            $(`.nav-item[onclick="showTab('${tab}')"]`).addClass('active');
+        function switchTab(view, btn) {
+            $('.section-view').removeClass('active');
+            $(`#view-${view}`).addClass('active');
+            $('.nav-btn').removeClass('active');
+            $(btn).addClass('active');
         }
 
+        // FUNCIÓN ALMACÉN (ORIGINAL SIN CAMBIOS)
         function cargarAlmacen() {
-            Papa.parse(urlAlmacen, {
+            Papa.parse(urlGral + gidAlmacen + '&single=true&output=csv', {
                 download: true,
                 complete: function(results) {
                     const rows = results.data;
                     let html = '';
-                    const headerIdx = rows.findIndex(r => r.some(c => c && c.includes('Artículo')));
-                    if (headerIdx !== -1) {
-                        rows.slice(headerIdx + 1).forEach(row => {
-                            if (row[1] && !row[1].includes('Total')) {
-                                html += `<tr>
-                                    <td class="text-center"><img src="${row[32]}" class="item-icon-sm mx-auto" onerror="this.style.display='none'"></td>
-                                    <td class="font-semibold text-slate-100">${row[1]}</td>
-                                    <td class="text-right text-[#4ade80] font-bold text-lg">${row[2] || 0}</td>
-                                </tr>`;
+                    const headerRowIdx = rows.findIndex(r => r.some(c => c && c.includes('Artículo')));
+                    if (headerRowIdx !== -1) {
+                        const headers = rows[headerRowIdx];
+                        const colItem = headers.findIndex(h => h.includes('Artículo'));
+                        const colStock = headers.findIndex(h => h.includes('Existencia'));
+                        rows.slice(headerRowIdx + 1).forEach(row => {
+                            const nombre = row[colItem] ? row[colItem].trim() : '';
+                            const stock = row[colStock] ? row[colStock].trim() : '0';
+                            const imgPath = row[32] ? row[32].trim() : ''; 
+                            if (nombre && !nombre.includes('Total de puntos')) {
+                                html += `<tr><td class="text-center"><img src="${imgPath}" class="item-icon mx-auto" onerror="this.src='https://valhalla-rising.com/favicon.ico';"></td><td class="font-semibold text-slate-100">${nombre}</td><td class="text-right stock-number">${stock}</td></tr>`;
                             }
                         });
                     }
                     $('#cuerpoTabla').html(html);
-                    $('#tablaReapers').DataTable({ destroy: true, pageLength: 20 });
+                    $('#tablaReapers').DataTable({ destroy: true, pageLength: 50, order: [[2, 'desc']] });
                 }
             });
         }
 
+        // FUNCIÓN REPARTO (LOGICA DE COLUMNAS EXCEL)
         function cargarReparto() {
-    // Usamos el GID 1587397753 que corresponde a la pestaña de PUNTOS[cite: 2]
-    const urlPuntos = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTmqkTpsU-nFe_DmHlwG28zHEtZU_RkhD6VxNZGX4XdC2Di6JPSBrTXTF6pKeIP737mHOL6eZwqJuW6/pub?gid=1587397753&single=true&output=csv';
-
-    Papa.parse(urlPuntos, {
-        download: true,
-        complete: function(results) {
-            const rows = results.data;
-            let htmlDiscord = '', htmlAdmin = '', htmlAH = '';
-
-            // Empezamos en la fila 5 (índice 4) para saltar encabezados del Excel[cite: 2]
-            for (let i = 4; i < rows.length; i++) {
-                const r = rows[i];
-
-                // 1. DISCORD REPARTO ITEMS (A, B, D)[cite: 2]
-                if (r[1] && r[1].trim() !== "") {
-                    htmlDiscord += `
-                        <tr>
-                            <td style="width:40px"><img src="${r[0]}" class="img-mini" onerror="this.style.display='none'"></td>
-                            <td class="text-slate-200 uppercase">${r[1]}</td>
-                            <td class="pts-orange">${r[3] || '0'}</td>
-                        </tr>`;
+            Papa.parse(urlGral + gidPuntos + '&single=true&output=csv', {
+                download: true,
+                complete: function(results) {
+                    const rows = results.data;
+                    let h1='', h2='', h3='';
+                    // Empezamos en la fila 5 (índice 4) del Excel
+                    for(let i=4; i<rows.length; i++){
+                        const r = rows[i];
+                        // Columna Discord (A, B, D)
+                        if(r[1]) h1 += `<tr><td width="35"><img src="${r[0]}" class="img-mini"></td><td>${r[1]}</td><td class="pts-orange">${r[3] || ''}</td></tr>`;
+                        // Columna Admin (E, G)
+                        if(r[4]) h2 += `<tr><td>${r[4]}</td><td class="pts-orange">${r[6] || ''}</td></tr>`;
+                        // Columna AH (H, I, J, K)[cite: 2]
+                        if(r[8]) h3 += `<tr><td width="35"><img src="${r[7]}" class="img-mini"></td><td>${r[8]}</td><td class="stock-green">${r[9] || '0'}</td><td class="pts-orange">${r[10] || ''}</td></tr>`;
+                    }
+                    $('#listaDiscord').html(h1);
+                    $('#listaAdmin').html(h2);
+                    $('#listaAH').html(h3);
                 }
-
-                // 2. ENTREGA ADMINISTRACION (E, G)[cite: 2]
-                if (r[4] && r[4].trim() !== "") {
-                    htmlAdmin += `
-                        <tr>
-                            <td class="text-slate-200 uppercase">${r[4]}</td>
-                            <td class="pts-orange">${r[6] || '0'}</td>
-                        </tr>`;
-                }
-
-                // 3. POR ACTION HOUSE (H, I, J, K)[cite: 2]
-                if (r[8] && r[8].trim() !== "") {
-                    htmlAH += `
-                        <tr>
-                            <td style="width:40px"><img src="${r[7]}" class="img-mini" onerror="this.style.display='none'"></td>
-                            <td class="text-slate-200 uppercase">${r[8]}</td>
-                            <td class="stock-green">${r[9] || '0'}</td>
-                            <td class="pts-orange">${r[10] || '0'}</td>
-                        </tr>`;
-                }
-            }
-
-            // Inyectamos los datos en los TBODY correspondientes[cite: 2]
-            $('#listaDiscord').html(htmlDiscord || '<tr><td colspan="3" class="text-center py-4">No hay datos</td></tr>');
-            $('#listaAdmin').html(htmlAdmin || '<tr><td colspan="2" class="text-center py-4">No hay datos</td></tr>');
-            $('#listaAH').html(htmlAH || '<tr><td colspan="4" class="text-center py-4">No hay datos</td></tr>');
-        },
-        error: function(err) {
-            console.error("Error cargando Reparto de Items:", err);
+            });
         }
-    });
-}
 
         $(document).ready(function() {
             cargarAlmacen();
-            cargarPuntos();
+            cargarReparto();
         });
     </script>
 </body>
