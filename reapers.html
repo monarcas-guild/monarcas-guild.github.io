@@ -9,21 +9,20 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --primary: #3b82f6; --dark: #0f172a; --card: #1e293b; }
-        body { background-color: var(--dark); color: #e2e8f0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--dark); color: #e2e8f0; font-family: 'Segoe UI', sans-serif; }
         .dataTables_wrapper { color: #e2e8f0 !important; padding: 10px; }
         table.dataTable tbody tr { background-color: var(--card) !important; color: #e2e8f0; border-bottom: 1px solid #334155; }
-        .dataTables_filter input { background: #334155; border: 1px solid var(--primary); border-radius: 4px; padding: 4px; color: white; }
+        .dataTables_filter input { background: #334155; border: 1px solid var(--primary); border-radius: 4px; padding: 6px; color: white; width: 250px; }
         .nav-btn { @apply px-6 py-3 rounded-lg font-bold transition-all flex items-center gap-2; }
         .active-tab { @apply bg-blue-600 text-white shadow-lg shadow-blue-900/50; }
         .inactive-tab { @apply bg-slate-800 text-gray-400 hover:bg-slate-700; }
-        .loading { border: 4px solid #f3f3f3; border-top: 4px solid #3b82f6; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        img.item-icon { width: 32px; height: 32px; object-fit: contain; background: #0f172a; padding: 2px; border-radius: 4px; border: 1px solid #334155; }
     </style>
 </head>
 <body class="min-h-screen p-4">
 
     <header class="max-w-6xl mx-auto text-center my-8">
-        <h1 class="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-700 mb-2">REAPERS</h1>
+        <h1 class="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-700 mb-2 italic">REAPERS</h1>
         <div class="flex flex-wrap justify-center gap-4 mt-8">
             <button onclick="showTab('almacen')" id="btn-almacen" class="nav-btn active-tab"><i class="fas fa-warehouse"></i> Almacén</button>
             <button onclick="showTab('puntos')" id="btn-puntos" class="nav-btn inactive-tab"><i class="fas fa-gem"></i> Tienda de Puntos</button>
@@ -31,21 +30,22 @@
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto">
+    <main class="max-w-5xl mx-auto">
         <!-- SECCIÓN ALMACÉN -->
         <div id="almacen" class="tab-content">
             <div class="bg-slate-900/50 p-6 rounded-2xl border border-slate-700 shadow-xl">
-                <h2 class="text-2xl font-bold mb-6 flex items-center gap-2 text-blue-400"><i class="fas fa-boxes"></i> Inventario Actual y Salidas</h2>
+                <h2 class="text-2xl font-bold mb-6 flex items-center gap-2 text-blue-400"><i class="fas fa-boxes"></i> Inventario en Stock</h2>
                 <table id="tablaAlmacen" class="display w-full border border-slate-700">
                     <thead>
-                        <tr class="bg-slate-800 text-left">
-                            <th>Ítem / Descripción</th>
-                            <th>Existencia</th>
-                            <th>Jefe (Boss)</th>
-                            <th>Último Receptor</th>
+                        <tr class="bg-slate-800 text-left text-blue-400">
+                            <th class="w-16">Icono</th>
+                            <th>Artículo / Item</th>
+                            <th class="text-right pr-10">Stock Disponible</th>
                         </tr>
                     </thead>
-                    <tbody id="dataAlmacen"></tbody>
+                    <tbody id="dataAlmacen">
+                        <!-- Datos cargados por JS -->
+                    </tbody>
                 </table>
             </div>
         </div>
@@ -54,22 +54,20 @@
         <div id="puntos" class="tab-content hidden">
             <div class="bg-slate-900/50 p-6 rounded-2xl border border-slate-700 shadow-xl">
                 <h2 class="text-2xl font-bold mb-6 text-blue-400"><i class="fas fa-tags"></i> Listado de Precios</h2>
-                <div id="gridPuntos" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                    <!-- Cards se generan aquí -->
-                </div>
+                <div id="gridPuntos" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
             </div>
         </div>
 
         <!-- SECCIÓN ACTIVIDAD -->
         <div id="actividad" class="tab-content hidden">
             <div class="bg-slate-900/50 p-6 rounded-2xl border border-slate-700 shadow-xl">
-                <h2 class="text-2xl font-bold mb-6 text-green-400"><i class="fas fa-trophy"></i> Ranking de Asistencia Media</h2>
+                <h2 class="text-2xl font-bold mb-6 text-green-400"><i class="fas fa-trophy"></i> Ranking de Asistencia</h2>
                 <table id="tablaRanking" class="display w-full border border-slate-700">
                     <thead>
                         <tr class="bg-slate-800 text-left">
                             <th>Rango</th>
-                            <th>Usuario Discord</th>
-                            <th>Asistencia Media %</th>
+                            <th>Usuario</th>
+                            <th>Media %</th>
                         </tr>
                     </thead>
                     <tbody id="dataActividad"></tbody>
@@ -82,153 +80,109 @@
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 
-<script>
-    const csvUrls = {
-        almacen: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTmqkTpsU-nFe_DmHlwG28zHEtZU_RkhD6VxNZGX4XdC2Di6JPSBrTXTF6pKeIP737mHOL6eZwqJuW6/pub?gid=2029872222&single=true&output=csv',
-        puntos: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTmqkTpsU-nFe_DmHlwG28zHEtZU_RkhD6VxNZGX4XdC2Di6JPSBrTXTF6pKeIP737mHOL6eZwqJuW6/pub?gid=854086504&single=true&output=csv',
-        actividad: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTmqkTpsU-nFe_DmHlwG28zHEtZU_RkhD6VxNZGX4XdC2Di6JPSBrTXTF6pKeIP737mHOL6eZwqJuW6/pub?gid=801467735&single=true&output=csv'
-    };
+    <script>
+        const csvUrls = {
+            almacen: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTmqkTpsU-nFe_DmHlwG28zHEtZU_RkhD6VxNZGX4XdC2Di6JPSBrTXTF6pKeIP737mHOL6eZwqJuW6/pub?gid=2029872222&single=true&output=csv',
+            puntos: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTmqkTpsU-nFe_DmHlwG28zHEtZU_RkhD6VxNZGX4XdC2Di6JPSBrTXTF6pKeIP737mHOL6eZwqJuW6/pub?gid=854086504&single=true&output=csv',
+            actividad: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTmqkTpsU-nFe_DmHlwG28zHEtZU_RkhD6VxNZGX4XdC2Di6JPSBrTXTF6pKeIP737mHOL6eZwqJuW6/pub?gid=801467735&single=true&output=csv'
+        };
 
-   // --- CARGAR ALMACÉN (VERSIÓN STOCK REAL) ---
-Papa.parse(csvUrls.almacen, {
-    download: true,
-    complete: function(results) {
-        const data = results.data;
-        let html = '';
-        
-        // Buscamos la fila donde empieza "Artículo /Item" (Fila 1 en tu imagen)
-        const headerIndex = data.findIndex(row => row.some(c => c && c.toUpperCase().includes('ARTÍCULO')));
-        
-        if (headerIndex !== -1) {
-            const headers = data[headerIndex].map(h => h ? h.trim().toUpperCase() : '');
-            
-            // Identificamos las columnas exactas de tu imagen
-            const colIcono = 0; // La primera columna con imágenes
-            const colNombre = headers.findIndex(h => h.includes('ARTÍCULO'));
-            const colStock = headers.findIndex(h => h.includes('EXISTENCIA'));
+        // --- CARGA ALMACÉN ---
+        Papa.parse(csvUrls.almacen, {
+            download: true,
+            complete: function(results) {
+                const data = results.data;
+                let html = '';
+                // Buscamos la fila donde dice "ARTÍCULO /ITEM"
+                const headerIndex = data.findIndex(row => row.some(c => c && c.toUpperCase().includes('ARTÍCULO')));
+                
+                if (headerIndex !== -1) {
+                    const headers = data[headerIndex].map(h => h ? h.trim().toUpperCase() : '');
+                    const colNombre = headers.findIndex(h => h.includes('ARTÍCULO'));
+                    const colStock = headers.findIndex(h => h.includes('EXISTENCIA'));
+                    const rows = data.slice(headerIndex + 1);
 
-            const rows = data.slice(headerIndex + 1);
+                    rows.forEach(row => {
+                        const nombre = row[colNombre];
+                        const stockStr = row[colStock] ? row[colStock].replace(/[^0-9]/g, '') : '0';
+                        const stock = parseInt(stockStr) || 0;
+                        const icono = row[0]; // Asumimos columna A para iconos
 
-            rows.forEach(row => {
-                const nombre = row[colNombre];
-                const stock = parseInt(row[colStock]) || 0;
-                const iconoUrl = row[colIcono]; // Google Sheets publica la URL de la imagen si está en la celda
-
-                // Solo mostramos si hay stock disponible
-                if (nombre && stock > 0) {
-                    html += `<tr>
-                        <td class="text-center">
-                            ${iconoUrl ? `<img src="${iconoUrl}" class="w-8 h-8 mx-auto rounded shadow-sm" onerror="this.style.display='none'">` : '<i class="fas fa-box text-slate-600"></i>'}
-                        </td>
-                        <td class="font-bold text-blue-100">${nombre}</td>
-                        <td class="text-right pr-10">
-                            <span class="bg-green-900/50 text-green-400 px-3 py-1 rounded-full border border-green-700/50 font-black">
-                                ${stock.toLocaleString()}
-                            </span>
-                        </td>
-                    </tr>`;
+                        if (nombre && stock > 0) {
+                            html += `<tr>
+                                <td class="text-center">
+                                    ${icono && icono.startsWith('http') ? `<img src="${icono}" class="item-icon mx-auto">` : '<i class="fas fa-circle text-blue-500/20"></i>'}
+                                </td>
+                                <td class="font-bold text-blue-100">${nombre}</td>
+                                <td class="text-right pr-10">
+                                    <span class="text-green-400 font-black text-lg">${stock.toLocaleString()}</span>
+                                </td>
+                            </tr>`;
+                        }
+                    });
                 }
-            });
-        }
-
-        // Actualizamos el encabezado de la tabla para que coincida con lo nuevo
-        $('#almacen thead').html(`
-            <tr class="bg-slate-800 text-left text-blue-400">
-                <th class="w-16">Icono</th>
-                <th>Artículo / Item</th>
-                <th class="text-right pr-10">Stock Disponible</th>
-            </tr>
-        `);
-
-        $('#dataAlmacen').html(html);
-        
-        // Reiniciamos DataTable con tus preferencias
-        if ($.fn.DataTable.isDataTable('#tablaAlmacen')) {
-            $('#tablaAlmacen').DataTable().destroy();
-        }
-        
-        $('#tablaAlmacen').DataTable({
-            language: { 
-                search: "🔍 Buscar item en stock:",
-                lengthMenu: "Mostrar _MENU_ items",
-                info: "Mostrando _START_ a _END_ de _TOTAL_ items en stock"
-            },
-            pageLength: 200, // Por defecto 200 como pediste
-            order: [[2, 'desc']], // Ordenar por cantidad de stock de mayor a menor
-            columnDefs: [
-                { targets: 0, orderable: false } // No ordenar por el icono
-            ]
+                $('#dataAlmacen').html(html);
+                $('#tablaAlmacen').DataTable({
+                    pageLength: 200,
+                    language: { search: "🔍 Filtrar item en stock:" },
+                    order: [[2, 'desc']]
+                });
+            }
         });
-    }
-});
 
-    // --- CARGAR PUNTOS ---
-    Papa.parse(csvUrls.puntos, {
-        download: true,
-        complete: function(results) {
-            const data = results.data;
-            let html = '';
-            const headerIndex = data.findIndex(row => row.some(c => c && c.toUpperCase().includes('PUNTOS')));
-            
-            if (headerIndex !== -1) {
-                const rows = data.slice(headerIndex + 1);
-                rows.forEach(row => {
-                    const name = row[0]; // Ítem
-                    const pts = row[1];  // Puntos
-                    if (name && pts && !isNaN(pts)) {
-                        html += `
-                        <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 shadow-md">
-                            <h3 class="text-xs text-blue-400 font-bold uppercase">Ítem de Canje</h3>
-                            <p class="text-md font-semibold mb-2">${name}</p>
-                            <p class="text-2xl font-black text-white">${pts} <span class="text-xs font-normal text-gray-500">PTS</span></p>
-                        </div>`;
-                    }
-                });
+        // --- CARGA PUNTOS ---
+        Papa.parse(csvUrls.puntos, {
+            download: true,
+            complete: function(results) {
+                let html = '';
+                const data = results.data;
+                const headerIndex = data.findIndex(row => row.some(c => c && c.toUpperCase().includes('PUNTOS')));
+                if (headerIndex !== -1) {
+                    data.slice(headerIndex + 1).forEach(row => {
+                        if (row[0] && row[1] && !isNaN(row[1])) {
+                            html += `<div class="bg-slate-800 p-4 rounded-xl border border-slate-700">
+                                <p class="text-xs text-blue-400 font-bold uppercase">Canje</p>
+                                <p class="text-md font-medium leading-tight mb-2">${row[0]}</p>
+                                <p class="text-2xl font-black text-white">${row[1]} <small class="text-gray-500">PTS</small></p>
+                            </div>`;
+                        }
+                    });
+                }
+                $('#gridPuntos').html(html);
             }
-            $('#gridPuntos').html(html);
-        }
-    });
+        });
 
-    // --- CARGAR ACTIVIDAD ---
-    Papa.parse(csvUrls.actividad, {
-        download: true,
-        complete: function(results) {
-            const data = results.data;
-            let html = '';
-            const headerIndex = data.findIndex(row => row.some(c => c && c.toUpperCase().includes('DISCORD')));
-            
-            if (headerIndex !== -1) {
-                const headers = data[headerIndex].map(h => h.trim().toUpperCase());
-                let rows = data.slice(headerIndex + 1).filter(r => r[headers.indexOf('DISCORD')]);
-
-                // Ordenar por actividad media (Ranking)
-                rows.sort((a, b) => {
-                    let valA = parseFloat(a[headers.indexOf('ACTIVIDAD MEDIA TOTAL')]) || 0;
-                    let valB = parseFloat(b[headers.indexOf('ACTIVIDAD MEDIA TOTAL')]) || 0;
-                    return valB - valA;
-                });
-
-                rows.forEach((row, index) => {
-                    const user = row[headers.indexOf('DISCORD')];
-                    const media = row[headers.indexOf('ACTIVIDAD MEDIA TOTAL')] || '0%';
-                    html += `<tr>
-                        <td class="text-gray-500 font-bold">#${index + 1}</td>
-                        <td class="font-bold">${user}</td>
-                        <td class="text-green-400 font-mono">${media}</td>
-                    </tr>`;
-                });
+        // --- CARGA ACTIVIDAD ---
+        Papa.parse(csvUrls.actividad, {
+            download: true,
+            complete: function(results) {
+                let html = '';
+                const data = results.data;
+                const headerIndex = data.findIndex(row => row.some(c => c && c.toUpperCase().includes('DISCORD')));
+                if (headerIndex !== -1) {
+                    const headers = data[headerIndex].map(h => h.trim().toUpperCase());
+                    let rows = data.slice(headerIndex + 1).filter(r => r[headers.indexOf('DISCORD')]);
+                    rows.sort((a, b) => parseFloat(b[headers.indexOf('ACTIVIDAD MEDIA TOTAL')]) - parseFloat(a[headers.indexOf('ACTIVIDAD MEDIA TOTAL')]));
+                    
+                    rows.forEach((row, i) => {
+                        html += `<tr>
+                            <td class="text-gray-500 font-bold">#${i + 1}</td>
+                            <td class="font-bold">${row[headers.indexOf('DISCORD')]}</td>
+                            <td class="text-green-400 font-mono font-bold">${row[headers.indexOf('ACTIVIDAD MEDIA TOTAL')]}</td>
+                        </tr>`;
+                    });
+                }
+                $('#dataActividad').html(html);
+                $('#tablaRanking').DataTable({ order: [[2, 'desc']] });
             }
-            $('#dataActividad').html(html);
-            $('#tablaRanking').DataTable({ order: [[2, 'desc']] });
-        }
-    });
+        });
 
-    function showTab(tabId) {
-        $('.tab-content').addClass('hidden');
-        $(`#${tabId}`).removeClass('hidden');
-        $('.nav-btn').removeClass('active-tab').addClass('inactive-tab');
-        $(`#btn-${tabId}`).removeClass('inactive-tab').addClass('active-tab');
-    }
-</script>
+        function showTab(tabId) {
+            $('.tab-content').addClass('hidden');
+            $(`#${tabId}`).removeClass('hidden');
+            $('.nav-btn').removeClass('active-tab').addClass('inactive-tab');
+            $(`#btn-${tabId}`).removeClass('inactive-tab').addClass('active-tab');
+        }
+    </script>
 </body>
 </html>
