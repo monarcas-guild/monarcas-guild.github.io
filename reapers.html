@@ -17,30 +17,37 @@
             --text-silver: #94a3b8;
         }
 
-        body { 
-            background-color: #0a0c10; 
+
+body { 
+    background-color: #0a0c10; 
+    /* Usamos la nueva imagen alta */
     background-image: 
-        linear-gradient(to bottom, rgba(10, 12, 16, 0.85), rgba(10, 12, 16, 0.92)),
+        linear-gradient(to bottom, rgba(10, 12, 16, 0.4), rgba(10, 12, 16, 0.8)),
         url('https://i.imgur.com/AghCorA.jpeg');
+    
     background-attachment: fixed;
-    background-size: cover;
-    background-position: center;
+    /* Cambiamos 'cover' por 'contain' para que se vea la imagen completa sin zoom */
+    background-size: contain; 
+    /* Centramos la imagen */
+    background-position: center top;
+    /* Evitamos que la imagen se repita si la pantalla es muy grande */
+    background-repeat: no-repeat;
+    
     color: #f8fafc; 
     font-family: 'Inter', sans-serif; 
     margin: 0;
     padding-bottom: 40px;
-        }
+}
 
-        /* Contenedor con borde rúnico/dorado */
-        .main-container {
-            max-width: 1100px; 
-            margin: 40px auto; 
-            padding: 24px;
-            background: var(--panel-dark); 
-            border-radius: 4px;
-            border: 1px solid var(--nordic-gold); 
-            box-shadow: 0 0 30px rgba(0,0,0,0.8), inset 0 0 15px rgba(197, 160, 89, 0.1);
-        }
+/* Ajuste opcional para que el contenedor no tape los laterales importantes */
+.main-container {
+    max-width: 900px; /* Reducimos un poco el ancho para ver más fondo a los lados */
+    margin: 150px auto 40px; /* Bajamos un poco la tabla para que se vea el logo del fondo */
+    background: rgba(22, 27, 34, 0.9); 
+    backdrop-filter: blur(5px);
+    border: 1px solid var(--nordic-gold); 
+    box-shadow: 0 0 50px rgba(0,0,0,0.9);
+}
 
         /* Sección del Logo */
         .logo-header {
