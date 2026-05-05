@@ -9,13 +9,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
+        /* ESTILOS ORIGINALES ALMACEN (NO TOCAR) */
         #tablaReapers_length { margin-left: 15px; }
         #tablaReapers_filter { margin-right: 15px; }
         :root { 
             --bg-dark: #0a0c10; 
             --panel-dark: #161b22; 
             --nordic-gold: #c5a059; 
-            --rune-blue: #3b82f6;
             --text-silver: #94a3b8;
         }
 
@@ -24,8 +24,6 @@
             background-image: linear-gradient(to bottom, rgba(10, 12, 16, 0.6), rgba(10, 12, 16, 0.8)), url(https://i.imgur.com/xk5mqt2.png);
             background-attachment: fixed;
             background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
             color: #f8fafc;
             font-family: 'Inter', sans-serif;
             margin: 0;
@@ -43,8 +41,6 @@
             padding: 10px 25px;
             display: flex;
             gap: 30px;
-            box-shadow: 0 0 30px rgba(0,0,0,0.8);
-            backdrop-filter: blur(8px);
             border-radius: 4px;
         }
 
@@ -53,20 +49,17 @@
             color: var(--text-silver);
             text-transform: uppercase;
             cursor: pointer;
-            transition: 0.3s;
             font-size: 0.85rem;
             letter-spacing: 2px;
         }
 
-        .nav-item:hover, .nav-item.active { color: var(--nordic-gold); }
+        .nav-item.active { color: var(--nordic-gold); }
 
         .main-container {
             max-width: 1100px;
             margin: 140px auto 40px;
             background: rgba(22, 27, 34, 0.9); 
-            backdrop-filter: blur(5px);
             border: 1px solid var(--nordic-gold); 
-            box-shadow: 0 0 50px rgba(0,0,0,0.9);
         }
 
         .section-content { display: none; }
@@ -74,63 +67,58 @@
 
         .logo-header {
             text-align: center;
-            margin-bottom: 20px;
-            padding-top: 30px;
+            padding: 30px 0;
             border-bottom: 1px solid rgba(197, 160, 89, 0.3);
-            padding-bottom: 20px;
         }
 
         h1 {
             font-family: 'Cinzel', serif;
             color: var(--nordic-gold);
             font-size: 2.2rem;
-            letter-spacing: 4px;
             text-transform: uppercase;
         }
 
-        /* Estilos de Tablas Internas (Puntos) */
-        .inner-table { width: 100%; font-size: 11px; border-collapse: collapse; }
-        .inner-table thead th {
-            background: rgba(197, 160, 89, 0.15);
-            color: #fff;
-            font-family: 'Cinzel', serif;
-            padding: 8px 4px;
-            border: 1px solid rgba(197, 160, 89, 0.3);
-            text-transform: uppercase;
-        }
-        .inner-table td {
-            padding: 6px 4px;
-            border: 1px solid rgba(197, 160, 89, 0.1);
-            vertical-align: middle;
-        }
-
+        /* ESTILOS REPARTO DE ITEMS (NUEVO) */
         .points-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
+            gap: 10px;
             padding: 20px;
         }
 
         .points-column {
-            background: rgba(10, 12, 16, 0.5);
-            border: 1px solid rgba(197, 160, 89, 0.2);
+            border: 1px solid rgba(197, 160, 89, 0.4);
+            background: rgba(0, 0, 0, 0.3);
         }
 
-        .col-main-title {
-            background: var(--nordic-gold);
-            color: #000;
+        .col-header {
+            background: #d97706; /* Color naranja/dorado del Excel */
+            color: black;
             font-family: 'Cinzel', serif;
             text-align: center;
-            font-weight: 900;
-            padding: 5px;
-            font-size: 11px;
+            font-weight: bold;
+            padding: 8px;
+            font-size: 12px;
+            border-bottom: 1px solid #000;
         }
 
-        .item-icon-sm { width: 32px; height: 32px; object-fit: contain; border: 1px solid var(--nordic-gold); background: #000; }
-        .pts-text { color: var(--nordic-gold); font-weight: bold; text-align: center; }
-        .stock-text { color: #4ade80; font-weight: bold; text-align: center; }
-
-        @media (max-width: 1024px) { .points-grid { grid-template-columns: 1fr; } }
+        .inner-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+        .inner-table th {
+            background: #1e293b;
+            color: var(--nordic-gold);
+            padding: 6px;
+            border: 1px solid rgba(197, 160, 89, 0.2);
+            font-family: 'Cinzel', serif;
+        }
+        .inner-table td {
+            padding: 6px;
+            border: 1px solid rgba(197, 160, 89, 0.1);
+            vertical-align: middle;
+        }
+        
+        .img-item { width: 32px; height: 32px; object-fit: contain; background: black; border: 1px solid #334155; }
+        .txt-pts { color: #f59e0b; font-weight: bold; text-align: center; }
+        .txt-stock { color: #22c55e; font-weight: bold; text-align: center; }
     </style>
 </head>
 <body>
@@ -142,7 +130,7 @@
 
     <div class="main-container">
         
-        <!-- ALMACÉN -->
+        <!-- SECCIÓN ALMACÉN (TU ESTRUCTURA ORIGINAL) -->
         <div id="section-almacen" class="section-content active">
             <div class="logo-header">
                 <h1>REAPERS ALMACÉN</h1>
@@ -159,16 +147,17 @@
             </table>
         </div>
 
-        <!-- PUNTOS -->
+        <!-- SECCIÓN REPARTO DE ITEMS -->
         <div id="section-puntos" class="section-content">
             <div class="logo-header">
                 <h1>REPARTO DE ITEMS</h1>
+                <p class="text-[10px] uppercase tracking-widest text-slate-400">Sistema de Puntuación Oficial</p>
             </div>
             
             <div class="points-grid">
                 <!-- Columna 1: Discord -->
                 <div class="points-column">
-                    <div class="col-main-title">DISCORD REPARTO ITEMS</div>
+                    <div class="col-header">DISCORD REPARTO ITEMS</div>
                     <table class="inner-table">
                         <thead>
                             <tr>
@@ -180,14 +169,14 @@
                     </table>
                 </div>
 
-                <!-- Columna 2: Admin -->
+                <!-- Columna 2: Administración -->
                 <div class="points-column">
-                    <div class="col-main-title">ENTREGA ADMINISTRACION</div>
+                    <div class="col-header">ENTREGA ADMINISTRACION</div>
                     <table class="inner-table">
                         <thead>
                             <tr>
                                 <th>ITEM</th>
-                                <th>PUNTOS</th>
+                                <th>PUNTOS / UNIDAD</th>
                             </tr>
                         </thead>
                         <tbody id="cuerpoAdmin"></tbody>
@@ -196,12 +185,12 @@
 
                 <!-- Columna 3: Action House -->
                 <div class="points-column">
-                    <div class="col-main-title">POR ACTION HOUSE</div>
+                    <div class="col-header">POR ACTION HOUSE</div>
                     <table class="inner-table">
                         <thead>
                             <tr>
                                 <th colspan="2">ITEM</th>
-                                <th>STOCK</th>
+                                <th>EN STOCK</th>
                                 <th>PUNTOS</th>
                             </tr>
                         </thead>
@@ -224,7 +213,11 @@
             $('.section-content').removeClass('active');
             $(`#section-${tab}`).addClass('active');
             $('.nav-item').removeClass('active');
-            $(`.nav-item[onclick="showTab('${tab}')"]`).addClass('active');
+            $(`.nav-item`).each(function() {
+                if($(this).text().toLowerCase().includes(tab === 'puntos' ? 'reparto' : 'almacén')) {
+                    $(this).addClass('active');
+                }
+            });
         }
 
         function cargarAlmacen() {
@@ -233,17 +226,16 @@
                 complete: function(results) {
                     const rows = results.data;
                     let html = '';
-                    const headerIdx = rows.findIndex(r => r.some(c => c && c.includes('Artículo')));
-                    if (headerIdx !== -1) {
-                        rows.slice(headerIdx + 1).forEach(row => {
-                            if (row[1] && !row[1].includes('Total')) {
-                                html += `<tr>
-                                    <td class="text-center"><img src="${row[32]}" class="item-icon-sm mx-auto" onerror="this.style.display='none'"></td>
-                                    <td class="font-semibold text-slate-100">${row[1]}</td>
-                                    <td class="text-right text-[#4ade80] font-bold text-lg">${row[2] || 0}</td>
-                                </tr>`;
-                            }
-                        });
+                    // Usamos la lógica que ya te funcionaba para el almacén
+                    for(let i = 1; i < rows.length; i++) {
+                        const row = rows[i];
+                        if (row[1] && !row[1].includes('Total')) {
+                            html += `<tr>
+                                <td class="text-center"><img src="${row[32]}" class="w-10 h-10 mx-auto object-contain" onerror="this.style.opacity='0'"></td>
+                                <td class="font-semibold text-slate-100">${row[1]}</td>
+                                <td class="text-right text-[#4ade80] font-bold text-lg">${row[2] || 0}</td>
+                            </tr>`;
+                        }
                     }
                     $('#cuerpoTabla').html(html);
                     $('#tablaReapers').DataTable({ destroy: true, pageLength: 20 });
@@ -258,34 +250,34 @@
                     const rows = results.data;
                     let htmlD = '', htmlAdm = '', htmlAH = '';
 
-                    // Inicia en fila 5 (índice 4)
+                    // Empezamos en la fila 5 (índice 4) del Excel
                     for (let i = 4; i < rows.length; i++) {
                         const r = rows[i];
 
-                        // Discord (Cols A, B, C)
-                        if (r[1]) {
+                        // Col 1: Discord (A, B, D) -> Imagen, Nombre, Puntos
+                        if (r[1] && r[1].trim() !== "") {
                             htmlD += `<tr>
-                                <td style="width:35px"><img src="${r[0]}" class="item-icon-sm" onerror="this.style.display='none'"></td>
+                                <td style="width:35px"><img src="${r[0]}" class="img-item" onerror="this.style.display='none'"></td>
                                 <td class="text-slate-200 uppercase">${r[1]}</td>
-                                <td class="pts-text">${r[2]}</td>
+                                <td class="txt-pts">${r[3] || ''}</td>
                             </tr>`;
                         }
 
-                        // Admin (Cols E, F)
-                        if (r[4]) {
+                        // Col 2: Admin (E, G) -> Nombre, Puntos[cite: 2]
+                        if (r[4] && r[4].trim() !== "") {
                             htmlAdm += `<tr>
                                 <td class="text-slate-200 uppercase">${r[4]}</td>
-                                <td class="pts-text">${r[5]}</td>
+                                <td class="txt-pts">${r[6] || ''}</td>
                             </tr>`;
                         }
 
-                        // AH (Cols H, I, J, K)
-                        if (r[8]) {
+                        // Col 3: AH (H, I, J, K) -> Imagen, Nombre, Stock, Puntos[cite: 2]
+                        if (r[8] && r[8].trim() !== "") {
                             htmlAH += `<tr>
-                                <td style="width:35px"><img src="${r[7]}" class="item-icon-sm" onerror="this.style.display='none'"></td>
+                                <td style="width:35px"><img src="${r[7]}" class="img-item" onerror="this.style.display='none'"></td>
                                 <td class="text-slate-200 uppercase">${r[8]}</td>
-                                <td class="stock-text">${r[9]}</td>
-                                <td class="pts-text">${r[10]}</td>
+                                <td class="txt-stock">${r[9] || '0'}</td>
+                                <td class="txt-pts">${r[10] || ''}</td>
                             </tr>`;
                         }
                     }
