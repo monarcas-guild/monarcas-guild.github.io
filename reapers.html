@@ -5,48 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>REAPERS - Almacén</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --dark: #0b1120; --card: #161f32; --accent: #3b82f6; }
         body { background-color: var(--dark); color: #f1f5f9; font-family: sans-serif; }
-        
-        /* Estilos para el buscador */
-        .dataTables_wrapper .dataTables_filter { margin-bottom: 20px; }
         .dataTables_wrapper .dataTables_filter input {
             background: #1e293b; border: 1px solid #334155; border-radius: 6px;
             padding: 8px; color: white; margin-left: 10px; width: 250px;
         }
-        .dataTables_wrapper .dataTables_length select { background: #1e293b; color: white; border-radius: 4px; padding: 4px; }
-        
-        /* Estilo de la tabla */
         table.dataTable { border: none !important; border-collapse: collapse !important; width: 100% !important; }
         table.dataTable tbody tr { background-color: transparent !important; border-bottom: 1px solid #1e293b !important; }
         table.dataTable thead th { background-color: #1e293b !important; color: #60a5fa !important; border: none !important; padding: 15px !important; }
         table.dataTable td { padding: 12px !important; border: none !important; vertical-align: middle; }
-
-        .item-img { width: 35px; height: 35px; object-fit: contain; border-radius: 4px; background: #0b1120; padding: 2px; }
+        .item-img { width: 38px; height: 38px; object-fit: contain; border-radius: 4px; background: #0b1120; }
         .stock-badge { color: #4ade80; font-weight: 900; font-size: 1.1rem; }
     </style>
 </head>
 <body class="p-6">
 
     <div class="max-w-5xl mx-auto">
-        <!-- Logo/Título -->
         <h1 class="text-center text-4xl font-black text-blue-500 italic mb-8">REAPERS</h1>
 
-        <!-- Botones Navegación -->
         <div class="flex justify-center gap-4 mb-8">
             <button class="bg-blue-600 px-6 py-2 rounded-md font-bold flex items-center gap-2"><i class="fas fa-warehouse"></i> Almacén</button>
             <button class="bg-slate-800 text-slate-400 px-6 py-2 rounded-md font-bold">Tienda</button>
             <button class="bg-slate-800 text-slate-400 px-6 py-2 rounded-md font-bold">Actividad</button>
         </div>
 
-        <!-- Sección Almacén -->
         <div class="bg-slate-900/40 p-6 rounded-xl border border-slate-800 shadow-2xl">
             <h2 class="text-xl font-bold mb-6 flex items-center gap-2 text-blue-100">
-                <i class="fas fa-boxes text-blue-400"></i> Inventario Actual y Salidas
+                <i class="fas fa-boxes text-blue-400"></i> Inventario Actual
             </h2>
 
             <table id="tablaAlmacen" class="display nowrap">
@@ -57,14 +46,11 @@
                         <th class="text-right">Existencia</th>
                     </tr>
                 </thead>
-                <tbody id="dataAlmacen">
-                    <!-- Datos cargados vía JS -->
-                </tbody>
+                <tbody id="dataAlmacen"></tbody>
             </table>
         </div>
     </div>
 
-    <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
@@ -88,28 +74,21 @@
                         
                         const filas = data.slice(headerIdx + 1);
 
-                        filas.forEach((row) => {
+                        filas.forEach((row, index) => {
                             const nombre = row[colNombre];
                             const stockNum = row[colStock] ? row[colStock].toString().replace(/[^0-9]/g, '') : '0';
                             const stock = parseInt(stockNum) || 0;
 
-                            // Columna AB (índice 27)
-                            let imgPath = row[27] ? row[27].trim() : ''; 
-                            
-                            // Si no hay nada en la 27, probamos la 28 por si acaso
-                            if (!imgPath && row[28]) imgPath = row[28].trim();
-
                             if (nombre && stock > 0) {
-                                // Verificamos si es una ruta local o una URL completa
-                                const esValida = imgPath.length > 3;
+                                // Lógica automática: Google nombra las imágenes por orden (0, 1, 2...) 
+                                // según aparecen en el Excel original.
+                                const imgPath = `./resources/cellimage_637359523_${index}.jpg`;
                                 
                                 html += `<tr>
                                     <td class="text-center">
-                                        ${esValida ? 
-                                            `<img src="${imgPath}" class="item-img mx-auto" onerror="this.src='https://valhalla-rising.com/favicon.ico'">` : 
-                                            `<div class="w-8 h-8 bg-slate-800 rounded mx-auto flex items-center justify-center">
-                                                <i class="fas fa-box text-slate-600 text-xs"></i>
-                                            </div>`}
+                                        <img src="${imgPath}" 
+                                             class="item-img mx-auto" 
+                                             onerror="this.src='./resources/image_637359523_${index}.jpg'; this.onerror=function(){this.src='https://valhalla-rising.com/favicon.ico'};">
                                     </td>
                                     <td class="font-bold text-slate-200">${nombre}</td>
                                     <td class="text-right stock-badge">${stock.toLocaleString()}</td>
@@ -119,15 +98,13 @@
                     }
 
                     $('#dataAlmacen').html(html);
-
                     $('#tablaAlmacen').DataTable({
-                        pageLength: 200,
+                        pageLength: 50,
                         destroy: true,
                         order: [[2, 'desc']],
                         language: {
-                            search: "🔍 Buscar ítem:",
-                            lengthMenu: "Mostrar _MENU_ items",
-                            info: "Mostrando _TOTAL_ ítems en stock"
+                            search: "🔍 Buscar:",
+                            info: "Mostrando _TOTAL_ ítems"
                         },
                         columnDefs: [ { targets: 0, orderable: false } ]
                     });
