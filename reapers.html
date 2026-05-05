@@ -76,12 +76,48 @@
 
 
 
+/* --- SECCIÓN REPARTO: ESTILOS RESPONSIVOS --- */
+.reparto-grid { 
+    display: grid; 
+    grid-template-columns: 1fr; /* Una sola columna por defecto (Mobile) */
+    gap: 15px; 
+    margin-top: 20px; 
+    padding: 10px;
+}
+
 /* Cambio a 3 columnas solo en pantallas grandes (Desktop) */
 @media (min-width: 769px) {
     .reparto-grid { 
         grid-template-columns: repeat(3, 1fr); 
         padding: 20px;
     }
+}
+
+.reparto-col { 
+    border: 1px solid rgba(197, 160, 89, 0.3); 
+    background: rgba(0,0,0,0.4); 
+    width: 100%; /* Asegura que ocupe todo el ancho en mobile */
+}
+
+.reparto-header { 
+    background: #9a6a25; 
+    color: white; 
+    text-align: center; 
+    font-family: 'Cinzel', serif; 
+    font-size: 11px; 
+    padding: 10px; 
+    font-weight: bold; 
+}
+
+.tab-reparto { 
+    width: 100%; 
+    font-size: 11px; 
+    border-collapse: collapse; 
+}
+
+/* Ajuste de padding para que no se vea apretado en mobile */
+.tab-reparto td, .tab-reparto th { 
+    padding: 10px 5px; 
 }
     </style>
 </head>
