@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
-        /* --- SECCIÓN ALMACÉN: PROHIBIDO TOCAR (ESTILOS ORIGINALES) --- */
+        /* --- ESTILOS ORIGINALES ALMACÉN (NO TOCAR) --- */
         #tablaReapers_length { margin-left: 15px; }
         #tablaReapers_filter { margin-right: 15px; }
         :root { 
@@ -55,32 +55,21 @@
             text-transform: uppercase;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
-        table.dataTable thead th {
-            font-family: 'Cinzel', serif;
-            background-color: #0f172a !important; 
-            color: var(--nordic-gold) !important;
-            text-transform: uppercase; 
-            font-size: 0.85rem; 
-            padding: 18px !important;
-            border-bottom: 2px solid var(--nordic-gold) !important;
-        }
-        .item-icon { width: 44px; height: 44px; object-fit: contain; border-radius: 4px; background: #000; border: 1px solid var(--nordic-gold); padding: 2px; }
-        .stock-number { color: #4ade80; font-weight: 700; font-size: 1.2rem; }
 
-        /* --- SECCIÓN REPARTO: ESTILOS --- */
+        /* --- ESTILOS REPARTO --- */
         .reparto-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px; }
         .reparto-col { border: 1px solid rgba(197, 160, 89, 0.3); background: rgba(0,0,0,0.4); }
-        .reparto-header { background: #9a6a25; color: white; text-align: center; font-family: 'Cinzel', serif; font-size: 12px; padding: 10px; font-weight: bold; }
+        .reparto-header { background: #9a6a25; color: white; text-align: center; font-family: 'Cinzel', serif; font-size: 11px; padding: 10px; font-weight: bold; }
         .tab-reparto { width: 100%; font-size: 11px; border-collapse: collapse; }
-        .tab-reparto th { background: #1e293b; color: var(--nordic-gold); padding: 8px; border: 1px solid #334155; text-transform: uppercase; }
-        .tab-reparto td { padding: 8px; border: 1px solid rgba(197, 160, 89, 0.1); color: #cbd5e1; }
-        .img-mini { width: 32px; height: 32px; border: 1px solid var(--nordic-gold); background: #000; }
+        .tab-reparto th { background: #1e293b; color: var(--nordic-gold); padding: 8px; border: 1px solid #334155; }
+        .tab-reparto td { padding: 8px; border: 1px solid rgba(197, 160, 89, 0.1); color: #cbd5e1; vertical-align: middle; }
+        .img-mini { width: 32px; height: 32px; border: 1px solid var(--nordic-gold); background: #000; display: block; margin: 0 auto; }
         .pts-orange { color: #f59e0b; font-weight: bold; text-align: center; font-size: 13px; }
         .stock-green { color: #22c55e; font-weight: bold; text-align: center; }
 
-        /* Tabs de Navegación */
+        /* Navegación */
         .tabs-nav { display: flex; justify-content: center; gap: 10px; margin-bottom: -151px; position: relative; z-index: 100; }
-        .btn-tab { padding: 10px 25px; border: 1px solid var(--nordic-gold); background: #161b22; color: var(--nordic-gold); font-family: 'Cinzel', serif; cursor: pointer; }
+        .btn-tab { padding: 10px 25px; border: 1px solid var(--nordic-gold); background: #161b22; color: var(--nordic-gold); font-family: 'Cinzel', serif; cursor: pointer; text-transform: uppercase; }
         .btn-tab.active { background: var(--nordic-gold); color: black; }
         .content-section { display: none; }
         .content-section.active { display: block; }
@@ -95,7 +84,7 @@
 
     <div class="main-container">
         
-        <!-- SECCIÓN ALMACÉN -->
+        <!-- SECCIÓN ALMACÉN (ORIGINAL) -->
         <div id="sec-almacen" class="content-section active">
             <div class="logo-header">
                 <h1>REAPERS ALMACÉN</h1>
@@ -113,7 +102,7 @@
             </table>
         </div>
 
-        <!-- SECCIÓN REPARTO -->
+        <!-- SECCIÓN REPARTO (ACTUALIZADA CON TU NUEVO GID) -->
         <div id="sec-reparto" class="content-section">
             <div class="logo-header">
                 <h1>REPARTO DE ITEMS</h1>
@@ -157,10 +146,10 @@
             $(btn).addClass('active');
         }
 
-        // --- CARGAR ALMACÉN (TU CÓDIGO ORIGINAL SIN TOCAR) ---
+        // --- CARGAR ALMACÉN ---
         function cargarAlmacen() {
-            const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTmqkTpsU-nFe_DmHlwG28zHEtZU_RkhD6VxNZGX4XdC2Di6JPSBrTXTF6pKeIP737mHOL6eZwqJuW6/pub?gid=2029872222&single=true&output=csv';
-            Papa.parse(csvUrl, {
+            const urlAlmacen = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTmqkTpsU-nFe_DmHlwG28zHEtZU_RkhD6VxNZGX4XdC2Di6JPSBrTXTF6pKeIP737mHOL6eZwqJuW6/pub?gid=2029872222&single=true&output=csv';
+            Papa.parse(urlAlmacen, {
                 download: true,
                 complete: function(results) {
                     const rows = results.data;
@@ -185,27 +174,38 @@
             });
         }
 
-        // --- CARGAR REPARTO (SOLUCIÓN PARA QUE NO SALGA VACÍO) ---
+        // --- CARGAR REPARTO (USANDO TU LINK NUEVO) ---
         function cargarReparto() {
-            const urlReparto = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTmqkTpsU-nFe_DmHlwG28zHEtZU_RkhD6VxNZGX4XdC2Di6JPSBrTXTF6pKeIP737mHOL6eZwqJuW6/pub?gid=1587397753&single=true&output=csv';
+            // Este es el link que me pasaste[cite: 1]
+            const urlReparto = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTmqkTpsU-nFe_DmHlwG28zHEtZU_RkhD6VxNZGX4XdC2Di6JPSBrTXTF6pKeIP737mHOL6eZwqJuW6/pub?gid=854086504&single=true&output=csv';
+            
             Papa.parse(urlReparto, {
                 download: true,
                 complete: function(results) {
                     const rows = results.data;
                     let hDiscord = '', hAdmin = '', hAH = '';
-                    // Empezamos en la fila 5 del Excel (índice 4)[cite: 2]
+                    
+                    // Empezamos en la fila 5 (índice 4) según tu estructura de Excel[cite: 2]
                     for (let i = 4; i < rows.length; i++) {
                         const r = rows[i];
-                        // Discord: Col A (Img), B (Nombre), D (Puntos)[cite: 2]
-                        if (r[1]) hDiscord += `<tr><td><img src="${r[0]}" class="img-mini"></td><td>${r[1]}</td><td class="pts-orange">${r[3] || '0'}</td></tr>`;
-                        // Admin: Col E (Nombre), G (Puntos)[cite: 2]
-                        if (r[4]) hAdmin += `<tr><td>${r[4]}</td><td class="pts-orange">${r[6] || '0'}</td></tr>`;
-                        // AH: Col H (Img), I (Nombre), J (Stock), K (Puntos)[cite: 2]
-                        if (r[8]) hAH += `<tr><td><img src="${r[7]}" class="img-mini"></td><td>${r[8]}</td><td class="stock-green">${r[9] || '0'}</td><td class="pts-orange">${r[10] || '0'}</td></tr>`;
+                        if(!r) continue;
+
+                        // Discord: Col A, B, D[cite: 2]
+                        if (r[1] && r[1].trim() !== "") {
+                            hDiscord += `<tr><td width="35"><img src="${r[0] || ''}" class="img-mini" onerror="this.style.display='none'"></td><td class="uppercase">${r[1]}</td><td class="pts-orange">${r[3] || '0'}</td></tr>`;
+                        }
+                        // Admin: Col E, G[cite: 2]
+                        if (r[4] && r[4].trim() !== "") {
+                            hAdmin += `<tr><td class="uppercase">${r[4]}</td><td class="pts-orange">${r[6] || '0'}</td></tr>`;
+                        }
+                        // AH: Col H, I, J, K[cite: 2]
+                        if (r[8] && r[8].trim() !== "") {
+                            hAH += `<tr><td width="35"><img src="${r[7] || ''}" class="img-mini" onerror="this.style.display='none'"></td><td class="uppercase">${r[8]}</td><td class="stock-green">${r[9] || '0'}</td><td class="pts-orange">${r[10] || '0'}</td></tr>`;
+                        }
                     }
-                    $('#listaDiscord').html(hDiscord);
-                    $('#listaAdmin').html(hAdmin);
-                    $('#listaAH').html(hAH);
+                    $('#listaDiscord').html(hDiscord || '<tr><td colspan="3" class="text-center">Sin datos</td></tr>');
+                    $('#listaAdmin').html(hAdmin || '<tr><td colspan="2" class="text-center">Sin datos</td></tr>');
+                    $('#listaAH').html(hAH || '<tr><td colspan="4" class="text-center">Sin datos</td></tr>');
                 }
             });
         }
