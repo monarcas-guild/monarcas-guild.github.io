@@ -90,27 +90,31 @@
                         const filas = data.slice(headerIdx + 1);
 
                         filas.forEach(row => {
-                            const nombre = row[colNombre];
-                            // Limpiar stock para que sea número
-                            const stockNum = row[colStock] ? row[colStock].toString().replace(/[^0-9]/g, '') : '0';
-                            const stock = parseInt(stockNum) || 0;
-                            const imgUrl = row[0]; // Columna A
+    const nombre = row[colNombre];
+    // Limpiamos el stock para que sea número
+    const stockNum = row[colStock] ? row[colStock].toString().replace(/[^0-9]/g, '') : '0';
+    const stock = parseInt(stockNum) || 0;
 
-                            if (nombre && stock > 0) {
-                                // Validar si hay link de imagen
-                                const esImagen = imgUrl && imgUrl.startsWith('http');
-                                
-                                html += `<tr>
-                                    <td class="text-center">
-                                        ${esImagen ? 
-                                            `<img src="${imgUrl}" class="item-img mx-auto" onerror="this.src='https://valhalla-rising.com/favicon.ico'">` : 
-                                            `<div class="w-8 h-8 bg-slate-800 rounded mx-auto flex items-center justify-center"><i class="fas fa-box text-slate-600 text-xs"></i></div>`}
-                                    </td>
-                                    <td class="font-bold text-slate-200">${nombre}</td>
-                                    <td class="text-right stock-badge">${stock.toLocaleString()}</td>
-                                </tr>`;
-                            }
-                        });
+    // --- CAMBIO AQUÍ: Usamos la columna AB (Índice 27) ---
+    const imgUrl = row[27] ? row[27].trim() : ''; 
+
+    if (nombre && stock > 0) {
+        // Validamos si el contenido de la columna AB es un link
+        const esImagen = imgUrl && imgUrl.startsWith('http');
+        
+        html += `<tr>
+            <td class="text-center">
+                ${esImagen ? 
+                    `<img src="${imgUrl}" class="item-img mx-auto" onerror="this.src='https://valhalla-rising.com/favicon.ico'">` : 
+                    `<div class="w-8 h-8 bg-slate-800 rounded mx-auto flex items-center justify-center">
+                        <i class="fas fa-box text-slate-600 text-xs"></i>
+                    </div>`}
+            </td>
+            <td class="font-bold text-slate-200">${nombre}</td>
+            <td class="text-right stock-badge">${stock.toLocaleString()}</td>
+        </tr>`;
+    }
+});
                     }
 
                     // Insertar HTML
