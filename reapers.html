@@ -9,46 +9,62 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --dark: #0b1120; --card: #161f32; --accent: #3b82f6; }
-        body { background-color: var(--dark); color: #f1f5f9; font-family: sans-serif; }
+        body { background-color: var(--dark); color: #f1f5f9; font-family: 'Inter', sans-serif; }
         
-        /* Estilos de la Tabla */
+        /* Contenedor de la tabla */
+        .table-container {
+            background: rgba(22, 31, 50, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(51, 65, 85, 0.5);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Estilos DataTable */
         .dataTables_wrapper .dataTables_filter input {
-            background: #1e293b; border: 1px solid #334155; border-radius: 6px;
-            padding: 8px; color: white; margin-left: 10px; width: 250px;
+            background: #1e293b; border: 1px solid #334155; border-radius: 8px;
+            padding: 8px 12px; color: white; margin-left: 10px; width: 250px; outline: none;
         }
-        table.dataTable { border: none !important; border-collapse: collapse !important; width: 100% !important; }
-        table.dataTable tbody tr { background-color: transparent !important; border-bottom: 1px solid #1e293b !important; }
-        table.dataTable thead th { background-color: #1e293b !important; color: #60a5fa !important; border: none !important; padding: 15px !important; }
-        table.dataTable td { padding: 12px !important; border: none !important; vertical-align: middle; }
-        
-        /* Imagen de los ítems */
+        table.dataTable { border: none !important; width: 100% !important; margin-bottom: 20px !important; }
+        table.dataTable thead th { 
+            background-color: #1e293b !important; color: #60a5fa !important; 
+            text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em;
+            padding: 15px !important; border: none !important;
+        }
+        table.dataTable tbody tr { background-color: transparent !important; border-bottom: 1px solid #1e293b !important; transition: all 0.2s; }
+        table.dataTable tbody tr:hover { background-color: rgba(59, 130, 246, 0.05) !important; }
+        table.dataTable td { padding: 12px 15px !important; border: none !important; vertical-align: middle; }
+
+        /* Imagen del Ítem */
         .item-img { 
-            width: 42px; 
-            height: 42px; 
-            object-fit: contain; 
-            border-radius: 6px; 
-            background: rgba(0,0,0,0.3);
-            border: 1px solid #334155;
+            width: 44px; height: 44px; object-fit: contain; 
+            border-radius: 8px; background: #0b1120;
+            border: 1px solid #334155; padding: 2px;
         }
-        .stock-badge { color: #4ade80; font-weight: 900; font-size: 1.1rem; }
+        .stock-val { color: #4ade80; font-weight: 800; font-size: 1.1rem; }
     </style>
 </head>
-<body class="p-6">
+<body class="p-4 md:p-8">
 
-    <div class="max-w-5xl mx-auto">
-        <h1 class="text-center text-4xl font-black text-blue-500 italic mb-8">REAPERS</h1>
+    <div class="max-w-6xl mx-auto">
+        <header class="mb-8 text-center">
+            <h1 class="text-5xl font-black tracking-tighter italic text-blue-500 mb-2">REAPERS</h1>
+            <p class="text-slate-400 font-medium">Gestión de Inventario de Gremio</p>
+        </header>
 
-        <!-- Tabla -->
-        <div class="bg-slate-900/40 p-6 rounded-xl border border-slate-800 shadow-2xl">
+        <div class="table-container">
             <table id="tablaAlmacen" class="display nowrap">
                 <thead>
                     <tr>
-                        <th class="text-center" style="width: 70px;">Imagen</th>
-                        <th>Ítem / Descripción</th>
-                        <th class="text-right">Existencia</th>
+                        <th class="text-center" style="width: 60px;">Icono</th>
+                        <th>Descripción del Ítem</th>
+                        <th class="text-right">Cantidad</th>
                     </tr>
                 </thead>
-                <tbody id="dataAlmacen"></tbody>
+                <tbody id="dataAlmacen">
+                    <!-- Los datos se cargan aquí -->
+                </tbody>
             </table>
         </div>
     </div>
@@ -58,6 +74,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 
     <script>
+        // URL de tu CSV publicado
         const urlAlmacen = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTmqkTpsU-nFe_DmHlwG28zHEtZU_RkhD6VxNZGX4XdC2Di6JPSBrTXTF6pKeIP737mHOL6eZwqJuW6/pub?gid=2029872222&single=true&output=csv';
 
         function cargarAlmacen() {
@@ -65,54 +82,55 @@
                 download: true,
                 complete: function(results) {
                     const data = results.data;
-                    let html = '';
+                    let htmlRows = '';
                     
-                    // Buscar la fila que contiene los encabezados
-                    const headerIdx = data.findIndex(row => row.some(c => c && c.toString().toUpperCase().includes('ARTÍCULO')));
+                    // Identificar encabezados (buscamos la fila que tenga "DESCRIPCIÓN")
+                    const headerIdx = data.findIndex(row => row.some(c => c && c.toString().toUpperCase().includes('DESCRIPCIÓN')));
                     
                     if (headerIdx !== -1) {
                         const headers = data[headerIdx].map(h => h ? h.trim().toUpperCase() : '');
-                        const colNombre = headers.findIndex(h => h.includes('ARTÍCULO'));
-                        const colStock = headers.findIndex(h => h.includes('EXISTENCIA'));
+                        const colDesc = headers.findIndex(h => h.includes('DESCRIPCIÓN'));
+                        const colCant = headers.findIndex(h => h.includes('CANTIDAD'));
                         
-                        const filas = data.slice(headerIdx + 1);
+                        // Procesar filas después del encabezado
+                        data.slice(headerIdx + 1).forEach((row) => {
+                            const descripcion = row[colDesc];
+                            const cantidad = row[colCant] ? row[colCant].trim() : '0';
+                            
+                            // EXTRAER RUTA DE COLUMNA AG (Índice 32)
+                            const imgRuta = row[32] ? row[32].trim() : '';
 
-                        filas.forEach((row) => {
-                            const nombre = row[colNombre];
-                            const stockNum = row[colStock] ? row[colStock].toString().replace(/[^0-9]/g, '') : '0';
-                            const stock = parseInt(stockNum) || 0;
-
-                            // TOMAR IMAGEN DE COLUMNA AG (Índice 32)
-                            let imgSource = row[32] ? row[32].trim() : '';
-
-                            if (nombre && stock > 0) {
-                                html += `<tr>
-                                    <td class="text-center">
-                                        ${imgSource ? 
-                                            `<img src="${imgSource}" class="item-img mx-auto" onerror="this.src='https://valhalla-rising.com/favicon.ico';">` : 
-                                            `<div class="w-10 h-10 bg-slate-800 rounded mx-auto flex items-center justify-center">
-                                                <i class="fas fa-box text-slate-600"></i>
-                                            </div>`}
-                                    </td>
-                                    <td class="font-bold text-slate-200">${nombre}</td>
-                                    <td class="text-right stock-badge">${stock.toLocaleString()}</td>
-                                </tr>`;
+                            // Solo mostrar si tiene descripción y hay stock
+                            if (descripcion && descripcion !== "" && parseInt(cantidad) !== 0) {
+                                htmlRows += `
+                                    <tr>
+                                        <td class="text-center">
+                                            ${imgRuta ? 
+                                                `<img src="${imgRuta}" class="item-img mx-auto" onerror="this.src='https://valhalla-rising.com/favicon.ico';">` : 
+                                                `<div class="w-10 h-10 bg-slate-800 rounded flex items-center justify-center mx-auto"><i class="fas fa-box text-slate-600"></i></div>`
+                                            }
+                                        </td>
+                                        <td class="font-bold text-slate-100">${descripcion}</td>
+                                        <td class="text-right stock-val">${cantidad}</td>
+                                    </tr>`;
                             }
                         });
                     }
 
-                    $('#dataAlmacen').html(html);
+                    $('#dataAlmacen').html(htmlRows);
+
+                    // Inicializar DataTable
                     $('#tablaAlmacen').DataTable({
-                        pageLength: 200,
+                        pageLength: 50,
                         destroy: true,
-                        order: [[2, 'desc']],
-                        language: { 
-                            search: "🔍 Buscar ítem:",
-                            info: "Mostrando _TOTAL_ ítems",
+                        order: [[2, 'desc']], // Ordenar por cantidad de mayor a menor
+                        language: {
+                            search: "🔍",
+                            searchPlaceholder: "Buscar ítem...",
+                            info: "Mostrando _TOTAL_ objetos en el almacén",
                             lengthMenu: "Ver _MENU_",
-                            zeroRecords: "No se encontró nada"
-                        },
-                        columnDefs: [ { targets: 0, orderable: false } ]
+                            zeroRecords: "No se encontraron resultados"
+                        }
                     });
                 }
             });
