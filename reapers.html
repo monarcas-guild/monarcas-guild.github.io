@@ -12,7 +12,7 @@
         :root { --dark: #0b1120; --card: #161f32; --accent: #3b82f6; }
         body { background-color: var(--dark); color: #f1f5f9; font-family: sans-serif; }
         
-        /* Estilos para que el buscador se vea bien */
+        /* Estilos para el buscador */
         .dataTables_wrapper .dataTables_filter { margin-bottom: 20px; }
         .dataTables_wrapper .dataTables_filter input {
             background: #1e293b; border: 1px solid #334155; border-radius: 6px;
@@ -21,10 +21,10 @@
         .dataTables_wrapper .dataTables_length select { background: #1e293b; color: white; border-radius: 4px; padding: 4px; }
         
         /* Estilo de la tabla */
-        table.dataTable { border: none !important; border-collapse: collapse !important; }
+        table.dataTable { border: none !important; border-collapse: collapse !important; width: 100% !important; }
         table.dataTable tbody tr { background-color: transparent !important; border-bottom: 1px solid #1e293b !important; }
         table.dataTable thead th { background-color: #1e293b !important; color: #60a5fa !important; border: none !important; padding: 15px !important; }
-        table.dataTable td { padding: 12px !important; border: none !important; }
+        table.dataTable td { padding: 12px !important; border: none !important; vertical-align: middle; }
 
         .item-img { width: 35px; height: 35px; object-fit: contain; border-radius: 4px; background: #0b1120; padding: 2px; }
         .stock-badge { color: #4ade80; font-weight: 900; font-size: 1.1rem; }
@@ -44,12 +44,12 @@
         </div>
 
         <!-- Sección Almacén -->
-        <div class="bg-slate-900/40 p-6 rounded-xl border border-slate-800">
-            <h2 class="text-xl font-bold mb-6 flex items-center gap-2">
+        <div class="bg-slate-900/40 p-6 rounded-xl border border-slate-800 shadow-2xl">
+            <h2 class="text-xl font-bold mb-6 flex items-center gap-2 text-blue-100">
                 <i class="fas fa-boxes text-blue-400"></i> Inventario Actual y Salidas
             </h2>
 
-            <table id="tablaAlmacen" class="display w-full">
+            <table id="tablaAlmacen" class="display nowrap">
                 <thead>
                     <tr>
                         <th class="text-center" style="width: 60px;">Imagen</th>
@@ -58,7 +58,7 @@
                     </tr>
                 </thead>
                 <tbody id="dataAlmacen">
-                    <!-- JS cargará los datos aquí -->
+                    <!-- Datos cargados vía JS -->
                 </tbody>
             </table>
         </div>
@@ -79,7 +79,6 @@
                     const data = results.data;
                     let html = '';
                     
-                    // Encontrar cabecera
                     const headerIdx = data.findIndex(row => row.some(c => c && c.toString().toUpperCase().includes('ARTÍCULO')));
                     
                     if (headerIdx !== -1) {
@@ -89,58 +88,48 @@
                         
                         const filas = data.slice(headerIdx + 1);
 
-filas.forEach((row, index) => {
-    const nombre = row[colNombre];
-    const stockNum = row[colStock] ? row[colStock].toString().replace(/[^0-9]/g, '') : '0';
-    const stock = parseInt(stockNum) || 0;
+                        filas.forEach((row) => {
+                            const nombre = row[colNombre];
+                            const stockNum = row[colStock] ? row[colStock].toString().replace(/[^0-9]/g, '') : '0';
+                            const stock = parseInt(stockNum) || 0;
 
-    // --- LÓGICA PARA LA COLUMNA AB ---
-    // Usamos el índice 27 para la columna AB
-    let imgUrl = row[27] ? row[27].trim() : ''; 
-    
-    // Si la imagen no está en la 27, probamos a ver si está en la columna siguiente 
-    // a veces Google añade columnas vacías al exportar.
-    if (!imgUrl.startsWith('http') && row[28]) {
-        imgUrl = row[28].trim();
-    }
+                            // Columna AB (índice 27)
+                            let imgPath = row[27] ? row[27].trim() : ''; 
+                            
+                            // Si no hay nada en la 27, probamos la 28 por si acaso
+                            if (!imgPath && row[28]) imgPath = row[28].trim();
 
-    if (nombre && stock > 0) {
-        const esImagen = imgUrl && imgUrl.startsWith('http');
-        
-        // Debug opcional: Descomenta la línea de abajo para ver en la consola qué lee de Diamantes
-        // if(nombre.includes("Diamantes")) console.log("Link detectado para Diamantes:", imgUrl);
-
-        html += `<tr>
-            <td class="text-center">
-                ${esImagen ? 
-                    `<img src="${imgUrl}" class="item-img mx-auto" style="width:35px; height:35px;" onerror="this.src='https://valhalla-rising.com/favicon.ico'">` : 
-                    `<div class="w-8 h-8 bg-slate-800 rounded mx-auto flex items-center justify-center">
-                        <i class="fas fa-box text-slate-600 text-xs"></i>
-                    </div>`}
-            </td>
-            <td class="font-bold text-slate-200">${nombre}</td>
-            <td class="text-right stock-badge">${stock.toLocaleString()}</td>
-        </tr>`;
-    }
-});
+                            if (nombre && stock > 0) {
+                                // Verificamos si es una ruta local o una URL completa
+                                const esValida = imgPath.length > 3;
+                                
+                                html += `<tr>
+                                    <td class="text-center">
+                                        ${esValida ? 
+                                            `<img src="${imgPath}" class="item-img mx-auto" onerror="this.src='https://valhalla-rising.com/favicon.ico'">` : 
+                                            `<div class="w-8 h-8 bg-slate-800 rounded mx-auto flex items-center justify-center">
+                                                <i class="fas fa-box text-slate-600 text-xs"></i>
+                                            </div>`}
+                                    </td>
+                                    <td class="font-bold text-slate-200">${nombre}</td>
+                                    <td class="text-right stock-badge">${stock.toLocaleString()}</td>
+                                </tr>`;
+                            }
+                        });
                     }
 
-                    // Insertar HTML
                     $('#dataAlmacen').html(html);
 
-                    // Inicializar DataTable (Solo 3 columnas)
                     $('#tablaAlmacen').DataTable({
-                        pageLength: 200, // 200 por defecto
-                        destroy: true,   // Evita el error de reinicialización
-                        order: [[2, 'desc']], // Ordenar por cantidad
+                        pageLength: 200,
+                        destroy: true,
+                        order: [[2, 'desc']],
                         language: {
-                            search: "Buscar ítem:",
+                            search: "🔍 Buscar ítem:",
                             lengthMenu: "Mostrar _MENU_ items",
-                            info: "Mostrando _TOTAL_ ítems con stock"
+                            info: "Mostrando _TOTAL_ ítems en stock"
                         },
-                        columnDefs: [
-                            { targets: 0, orderable: false } // No ordenar por la imagen
-                        ]
+                        columnDefs: [ { targets: 0, orderable: false } ]
                     });
                 }
             });
