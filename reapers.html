@@ -73,6 +73,16 @@
         .btn-tab.active { background: var(--nordic-gold); color: black; }
         .content-section { display: none; }
         .content-section.active { display: block; }
+
+
+
+/* Cambio a 3 columnas solo en pantallas grandes (Desktop) */
+@media (min-width: 769px) {
+    .reparto-grid { 
+        grid-template-columns: repeat(3, 1fr); 
+        padding: 20px;
+    }
+}
     </style>
 </head>
 <body>
