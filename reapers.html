@@ -89,38 +89,78 @@
         actividad: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTmqkTpsU-nFe_DmHlwG28zHEtZU_RkhD6VxNZGX4XdC2Di6JPSBrTXTF6pKeIP737mHOL6eZwqJuW6/pub?gid=801467735&single=true&output=csv'
     };
 
-    // --- CARGAR ALMACÉN ---
-    Papa.parse(csvUrls.almacen, {
-        download: true,
-        complete: function(results) {
-            const data = results.data;
-            let html = '';
-            // Buscamos la fila donde realmente empiezan los títulos (ej. DESCRIPCIÓN)
-            const headerIndex = data.findIndex(row => row.some(c => c && c.toUpperCase().includes('DESCRIPCIÓN')));
+   // --- CARGAR ALMACÉN (VERSIÓN STOCK REAL) ---
+Papa.parse(csvUrls.almacen, {
+    download: true,
+    complete: function(results) {
+        const data = results.data;
+        let html = '';
+        
+        // Buscamos la fila donde empieza "Artículo /Item" (Fila 1 en tu imagen)
+        const headerIndex = data.findIndex(row => row.some(c => c && c.toUpperCase().includes('ARTÍCULO')));
+        
+        if (headerIndex !== -1) {
+            const headers = data[headerIndex].map(h => h ? h.trim().toUpperCase() : '');
             
-            if (headerIndex !== -1) {
-                const headers = data[headerIndex].map(h => h.trim().toUpperCase());
-                const rows = data.slice(headerIndex + 1);
+            // Identificamos las columnas exactas de tu imagen
+            const colIcono = 0; // La primera columna con imágenes
+            const colNombre = headers.findIndex(h => h.includes('ARTÍCULO'));
+            const colStock = headers.findIndex(h => h.includes('EXISTENCIA'));
 
-                rows.forEach(row => {
-                    const item = row[headers.indexOf('DESCRIPCIÓN')] || row[0];
-                    const stock = parseInt(row[headers.indexOf('EXISTENCIA')]) || 0;
-                    const boss = row[headers.indexOf('BOSS')] || '-';
-                    
-                    if (item && item.length > 2) {
-                        html += `<tr>
-                            <td class="font-bold text-blue-100">${item}</td>
-                            <td class="${stock > 0 ? 'text-green-400 font-black' : 'text-gray-600'}">${stock}</td>
-                            <td class="text-gray-400">${boss}</td>
-                            <td class="text-xs text-blue-300">${row[headers.indexOf('A QUIEN SE ENTREGO')] || '-'}</td>
-                        </tr>`;
-                    }
-                });
-            }
-            $('#dataAlmacen').html(html);
-            $('#tablaAlmacen').DataTable({ language: { search: "Buscar ítem:" }, pageLength: 10 });
+            const rows = data.slice(headerIndex + 1);
+
+            rows.forEach(row => {
+                const nombre = row[colNombre];
+                const stock = parseInt(row[colStock]) || 0;
+                const iconoUrl = row[colIcono]; // Google Sheets publica la URL de la imagen si está en la celda
+
+                // Solo mostramos si hay stock disponible
+                if (nombre && stock > 0) {
+                    html += `<tr>
+                        <td class="text-center">
+                            ${iconoUrl ? `<img src="${iconoUrl}" class="w-8 h-8 mx-auto rounded shadow-sm" onerror="this.style.display='none'">` : '<i class="fas fa-box text-slate-600"></i>'}
+                        </td>
+                        <td class="font-bold text-blue-100">${nombre}</td>
+                        <td class="text-right pr-10">
+                            <span class="bg-green-900/50 text-green-400 px-3 py-1 rounded-full border border-green-700/50 font-black">
+                                ${stock.toLocaleString()}
+                            </span>
+                        </td>
+                    </tr>`;
+                }
+            });
         }
-    });
+
+        // Actualizamos el encabezado de la tabla para que coincida con lo nuevo
+        $('#almacen thead').html(`
+            <tr class="bg-slate-800 text-left text-blue-400">
+                <th class="w-16">Icono</th>
+                <th>Artículo / Item</th>
+                <th class="text-right pr-10">Stock Disponible</th>
+            </tr>
+        `);
+
+        $('#dataAlmacen').html(html);
+        
+        // Reiniciamos DataTable con tus preferencias
+        if ($.fn.DataTable.isDataTable('#tablaAlmacen')) {
+            $('#tablaAlmacen').DataTable().destroy();
+        }
+        
+        $('#tablaAlmacen').DataTable({
+            language: { 
+                search: "🔍 Buscar item en stock:",
+                lengthMenu: "Mostrar _MENU_ items",
+                info: "Mostrando _START_ a _END_ de _TOTAL_ items en stock"
+            },
+            pageLength: 200, // Por defecto 200 como pediste
+            order: [[2, 'desc']], // Ordenar por cantidad de stock de mayor a menor
+            columnDefs: [
+                { targets: 0, orderable: false } // No ordenar por el icono
+            ]
+        });
+    }
+});
 
     // --- CARGAR PUNTOS ---
     Papa.parse(csvUrls.puntos, {
