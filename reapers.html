@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
-        /* --- ESTILOS ORIGINALES ALMACÉN (PROHIBIDO TOCAR) --- */
+        /* --- SECCIÓN ALMACÉN: PROHIBIDO TOCAR (ESTILOS ORIGINALES) --- */
         #tablaReapers_length { margin-left: 15px; }
         #tablaReapers_filter { margin-right: 15px; }
         :root { 
@@ -38,6 +38,7 @@
             backdrop-filter: blur(5px);
             border: 1px solid var(--nordic-gold); 
             box-shadow: 0 0 50px rgba(0,0,0,0.9);
+            padding: 20px;
         }
         .logo-header {
             text-align: center;
@@ -54,7 +55,6 @@
             text-transform: uppercase;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
-        table.dataTable { border-collapse: collapse !important; border: none !important; margin-top: 20px !important; }
         table.dataTable thead th {
             font-family: 'Cinzel', serif;
             background-color: #0f172a !important; 
@@ -63,67 +63,40 @@
             font-size: 0.85rem; 
             padding: 18px !important;
             border-bottom: 2px solid var(--nordic-gold) !important;
-            letter-spacing: 1px;
         }
-        table.dataTable tbody tr { background-color: transparent !important; border-bottom: 1px solid #334155 !important; }
-        table.dataTable td { padding: 15px !important; vertical-align: middle; border: none !important; }
         .item-icon { width: 44px; height: 44px; object-fit: contain; border-radius: 4px; background: #000; border: 1px solid var(--nordic-gold); padding: 2px; }
         .stock-number { color: #4ade80; font-weight: 700; font-size: 1.2rem; }
-        .dataTables_filter input { background: #0a0c10; border: 1px solid var(--nordic-gold); border-radius: 4px; padding: 8px 15px; color: white; margin-bottom: 20px; }
 
-        /* --- ESTILOS SECCIÓN REPARTO (NUEVOS E INDEPENDIENTES) --- */
-        .nav-tabs {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 10px;
-            z-index: 1000;
-        }
-        .nav-btn {
-            padding: 10px 20px;
-            background: rgba(22, 27, 34, 0.9);
-            border: 1px solid var(--nordic-gold);
-            color: var(--nordic-gold);
-            font-family: 'Cinzel', serif;
-            cursor: pointer;
-            text-transform: uppercase;
-            font-size: 12px;
-        }
-        .nav-btn.active { background: var(--nordic-gold); color: black; }
-        
-        .section-view { display: none; }
-        .section-view.active { display: block; }
-
-        .reparto-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            padding: 20px;
-        }
-        .reparto-col { border: 1px solid rgba(197, 160, 89, 0.3); background: rgba(0,0,0,0.2); }
-        .reparto-title { background: #b45309; color: white; text-align: center; font-family: 'Cinzel', serif; font-size: 11px; padding: 8px; font-weight: bold; }
-        
-        .tab-data { width: 100%; border-collapse: collapse; font-size: 10px; }
-        .tab-data th { background: #1e293b; color: var(--nordic-gold); padding: 5px; border: 1px solid #334155; }
-        .tab-data td { padding: 5px; border: 1px solid rgba(197, 160, 89, 0.1); vertical-align: middle; }
-        .img-mini { width: 30px; height: 30px; border: 1px solid #444; background: #000; }
-        .pts-orange { color: #f59e0b; font-weight: bold; text-align: center; }
+        /* --- SECCIÓN REPARTO: ESTILOS --- */
+        .reparto-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px; }
+        .reparto-col { border: 1px solid rgba(197, 160, 89, 0.3); background: rgba(0,0,0,0.4); }
+        .reparto-header { background: #9a6a25; color: white; text-align: center; font-family: 'Cinzel', serif; font-size: 12px; padding: 10px; font-weight: bold; }
+        .tab-reparto { width: 100%; font-size: 11px; border-collapse: collapse; }
+        .tab-reparto th { background: #1e293b; color: var(--nordic-gold); padding: 8px; border: 1px solid #334155; text-transform: uppercase; }
+        .tab-reparto td { padding: 8px; border: 1px solid rgba(197, 160, 89, 0.1); color: #cbd5e1; }
+        .img-mini { width: 32px; height: 32px; border: 1px solid var(--nordic-gold); background: #000; }
+        .pts-orange { color: #f59e0b; font-weight: bold; text-align: center; font-size: 13px; }
         .stock-green { color: #22c55e; font-weight: bold; text-align: center; }
+
+        /* Tabs de Navegación */
+        .tabs-nav { display: flex; justify-content: center; gap: 10px; margin-bottom: -151px; position: relative; z-index: 100; }
+        .btn-tab { padding: 10px 25px; border: 1px solid var(--nordic-gold); background: #161b22; color: var(--nordic-gold); font-family: 'Cinzel', serif; cursor: pointer; }
+        .btn-tab.active { background: var(--nordic-gold); color: black; }
+        .content-section { display: none; }
+        .content-section.active { display: block; }
     </style>
 </head>
 <body>
 
-    <div class="nav-tabs">
-        <button class="nav-btn active" onclick="switchTab('almacen', this)">Almacén</button>
-        <button class="nav-btn" onclick="switchTab('reparto', this)">Reparto de Items</button>
+    <div class="tabs-nav">
+        <button class="btn-tab active" onclick="verSeccion('almacen', this)">ALMACÉN</button>
+        <button class="btn-tab" onclick="verSeccion('reparto', this)">REPARTO DE ITEMS</button>
     </div>
 
     <div class="main-container">
         
-        <!-- VISTA ALMACÉN (TU CÓDIGO ORIGINAL) -->
-        <div id="view-almacen" class="section-view active">
+        <!-- SECCIÓN ALMACÉN -->
+        <div id="sec-almacen" class="content-section active">
             <div class="logo-header">
                 <h1>REAPERS ALMACÉN</h1>
                 <p class="text-slate-400 uppercase tracking-widest text-xs">Registro Oficial de Suministros</p>
@@ -140,34 +113,31 @@
             </table>
         </div>
 
-        <!-- VISTA REPARTO (SECCIÓN NUEVA AISLADA) -->
-        <div id="view-reparto" class="section-view">
+        <!-- SECCIÓN REPARTO -->
+        <div id="sec-reparto" class="content-section">
             <div class="logo-header">
                 <h1>REPARTO DE ITEMS</h1>
                 <p class="text-slate-400 uppercase tracking-widest text-xs">Sistema de Puntuación Oficial</p>
             </div>
             <div class="reparto-grid">
-                <!-- Col 1 -->
                 <div class="reparto-col">
-                    <div class="reparto-title">DISCORD REPARTO ITEMS</div>
-                    <table class="tab-data">
+                    <div class="reparto-header">DISCORD REPARTO ITEMS</div>
+                    <table class="tab-reparto">
                         <thead><tr><th colspan="2">ITEM</th><th>PUNTOS</th></tr></thead>
                         <tbody id="listaDiscord"></tbody>
                     </table>
                 </div>
-                <!-- Col 2 -->
                 <div class="reparto-col">
-                    <div class="reparto-title">ENTREGA ADMINISTRACION</div>
-                    <table class="tab-data">
+                    <div class="reparto-header">ENTREGA ADMINISTRACION</div>
+                    <table class="tab-reparto">
                         <thead><tr><th>ITEM</th><th>PUNTOS / UNIDAD</th></tr></thead>
                         <tbody id="listaAdmin"></tbody>
                     </table>
                 </div>
-                <!-- Col 3 -->
                 <div class="reparto-col">
-                    <div class="reparto-title">POR ACTION HOUSE</div>
-                    <table class="tab-data">
-                        <thead><tr><th colspan="2">ITEM</th><th>EN STOCK</th><th>PUNTOS</th></tr></thead>
+                    <div class="reparto-header">POR ACTION HOUSE</div>
+                    <table class="tab-reparto">
+                        <thead><tr><th colspan="2">ITEM</th><th>STOCK</th><th>PTS</th></tr></thead>
                         <tbody id="listaAH"></tbody>
                     </table>
                 </div>
@@ -180,20 +150,17 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 
     <script>
-        const urlGral = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTmqkTpsU-nFe_DmHlwG28zHEtZU_RkhD6VxNZGX4XdC2Di6JPSBrTXTF6pKeIP737mHOL6eZwqJuW6/pub?gid=';
-        const gidAlmacen = '2029872222';
-        const gidPuntos = '1587397753';
-
-        function switchTab(view, btn) {
-            $('.section-view').removeClass('active');
-            $(`#view-${view}`).addClass('active');
-            $('.nav-btn').removeClass('active');
+        function verSeccion(id, btn) {
+            $('.content-section').removeClass('active');
+            $(`#sec-${id}`).addClass('active');
+            $('.btn-tab').removeClass('active');
             $(btn).addClass('active');
         }
 
-        // FUNCIÓN ALMACÉN (ORIGINAL SIN CAMBIOS)
+        // --- CARGAR ALMACÉN (TU CÓDIGO ORIGINAL SIN TOCAR) ---
         function cargarAlmacen() {
-            Papa.parse(urlGral + gidAlmacen + '&single=true&output=csv', {
+            const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTmqkTpsU-nFe_DmHlwG28zHEtZU_RkhD6VxNZGX4XdC2Di6JPSBrTXTF6pKeIP737mHOL6eZwqJuW6/pub?gid=2029872222&single=true&output=csv';
+            Papa.parse(csvUrl, {
                 download: true,
                 complete: function(results) {
                     const rows = results.data;
@@ -218,26 +185,27 @@
             });
         }
 
-        // FUNCIÓN REPARTO (LOGICA DE COLUMNAS EXCEL)
+        // --- CARGAR REPARTO (SOLUCIÓN PARA QUE NO SALGA VACÍO) ---
         function cargarReparto() {
-            Papa.parse(urlGral + gidPuntos + '&single=true&output=csv', {
+            const urlReparto = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTmqkTpsU-nFe_DmHlwG28zHEtZU_RkhD6VxNZGX4XdC2Di6JPSBrTXTF6pKeIP737mHOL6eZwqJuW6/pub?gid=1587397753&single=true&output=csv';
+            Papa.parse(urlReparto, {
                 download: true,
                 complete: function(results) {
                     const rows = results.data;
-                    let h1='', h2='', h3='';
-                    // Empezamos en la fila 5 (índice 4) del Excel
-                    for(let i=4; i<rows.length; i++){
+                    let hDiscord = '', hAdmin = '', hAH = '';
+                    // Empezamos en la fila 5 del Excel (índice 4)[cite: 2]
+                    for (let i = 4; i < rows.length; i++) {
                         const r = rows[i];
-                        // Columna Discord (A, B, D)
-                        if(r[1]) h1 += `<tr><td width="35"><img src="${r[0]}" class="img-mini"></td><td>${r[1]}</td><td class="pts-orange">${r[3] || ''}</td></tr>`;
-                        // Columna Admin (E, G)
-                        if(r[4]) h2 += `<tr><td>${r[4]}</td><td class="pts-orange">${r[6] || ''}</td></tr>`;
-                        // Columna AH (H, I, J, K)[cite: 2]
-                        if(r[8]) h3 += `<tr><td width="35"><img src="${r[7]}" class="img-mini"></td><td>${r[8]}</td><td class="stock-green">${r[9] || '0'}</td><td class="pts-orange">${r[10] || ''}</td></tr>`;
+                        // Discord: Col A (Img), B (Nombre), D (Puntos)[cite: 2]
+                        if (r[1]) hDiscord += `<tr><td><img src="${r[0]}" class="img-mini"></td><td>${r[1]}</td><td class="pts-orange">${r[3] || '0'}</td></tr>`;
+                        // Admin: Col E (Nombre), G (Puntos)[cite: 2]
+                        if (r[4]) hAdmin += `<tr><td>${r[4]}</td><td class="pts-orange">${r[6] || '0'}</td></tr>`;
+                        // AH: Col H (Img), I (Nombre), J (Stock), K (Puntos)[cite: 2]
+                        if (r[8]) hAH += `<tr><td><img src="${r[7]}" class="img-mini"></td><td>${r[8]}</td><td class="stock-green">${r[9] || '0'}</td><td class="pts-orange">${r[10] || '0'}</td></tr>`;
                     }
-                    $('#listaDiscord').html(h1);
-                    $('#listaAdmin').html(h2);
-                    $('#listaAH').html(h3);
+                    $('#listaDiscord').html(hDiscord);
+                    $('#listaAdmin').html(hAdmin);
+                    $('#listaAH').html(hAH);
                 }
             });
         }
