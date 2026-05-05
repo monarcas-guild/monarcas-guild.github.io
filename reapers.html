@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>REAPERS - Almacén Consolidado</title>
+    <title>REAPERS - Almacén Final</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -17,19 +17,16 @@
             border: 1px solid rgba(51, 65, 85, 0.5);
             border-radius: 12px;
             padding: 20px;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
         }
 
-        /* Estilos DataTable */
         .dataTables_wrapper .dataTables_filter input {
             background: #1e293b; border: 1px solid #334155; border-radius: 8px;
             padding: 8px 12px; color: white; margin-left: 10px; width: 250px; outline: none;
         }
-        table.dataTable { border: none !important; width: 100% !important; margin-bottom: 20px !important; }
+        table.dataTable { border: none !important; width: 100% !important; }
         table.dataTable thead th { 
             background-color: #1e293b !important; color: #60a5fa !important; 
-            text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em;
-            padding: 15px !important; border: none !important;
+            text-transform: uppercase; font-size: 0.75rem; padding: 15px !important; border: none !important;
         }
         table.dataTable tbody tr { background-color: transparent !important; border-bottom: 1px solid #1e293b !important; }
         table.dataTable td { padding: 12px 15px !important; border: none !important; vertical-align: middle; }
@@ -47,7 +44,7 @@
     <div class="max-w-6xl mx-auto">
         <header class="mb-8 text-center">
             <h1 class="text-5xl font-black tracking-tighter italic text-blue-500 mb-2">REAPERS</h1>
-            <p class="text-slate-400 font-medium">Inventario Total de Gremio (Suma Automática)</p>
+            <p class="text-slate-400 font-medium">Existencias en Almacén</p>
         </header>
 
         <div class="table-container">
@@ -56,7 +53,7 @@
                     <tr>
                         <th class="text-center" style="width: 60px;">Icono</th>
                         <th>Descripción del Ítem</th>
-                        <th class="text-right">Total Existencia</th>
+                        <th class="text-right">Existencia</th>
                     </tr>
                 </thead>
                 <tbody id="dataAlmacen"></tbody>
@@ -78,30 +75,31 @@
                     const data = results.data;
                     const inventarioAgrupado = {}; 
                     
+                    // Encontrar la fila de encabezados
                     const headerIdx = data.findIndex(row => row.some(c => c && c.toString().toUpperCase().includes('DESCRIPCIÓN')));
                     
                     if (headerIdx !== -1) {
                         const headers = data[headerIdx].map(h => h ? h.trim().toUpperCase() : '');
-                        const colDesc = headers.findIndex(h => h.includes('DESCRIPCIÓN'));
-                        const colCant = headers.findIndex(h => h.includes('CANTIDAD'));
                         
+                        // Buscamos la descripción y la existencia (evitando la columna de "entrada")
+                        const colDesc = headers.findIndex(h => h.includes('DESCRIPCIÓN'));
+                        const colExistencia = headers.lastIndexOf('EXISTENCIA'); // lastIndexOf para tomar la columna final del Excel
+
                         data.slice(headerIdx + 1).forEach((row) => {
                             const descripcion = row[colDesc] ? row[colDesc].trim() : '';
-                            // Limpiar el número de cualquier carácter no numérico excepto el signo menos
-                            const cantRaw = row[colCant] ? row[colCant].toString().replace(/[^0-9-]/g, '') : '0';
-                            const cantidad = parseInt(cantRaw) || 0;
-                            const imgRuta = row[32] ? row[32].trim() : '';
+                            const stockRaw = row[colExistencia] ? row[colExistencia].toString().replace(/[^0-9-]/g, '') : '0';
+                            const stock = parseInt(stockRaw) || 0;
+                            const imgRuta = row[32] ? row[32].trim() : ''; // Columna AG
 
                             if (descripcion && descripcion !== "") {
                                 if (inventarioAgrupado[descripcion]) {
-                                    inventarioAgrupado[descripcion].cantidad += cantidad;
-                                    // Si la fila actual tiene imagen y la guardada no, la actualizamos
+                                    inventarioAgrupado[descripcion].stock += stock;
                                     if (imgRuta && !inventarioAgrupado[descripcion].imagen) {
                                         inventarioAgrupado[descripcion].imagen = imgRuta;
                                     }
                                 } else {
                                     inventarioAgrupado[descripcion] = {
-                                        cantidad: cantidad,
+                                        stock: stock,
                                         imagen: imgRuta
                                     };
                                 }
@@ -111,8 +109,7 @@
                         let htmlRows = '';
                         for (const item in inventarioAgrupado) {
                             const datos = inventarioAgrupado[item];
-                            // Solo mostramos ítems con stock mayor a cero
-                            if (datos.cantidad > 0) {
+                            if (datos.stock > 0) {
                                 htmlRows += `
                                     <tr>
                                         <td class="text-center">
@@ -122,7 +119,7 @@
                                             }
                                         </td>
                                         <td class="font-bold text-slate-100">${item}</td>
-                                        <td class="text-right stock-val">${datos.cantidad.toLocaleString()}</td>
+                                        <td class="text-right stock-val">${datos.stock.toLocaleString()}</td>
                                     </tr>`;
                             }
                         }
@@ -132,12 +129,7 @@
                             pageLength: 100,
                             destroy: true,
                             order: [[2, 'desc']],
-                            language: {
-                                search: "🔍",
-                                searchPlaceholder: "Buscar ítem...",
-                                info: "Mostrando _TOTAL_ ítems únicos",
-                                zeroRecords: "No hay stock registrado"
-                            }
+                            language: { search: "🔍", zeroRecords: "No hay existencias" }
                         });
                     }
                 }
