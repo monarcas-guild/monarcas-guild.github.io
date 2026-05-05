@@ -89,23 +89,31 @@
                         
                         const filas = data.slice(headerIdx + 1);
 
-                        filas.forEach(row => {
+filas.forEach((row, index) => {
     const nombre = row[colNombre];
-    // Limpiamos el stock para que sea número
     const stockNum = row[colStock] ? row[colStock].toString().replace(/[^0-9]/g, '') : '0';
     const stock = parseInt(stockNum) || 0;
 
-    // --- CAMBIO AQUÍ: Usamos la columna AB (Índice 27) ---
-    const imgUrl = row[27] ? row[27].trim() : ''; 
+    // --- LÓGICA PARA LA COLUMNA AB ---
+    // Usamos el índice 27 para la columna AB
+    let imgUrl = row[27] ? row[27].trim() : ''; 
+    
+    // Si la imagen no está en la 27, probamos a ver si está en la columna siguiente 
+    // a veces Google añade columnas vacías al exportar.
+    if (!imgUrl.startsWith('http') && row[28]) {
+        imgUrl = row[28].trim();
+    }
 
     if (nombre && stock > 0) {
-        // Validamos si el contenido de la columna AB es un link
         const esImagen = imgUrl && imgUrl.startsWith('http');
         
+        // Debug opcional: Descomenta la línea de abajo para ver en la consola qué lee de Diamantes
+        // if(nombre.includes("Diamantes")) console.log("Link detectado para Diamantes:", imgUrl);
+
         html += `<tr>
             <td class="text-center">
                 ${esImagen ? 
-                    `<img src="${imgUrl}" class="item-img mx-auto" onerror="this.src='https://valhalla-rising.com/favicon.ico'">` : 
+                    `<img src="${imgUrl}" class="item-img mx-auto" style="width:35px; height:35px;" onerror="this.src='https://valhalla-rising.com/favicon.ico'">` : 
                     `<div class="w-8 h-8 bg-slate-800 rounded mx-auto flex items-center justify-center">
                         <i class="fas fa-box text-slate-600 text-xs"></i>
                     </div>`}
