@@ -10,6 +10,8 @@
     <style>
         :root { --dark: #0b1120; --card: #161f32; --accent: #3b82f6; }
         body { background-color: var(--dark); color: #f1f5f9; font-family: sans-serif; }
+        
+        /* Estilos de la Tabla */
         .dataTables_wrapper .dataTables_filter input {
             background: #1e293b; border: 1px solid #334155; border-radius: 6px;
             padding: 8px; color: white; margin-left: 10px; width: 250px;
@@ -18,7 +20,16 @@
         table.dataTable tbody tr { background-color: transparent !important; border-bottom: 1px solid #1e293b !important; }
         table.dataTable thead th { background-color: #1e293b !important; color: #60a5fa !important; border: none !important; padding: 15px !important; }
         table.dataTable td { padding: 12px !important; border: none !important; vertical-align: middle; }
-        .item-img { width: 38px; height: 38px; object-fit: contain; border-radius: 4px; background: #0b1120; }
+        
+        /* Imagen de los ítems */
+        .item-img { 
+            width: 42px; 
+            height: 42px; 
+            object-fit: contain; 
+            border-radius: 6px; 
+            background: rgba(0,0,0,0.3);
+            border: 1px solid #334155;
+        }
         .stock-badge { color: #4ade80; font-weight: 900; font-size: 1.1rem; }
     </style>
 </head>
@@ -27,21 +38,12 @@
     <div class="max-w-5xl mx-auto">
         <h1 class="text-center text-4xl font-black text-blue-500 italic mb-8">REAPERS</h1>
 
-        <div class="flex justify-center gap-4 mb-8">
-            <button class="bg-blue-600 px-6 py-2 rounded-md font-bold flex items-center gap-2"><i class="fas fa-warehouse"></i> Almacén</button>
-            <button class="bg-slate-800 text-slate-400 px-6 py-2 rounded-md font-bold">Tienda</button>
-            <button class="bg-slate-800 text-slate-400 px-6 py-2 rounded-md font-bold">Actividad</button>
-        </div>
-
+        <!-- Tabla -->
         <div class="bg-slate-900/40 p-6 rounded-xl border border-slate-800 shadow-2xl">
-            <h2 class="text-xl font-bold mb-6 flex items-center gap-2 text-blue-100">
-                <i class="fas fa-boxes text-blue-400"></i> Inventario Actual
-            </h2>
-
             <table id="tablaAlmacen" class="display nowrap">
                 <thead>
                     <tr>
-                        <th class="text-center" style="width: 60px;">Imagen</th>
+                        <th class="text-center" style="width: 70px;">Imagen</th>
                         <th>Ítem / Descripción</th>
                         <th class="text-right">Existencia</th>
                     </tr>
@@ -65,6 +67,7 @@
                     const data = results.data;
                     let html = '';
                     
+                    // Buscar la fila que contiene los encabezados
                     const headerIdx = data.findIndex(row => row.some(c => c && c.toString().toUpperCase().includes('ARTÍCULO')));
                     
                     if (headerIdx !== -1) {
@@ -74,41 +77,40 @@
                         
                         const filas = data.slice(headerIdx + 1);
 
-// ... dentro de la función cargarAlmacen, en el bucle filas.forEach ...
+                        filas.forEach((row) => {
+                            const nombre = row[colNombre];
+                            const stockNum = row[colStock] ? row[colStock].toString().replace(/[^0-9]/g, '') : '0';
+                            const stock = parseInt(stockNum) || 0;
 
-filas.forEach((row) => {
-    const nombre = row[colNombre];
-    const stockNum = row[colStock] ? row[colStock].toString().replace(/[^0-9]/g, '') : '0';
-    const stock = parseInt(stockNum) || 0;
+                            // TOMAR IMAGEN DE COLUMNA AG (Índice 32)
+                            let imgSource = row[32] ? row[32].trim() : '';
 
-    // LEER COLUMNA AG (Índice 32)
-    // Aquí el código buscará el texto que escribas, ej: ./resources/cellImage_637359523_0.jpg
-    let imgPath = row[32] ? row[32].trim() : '';
-
-    if (nombre && stock > 0) {
-        html += `<tr>
-            <td class="text-center">
-                ${imgPath ? 
-                    `<img src="${imgPath}" class="item-img mx-auto" onerror="this.src='https://valhalla-rising.com/favicon.ico';">` : 
-                    `<div class="w-8 h-8 bg-slate-800 rounded mx-auto flex items-center justify-center">
-                        <i class="fas fa-box text-slate-600 text-xs"></i>
-                    </div>`}
-            </td>
-            <td class="font-bold text-slate-200">${nombre}</td>
-            <td class="text-right stock-badge">${stock.toLocaleString()}</td>
-        </tr>`;
-    }
-});
+                            if (nombre && stock > 0) {
+                                html += `<tr>
+                                    <td class="text-center">
+                                        ${imgSource ? 
+                                            `<img src="${imgSource}" class="item-img mx-auto" onerror="this.src='https://valhalla-rising.com/favicon.ico';">` : 
+                                            `<div class="w-10 h-10 bg-slate-800 rounded mx-auto flex items-center justify-center">
+                                                <i class="fas fa-box text-slate-600"></i>
+                                            </div>`}
+                                    </td>
+                                    <td class="font-bold text-slate-200">${nombre}</td>
+                                    <td class="text-right stock-badge">${stock.toLocaleString()}</td>
+                                </tr>`;
+                            }
+                        });
                     }
 
                     $('#dataAlmacen').html(html);
                     $('#tablaAlmacen').DataTable({
-                        pageLength: 50,
+                        pageLength: 200,
                         destroy: true,
                         order: [[2, 'desc']],
-                        language: {
-                            search: "🔍 Buscar:",
-                            info: "Mostrando _TOTAL_ ítems"
+                        language: { 
+                            search: "🔍 Buscar ítem:",
+                            info: "Mostrando _TOTAL_ ítems",
+                            lengthMenu: "Ver _MENU_",
+                            zeroRecords: "No se encontró nada"
                         },
                         columnDefs: [ { targets: 0, orderable: false } ]
                     });
