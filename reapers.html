@@ -174,41 +174,62 @@
             });
         }
 
-        // --- CARGAR REPARTO (USANDO TU LINK NUEVO) ---
-        function cargarReparto() {
-            // Este es el link que me pasaste[cite: 1]
-            const urlReparto = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTmqkTpsU-nFe_DmHlwG28zHEtZU_RkhD6VxNZGX4XdC2Di6JPSBrTXTF6pKeIP737mHOL6eZwqJuW6/pub?gid=854086504&single=true&output=csv';
+       function cargarReparto() {
+    const urlReparto = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTmqkTpsU-nFe_DmHlwG28zHEtZU_RkhD6VxNZGX4XdC2Di6JPSBrTXTF6pKeIP737mHOL6eZwqJuW6/pub?gid=854086504&single=true&output=csv';
+    
+    Papa.parse(urlReparto, {
+        download: true,
+        complete: function(results) {
+            const rows = results.data;
+            let hDiscord = '', hAdmin = '', hAH = '';
             
-            Papa.parse(urlReparto, {
-                download: true,
-                complete: function(results) {
-                    const rows = results.data;
-                    let hDiscord = '', hAdmin = '', hAH = '';
-                    
-                    // Empezamos en la fila 5 (índice 4) según tu estructura de Excel[cite: 2]
-                    for (let i = 4; i < rows.length; i++) {
-                        const r = rows[i];
-                        if(!r) continue;
+            // Empezamos en la fila 5 (índice 4)
+            for (let i = 4; i < rows.length; i++) {
+                const r = rows[i];
+                if(!r) continue;
 
-                        // Discord: Col A, B, D[cite: 2]
-                        if (r[1] && r[1].trim() !== "") {
-                            hDiscord += `<tr><td width="35"><img src="${r[0] || ''}" class="img-mini" onerror="this.style.display='none'"></td><td class="uppercase">${r[1]}</td><td class="pts-orange">${r[3] || '0'}</td></tr>`;
-                        }
-                        // Admin: Col E, G[cite: 2]
-                        if (r[4] && r[4].trim() !== "") {
-                            hAdmin += `<tr><td class="uppercase">${r[4]}</td><td class="pts-orange">${r[6] || '0'}</td></tr>`;
-                        }
-                        // AH: Col H, I, J, K[cite: 2]
-                        if (r[8] && r[8].trim() !== "") {
-                            hAH += `<tr><td width="35"><img src="${r[7] || ''}" class="img-mini" onerror="this.style.display='none'"></td><td class="uppercase">${r[8]}</td><td class="stock-green">${r[9] || '0'}</td><td class="pts-orange">${r[10] || '0'}</td></tr>`;
-                        }
-                    }
-                    $('#listaDiscord').html(hDiscord || '<tr><td colspan="3" class="text-center">Sin datos</td></tr>');
-                    $('#listaAdmin').html(hAdmin || '<tr><td colspan="2" class="text-center">Sin datos</td></tr>');
-                    $('#listaAH').html(hAH || '<tr><td colspan="4" class="text-center">Sin datos</td></tr>');
+                // 1. DISCORD REPARTO: Nombre en Col B (r[1]), Imagen en Col AC (r[28])
+                if (r[1] && r[1].trim() !== "") {
+                    const imgLocal = r[28] ? r[28].trim() : '';
+                    hDiscord += `
+                        <tr>
+                            <td style="width:45px">
+                                ${imgLocal ? `<img src="${imgLocal}" class="img-mini" onerror="this.src='https://valhalla-rising.com/favicon.ico';">` : ''}
+                            </td>
+                            <td class="uppercase font-medium">${r[1]}</td>
+                            <td class="pts-orange">${r[3] || '0'}</td>
+                        </tr>`;
                 }
-            });
+
+                // 2. ENTREGA ADMINISTRACION: Nombre en Col E (r[4])[cite: 2]
+                if (r[4] && r[4].trim() !== "") {
+                    hAdmin += `
+                        <tr>
+                            <td class="uppercase font-medium">${r[4]}</td>
+                            <td class="pts-orange">${r[6] || '0'}</td>
+                        </tr>`;
+                }
+
+                // 3. POR ACTION HOUSE: Nombre en Col I (r[8]), Imagen en Col AD (r[29])[cite: 2]
+                if (r[8] && r[8].trim() !== "") {
+                    const imgLocalAH = r[29] ? r[29].trim() : '';
+                    hAH += `
+                        <tr>
+                            <td style="width:45px">
+                                ${imgLocalAH ? `<img src="${imgLocalAH}" class="img-mini" onerror="this.src='https://valhalla-rising.com/favicon.ico';">` : ''}
+                            </td>
+                            <td class="uppercase font-medium">${r[8]}</td>
+                            <td class="stock-green">${r[9] || '0'}</td>
+                            <td class="pts-orange">${r[10] || '0'}</td>
+                        </tr>`;
+                }
+            }
+            $('#listaDiscord').html(hDiscord);
+            $('#listaAdmin').html(hAdmin);
+            $('#listaAH').html(hAH);
         }
+    });
+}
 
         $(document).ready(function() {
             cargarAlmacen();
