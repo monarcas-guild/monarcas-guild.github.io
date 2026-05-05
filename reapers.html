@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>REAPERS - Almacén</title>
+    <title>REAPERS - Almacén Consolidado</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -11,7 +11,6 @@
         :root { --dark: #0b1120; --card: #161f32; --accent: #3b82f6; }
         body { background-color: var(--dark); color: #f1f5f9; font-family: 'Inter', sans-serif; }
         
-        /* Contenedor de la tabla */
         .table-container {
             background: rgba(22, 31, 50, 0.8);
             backdrop-filter: blur(10px);
@@ -32,11 +31,9 @@
             text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em;
             padding: 15px !important; border: none !important;
         }
-        table.dataTable tbody tr { background-color: transparent !important; border-bottom: 1px solid #1e293b !important; transition: all 0.2s; }
-        table.dataTable tbody tr:hover { background-color: rgba(59, 130, 246, 0.05) !important; }
+        table.dataTable tbody tr { background-color: transparent !important; border-bottom: 1px solid #1e293b !important; }
         table.dataTable td { padding: 12px 15px !important; border: none !important; vertical-align: middle; }
 
-        /* Imagen del Ítem */
         .item-img { 
             width: 44px; height: 44px; object-fit: contain; 
             border-radius: 8px; background: #0b1120;
@@ -50,7 +47,7 @@
     <div class="max-w-6xl mx-auto">
         <header class="mb-8 text-center">
             <h1 class="text-5xl font-black tracking-tighter italic text-blue-500 mb-2">REAPERS</h1>
-            <p class="text-slate-400 font-medium">Gestión de Inventario de Gremio</p>
+            <p class="text-slate-400 font-medium">Inventario Total de Gremio (Suma Automática)</p>
         </header>
 
         <div class="table-container">
@@ -59,12 +56,10 @@
                     <tr>
                         <th class="text-center" style="width: 60px;">Icono</th>
                         <th>Descripción del Ítem</th>
-                        <th class="text-right">Cantidad</th>
+                        <th class="text-right">Total Existencia</th>
                     </tr>
                 </thead>
-                <tbody id="dataAlmacen">
-                    <!-- Los datos se cargan aquí -->
-                </tbody>
+                <tbody id="dataAlmacen"></tbody>
             </table>
         </div>
     </div>
@@ -74,7 +69,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 
     <script>
-        // URL de tu CSV publicado
         const urlAlmacen = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTmqkTpsU-nFe_DmHlwG28zHEtZU_RkhD6VxNZGX4XdC2Di6JPSBrTXTF6pKeIP737mHOL6eZwqJuW6/pub?gid=2029872222&single=true&output=csv';
 
         function cargarAlmacen() {
@@ -82,9 +76,8 @@
                 download: true,
                 complete: function(results) {
                     const data = results.data;
-                    let htmlRows = '';
+                    const inventarioAgrupado = {}; 
                     
-                    // Identificar encabezados (buscamos la fila que tenga "DESCRIPCIÓN")
                     const headerIdx = data.findIndex(row => row.some(c => c && c.toString().toUpperCase().includes('DESCRIPCIÓN')));
                     
                     if (headerIdx !== -1) {
@@ -92,46 +85,61 @@
                         const colDesc = headers.findIndex(h => h.includes('DESCRIPCIÓN'));
                         const colCant = headers.findIndex(h => h.includes('CANTIDAD'));
                         
-                        // Procesar filas después del encabezado
                         data.slice(headerIdx + 1).forEach((row) => {
-                            const descripcion = row[colDesc];
-                            const cantidad = row[colCant] ? row[colCant].trim() : '0';
-                            
-                            // EXTRAER RUTA DE COLUMNA AG (Índice 32)
+                            const descripcion = row[colDesc] ? row[colDesc].trim() : '';
+                            // Limpiar el número de cualquier carácter no numérico excepto el signo menos
+                            const cantRaw = row[colCant] ? row[colCant].toString().replace(/[^0-9-]/g, '') : '0';
+                            const cantidad = parseInt(cantRaw) || 0;
                             const imgRuta = row[32] ? row[32].trim() : '';
 
-                            // Solo mostrar si tiene descripción y hay stock
-                            if (descripcion && descripcion !== "" && parseInt(cantidad) !== 0) {
+                            if (descripcion && descripcion !== "") {
+                                if (inventarioAgrupado[descripcion]) {
+                                    inventarioAgrupado[descripcion].cantidad += cantidad;
+                                    // Si la fila actual tiene imagen y la guardada no, la actualizamos
+                                    if (imgRuta && !inventarioAgrupado[descripcion].imagen) {
+                                        inventarioAgrupado[descripcion].imagen = imgRuta;
+                                    }
+                                } else {
+                                    inventarioAgrupado[descripcion] = {
+                                        cantidad: cantidad,
+                                        imagen: imgRuta
+                                    };
+                                }
+                            }
+                        });
+
+                        let htmlRows = '';
+                        for (const item in inventarioAgrupado) {
+                            const datos = inventarioAgrupado[item];
+                            // Solo mostramos ítems con stock mayor a cero
+                            if (datos.cantidad > 0) {
                                 htmlRows += `
                                     <tr>
                                         <td class="text-center">
-                                            ${imgRuta ? 
-                                                `<img src="${imgRuta}" class="item-img mx-auto" onerror="this.src='https://valhalla-rising.com/favicon.ico';">` : 
+                                            ${datos.imagen ? 
+                                                `<img src="${datos.imagen}" class="item-img mx-auto" onerror="this.src='https://valhalla-rising.com/favicon.ico';">` : 
                                                 `<div class="w-10 h-10 bg-slate-800 rounded flex items-center justify-center mx-auto"><i class="fas fa-box text-slate-600"></i></div>`
                                             }
                                         </td>
-                                        <td class="font-bold text-slate-100">${descripcion}</td>
-                                        <td class="text-right stock-val">${cantidad}</td>
+                                        <td class="font-bold text-slate-100">${item}</td>
+                                        <td class="text-right stock-val">${datos.cantidad.toLocaleString()}</td>
                                     </tr>`;
+                            }
+                        }
+
+                        $('#dataAlmacen').html(htmlRows);
+                        $('#tablaAlmacen').DataTable({
+                            pageLength: 100,
+                            destroy: true,
+                            order: [[2, 'desc']],
+                            language: {
+                                search: "🔍",
+                                searchPlaceholder: "Buscar ítem...",
+                                info: "Mostrando _TOTAL_ ítems únicos",
+                                zeroRecords: "No hay stock registrado"
                             }
                         });
                     }
-
-                    $('#dataAlmacen').html(htmlRows);
-
-                    // Inicializar DataTable
-                    $('#tablaAlmacen').DataTable({
-                        pageLength: 50,
-                        destroy: true,
-                        order: [[2, 'desc']], // Ordenar por cantidad de mayor a menor
-                        language: {
-                            search: "🔍",
-                            searchPlaceholder: "Buscar ítem...",
-                            info: "Mostrando _TOTAL_ objetos en el almacén",
-                            lengthMenu: "Ver _MENU_",
-                            zeroRecords: "No se encontraron resultados"
-                        }
-                    });
                 }
             });
         }
