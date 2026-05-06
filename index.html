@@ -63,6 +63,7 @@
         <button class="btn-tab active" onclick="verSeccion('almacen', this)">ALMACÉN</button>
         <button class="btn-tab" onclick="verSeccion('reparto', this)">REPARTO</button>
         <button class="btn-tab" onclick="verSeccion('actividad', this)">ACTIVIDAD</button>
+        <button class="btn-tab" onclick="verSeccion('deudores', this)">DEUDORES</button>
     </nav>
 
     <div class="main-container">
@@ -107,6 +108,15 @@
         <div id="sec-actividad" class="content-section">
             <div class="logo-header"><h1>RANKING ACTIVIDAD</h1></div>
             <div id="listaActividad"></div>
+        </div>
+
+        <!-- SECCIÓN DEUDORES -->
+        <div id="sec-deudores" class="content-section">
+            <div class="logo-header">
+                <h1>LISTA DE DEUDORES</h1>
+                <p class="text-red-400 uppercase tracking-widest text-xs">Miembros con Saldo Negativo</p>
+            </div>
+            <div id="listaDeudores"></div>
         </div>
     </div>
 
@@ -191,10 +201,60 @@
             }});
         }
 
+        // --- FUNCIÓN DEUDORES (Puntos Negativos) ---
+        function cargarDeudores() {
+            // Usamos la URL de la pestaña de reparto/puntos (gid=854086504)
+            const urlPuntos = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTmqkTpsU-nFe_DmHlwG28zHEtZU_RkhD6VxNZGX4XdC2Di6JPSBrTXTF6pKeIP737mHOL6eZwqJuW6/pub?gid=854086504&single=true&output=csv';
+            
+            Papa.parse(urlPuntos, { 
+                download: true, 
+                complete: function(results) {
+                    const data = results.data;
+                    let deudores = [];
+                    
+                    // Empezamos desde la fila 4 (donde suelen empezar los nombres según la imagen)
+                    for (let i = 3; i < data.length; i++) {
+                        const nombre = data[i][12]; // Columna M
+                        const puntosStr = data[i][13]; // Columna N
+                        
+                        if (nombre && puntosStr) {
+                            const puntosVal = parseInt(puntosStr.replace('.', '').trim());
+                            
+                            // Solo tomamos a los que tienen puntos menores a 0
+                            if (puntosVal < 0) {
+                                deudores.push({ nombre, puntos: puntosVal });
+                            }
+                        }
+                    }
+                    
+                    // Ordenar de menos puntos negativos a más (ej: -200 antes que -1000)
+                    deudores.sort((a, b) => b.puntos - a.puntos);
+                    
+                    let html = '';
+                    deudores.forEach((d) => {
+                        html += `
+                        <div class="ranking-row" style="border-left: 4px solid #ef4444; margin-bottom: 5px; background: rgba(239, 68, 68, 0.05);">
+                            <div style="flex-grow:1; font-weight:bold; text-transform:uppercase; padding-left: 10px;">${d.nombre}</div>
+                            <div class="pct-low" style="padding:4px 12px; border-radius:4px; font-weight:900; min-width:85px; text-align:center;">
+                                ${d.puntos} PTS
+                            </div>
+                        </div>`;
+                    });
+                    
+                    if (deudores.length === 0) {
+                        html = '<p class="text-center text-slate-400 py-10">No hay miembros con saldo negativo.</p>';
+                    }
+                    
+                    $('#listaDeudores').html(html);
+                }
+            });
+        }
+
         $(document).ready(function() {
             cargarDatos();
             cargarReparto();
             cargarActividad();
+            cargarDeudores();
         });
     </script>
 </body>
