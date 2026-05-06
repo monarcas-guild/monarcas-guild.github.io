@@ -140,12 +140,12 @@
             if (btn) {
                 $(btn).addClass('active');
             } else {
+                // Busca el botón que tiene la función verSeccion con ese ID
                 $(`.btn-tab[onclick*="'${id}'"]`).addClass('active');
             }
 
-            // 3. CAMBIO: URL limpia sin el numeral (#)
-            // Esto cambia la URL a /almacen, /deudores, etc.
-            const nuevaUrl = window.location.origin + window.location.pathname + id;
+            // 3. Actualizar la URL limpia (ej: /deudores)
+            // Usamos history.pushState para que no aparezca el #
             window.history.pushState({ seccion: id }, "", id);
         }
 
@@ -268,27 +268,34 @@
         }
 
         $(document).ready(function() {
+            // Carga de tus datos de Google Sheets
             cargarDatos();
             cargarReparto();
             cargarActividad();
             cargarDeudores();
 
-            // Detectar la sección desde la URL limpia
-            // Obtenemos la última palabra de la ruta (ej: "deudores")
-            const path = window.location.pathname.split("/").pop();
+            // LEER LA URL ACTUAL
+            // window.location.pathname devuelve algo como "/reparto" o "/tu-repo/reparto"
+            const pathParts = window.location.pathname.split("/");
+            const lastPart = pathParts.pop() || pathParts.pop(); // Maneja si termina en /
+            
             const seccionesValidas = ['almacen', 'reparto', 'actividad', 'deudores'];
 
-            if (seccionesValidas.includes(path)) {
-                verSeccion(path);
+            if (seccionesValidas.includes(lastPart)) {
+                verSeccion(lastPart);
             } else {
-                // Por defecto si la URL está limpia o es "/"
+                // Si la ruta es la raíz o no existe, mostrar Almacén
                 verSeccion('almacen');
             }
 
-            // Manejar cuando el usuario usa las flechas de "Atrás/Adelante" del navegador
+            // Permitir que funcionen las flechas de "Atrás" y "Adelante" del navegador
             window.onpopstate = function(event) {
                 if (event.state && event.state.seccion) {
-                    verSeccion(event.state.seccion);
+                    // Solo cambiamos la sección visualmente sin volver a ejecutar pushState
+                    $('.content-section').removeClass('active');
+                    $(`#sec-${event.state.seccion}`).addClass('active');
+                    $('.btn-tab').removeClass('active');
+                    $(`.btn-tab[onclick*="'${event.state.seccion}'"]`).addClass('active');
                 }
             };
         });
