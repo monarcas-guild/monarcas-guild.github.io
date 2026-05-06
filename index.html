@@ -117,6 +117,9 @@
                 <p class="text-red-400 uppercase tracking-widest text-xs">Miembros con Saldo Negativo</p>
             </div>
             <div id="listaDeudores"></div>
+            <div class="sticket-deudores">
+                <img src="https://i.imgur.com/0uni79p.png" alt="">
+            </div>
         </div>
     </div>
 
@@ -201,8 +204,9 @@
             }});
         }
 
-        // --- FUNCIÓN DEUDORES ACTUALIZADA (Más negativos arriba) ---
+        // --- FUNCIÓN DEUDORES (Puntos Negativos) ---
         function cargarDeudores() {
+            // Usamos la URL de la pestaña de reparto/puntos (gid=854086504)
             const urlPuntos = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTmqkTpsU-nFe_DmHlwG28zHEtZU_RkhD6VxNZGX4XdC2Di6JPSBrTXTF6pKeIP737mHOL6eZwqJuW6/pub?gid=854086504&single=true&output=csv';
             
             Papa.parse(urlPuntos, { 
@@ -211,6 +215,7 @@
                     const data = results.data;
                     let deudores = [];
                     
+                    // Empezamos desde la fila 4 (donde suelen empezar los nombres según la imagen)
                     for (let i = 3; i < data.length; i++) {
                         const nombre = data[i][12]; // Columna M
                         const puntosStr = data[i][13]; // Columna N
@@ -218,14 +223,15 @@
                         if (nombre && puntosStr) {
                             const puntosVal = parseInt(puntosStr.replace('.', '').trim());
                             
+                            // Solo tomamos a los que tienen puntos menores a 0
                             if (puntosVal < 0) {
                                 deudores.push({ nombre, puntos: puntosVal });
                             }
                         }
                     }
                     
-                    // CAMBIO AQUÍ: Ordenar de menor a mayor (el más negativo primero)
-                    deudores.sort((a, b) => a.puntos - b.puntos);
+                    // Ordenar de menos puntos negativos a más (ej: -200 antes que -1000)
+                    deudores.sort((a, b) => b.puntos - a.puntos);
                     
                     let html = '';
                     deudores.forEach((d) => {
