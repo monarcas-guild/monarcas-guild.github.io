@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REAPERS - Portal Oficial</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        .sticket-deudores img{margin: 0 auto;padding-top: 45px;}
+        /* --- TUS ESTILOS ORIGINALES --- */
+        #tablaReapers_length { margin-left: 15px; }
+        #tablaReapers_filter { margin-right: 15px; }
+        :root { --bg-dark: #0a0c10; --panel-dark: #161b22; --nordic-gold: #c5a059; --text-silver: #94a3b8; }
+
+        body { 
+            background-color: #0a0c10;
+            background-image: linear-gradient(to bottom, rgba(10, 12, 16, 0.6), rgba(10, 12, 16, 0.8)), url(https://i.imgur.com/xk5mqt2.png);
+            background-attachment: fixed; background-size: cover; background-position: center; background-repeat: no-repeat;
+            color: #f8fafc; font-family: 'Inter', sans-serif; margin: 0; padding-bottom: 40px;
+        }
+
+        .main-container {
+            max-width: 900px; margin: 150px auto 40px; background: rgba(22, 27, 34, 0.9); 
+            backdrop-filter: blur(5px); border: 1px solid var(--nordic-gold); box-shadow: 0 0 50px rgba(0,0,0,0.9);
+        }
+
+        /* --- TABS NAV --- */
+        .tabs-nav { display: flex; justify-content: center; gap: 10px; margin-bottom: -151px; position: relative; z-index: 100; }
+        .btn-tab { padding: 12px 25px; border: 1px solid var(--nordic-gold); background: #161b22; color: var(--nordic-gold); font-family: 'Cinzel', serif; cursor: pointer; text-transform: uppercase; font-size: 13px; transition: 0.3s; }
+        .btn-tab.active { background: var(--nordic-gold); color: black; }
+        .content-section { display: none; }
+        .content-section.active { display: block; }
+
+        .logo-header { text-align: center; margin-bottom: 30px; padding: 30px 0 20px; border-bottom: 1px solid rgba(197, 160, 89, 0.3); }
+        h1 { font-family: 'Cinzel', serif; color: var(--nordic-gold); font-size: 2.5rem; letter-spacing: 4px; text-transform: uppercase; }
+
+        /* --- ESTILOS DE TABLA (ORIGINALES) --- */
+        table.dataTable { border-collapse: collapse !important; border: none !important; margin-top: 20px !important; }
+        table.dataTable thead th { font-family: 'Cinzel', serif; background-color: #0f172a !important; color: var(--nordic-gold) !important; text-transform: uppercase; font-size: 0.85rem; padding: 18px !important; border-bottom: 2px solid var(--nordic-gold) !important; letter-spacing: 1px; }
+        .item-icon { width: 44px; height: 44px; object-fit: contain; border-radius: 4px; background: #000; border: 1px solid var(--nordic-gold); padding: 2px; }
+        .stock-number { color: #4ade80; font-weight: 700; font-size: 1.2rem; }
+
+        /* --- REPARTO GRID --- */
+        .reparto-grid { display: grid; grid-template-columns: 1fr; gap: 15px; margin-top: 20px; padding: 15px; }
+        @media (min-width: 769px) { .reparto-grid { grid-template-columns: repeat(3, 1fr); } }
+        .reparto-col { border: 1px solid rgba(197, 160, 89, 0.3); background: rgba(0,0,0,0.4); }
+        .reparto-header { background: #9a6a25; color: white; text-align: center; font-family: 'Cinzel', serif; font-size: 11px; padding: 10px; font-weight: bold; }
+        .tab-reparto { width: 100%; font-size: 11px; border-collapse: collapse; }
+        .tab-reparto td { padding: 8px; border: 1px solid rgba(197, 160, 89, 0.1); }
+        .img-mini { width: 32px; height: 32px; border: 1px solid var(--nordic-gold); background: #000; display: block; margin: 0 auto; }
+        .pts-orange { color: #f59e0b; font-weight: bold; text-align: center; }
+
+        /* --- RANKING --- */
+        .ranking-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; border-bottom: 1px solid rgba(197,160,89,0.1); }
+        .pct-high { background: rgba(34, 197, 94, 0.2); color: #4ade80; border: 1px solid #22c55e; }
+        .pct-low { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid #ef4444; }
+    </style>
+</head>
+<body>
+    <nav class="tabs-nav">
+        <button class="btn-tab active" onclick="verSeccion('almacen', this)">ALMACÉN</button>
+        <button class="btn-tab" onclick="verSeccion('reparto', this)">REPARTO</button>
+        <button class="btn-tab" onclick="verSeccion('actividad', this)">ACTIVIDAD</button>
+        <button class="btn-tab" onclick="verSeccion('deudores', this)">DEUDORES</button>
+    </nav>
+
+    <div class="main-container">
+        <!-- SECCIÓN ALMACÉN (IGUAL A TU ORIGINAL) -->
+        <div id="sec-almacen" class="content-section active">
+            <div class="logo-header">
+                <h1>REAPERS ALMACÉN</h1>
+                <p class="text-slate-400 uppercase tracking-widest text-xs">Registro Oficial de Suministros</p>
+            </div>
+            <table id="tablaReapers" class="display w-full">
+                <thead>
+                    <tr>
+                        <th class="text-center" style="width: 80px;">Icon</th>
+                        <th class="text-left">Artículo / Item</th>
+                        <th class="text-right">Existencia / Stock</th>
+                    </tr>
+                </thead>
+                <tbody id="cuerpoTabla"></tbody>
+            </table>
+        </div>
+
+        <!-- SECCIÓN REPARTO -->
+        <div id="sec-reparto" class="content-section">
+            <div class="logo-header"><h1>REPARTO DE ITEMS</h1></div>
+            <div class="reparto-grid">
+                <div class="reparto-col">
+                    <div class="reparto-header">DISCORD</div>
+                    <table class="tab-reparto"><thead><tr><th colspan="2">ITEM</th><th>PTS</th></tr></thead><tbody id="listaDiscord"></tbody></table>
+                </div>
+                <div class="reparto-col">
+                    <div class="reparto-header">ADMINISTRACIÓN</div>
+                    <table class="tab-reparto"><thead><tr><th>ITEM</th><th>PTS</th></tr></thead><tbody id="listaAdmin"></tbody></table>
+                </div>
+                <div class="reparto-col">
+                    <div class="reparto-header">ACTION HOUSE</div>
+                    <table class="tab-reparto"><thead><tr><th colspan="2">ITEM</th><th>STOCK</th><th>PTS</th></tr></thead><tbody id="listaAH"></tbody></table>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECCIÓN ACTIVIDAD -->
+        <div id="sec-actividad" class="content-section">
+            <div class="logo-header"><h1>RANKING ACTIVIDAD</h1></div>
+            <div id="listaActividad"></div>
+        </div>
+
+        <!-- SECCIÓN DEUDORES -->
+        <div id="sec-deudores" class="content-section">
+            <div class="logo-header">
+                <h1>LISTA DE DEUDORES</h1>
+                <p class="text-red-400 uppercase tracking-widest text-xs">Miembros con Saldo Negativo</p>
+            </div>
+            <div id="listaDeudores"></div>
+            <div class="sticket-deudores">
+                <img src="https://i.imgur.com/0uni79p.png" alt="">
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+
+    <script>
+
+        function verSeccion(id, btn) {
+            // 1. Cambiar visibilidad de secciones
+            $('.content-section').removeClass('active');
+            $(`#sec-${id}`).addClass('active');
+            
+            // 2. Cambiar estado del botón
+            $('.btn-tab').removeClass('active');
+            if (btn) {
+                $(btn).addClass('active');
+            } else {
+                $(`.btn-tab[onclick*="'${id}'"]`).addClass('active');
+            }
+
+            // 3. CAMBIO: URL limpia sin el numeral (#)
+            // Esto cambia la URL a /almacen, /deudores, etc.
+            const nuevaUrl = window.location.origin + window.location.pathname + id;
+            window.history.pushState({ seccion: id }, "", id);
+        }
+
+        // --- TU FUNCIÓN CARGAR DATOS ORIGINAL (ALMACÉN)[cite: 4] ---
+        function cargarDatos() {
+            const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTmqkTpsU-nFe_DmHlwG28zHEtZU_RkhD6VxNZGX4XdC2Di6JPSBrTXTF6pKeIP737mHOL6eZwqJuW6/pub?gid=2029872222&single=true&output=csv';
+            Papa.parse(csvUrl, {
+                download: true,
+                complete: function(results) {
+                    const rows = results.data;
+                    let html = '';
+                    const headerRowIdx = rows.findIndex(r => r.some(c => c && c.includes('Artículo')));
+                    if (headerRowIdx !== -1) {
+                        const headers = rows[headerRowIdx];
+                        const colItem = headers.findIndex(h => h.includes('Artículo'));
+                        const colStock = headers.findIndex(h => h.includes('Existencia'));
+                        rows.slice(headerRowIdx + 1).forEach(row => {
+                            const nombre = row[colItem] ? row[colItem].trim() : '';
+                            const stock = row[colStock] ? row[colStock].trim() : '0';
+                            const imgPath = row[32] ? row[32].trim() : ''; 
+                            if (nombre && nombre !== "" && !nombre.includes('Total de puntos')) {
+                                html += `<tr><td class="text-center"><img src="${imgPath}" class="item-icon mx-auto" onerror="this.src='https://valhalla-rising.com/favicon.ico';"></td><td class="font-semibold text-slate-100">${nombre}</td><td class="text-right stock-number">${stock}</td></tr>`;
+                            }
+                        });
+                    }
+                    $('#cuerpoTabla').html(html);
+                    $('#tablaReapers').DataTable({
+                        destroy: true, pageLength: 50, order: [[2, 'desc']],
+                        language: { search: "BUSCAR EN EL TESORO:", info: "Mostrando _TOTAL_ artículos", zeroRecords: "No se han encontrado suministros", paginate: { next: "Siguiente", previous: "Anterior" } }
+                    });
+                }
+            });
+        }
+
+        // --- FUNCIÓN REPARTO (AC y AD)[cite: 2] ---
+        function cargarReparto() {
+            const urlReparto = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTmqkTpsU-nFe_DmHlwG28zHEtZU_RkhD6VxNZGX4XdC2Di6JPSBrTXTF6pKeIP737mHOL6eZwqJuW6/pub?gid=854086504&single=true&output=csv';
+            Papa.parse(urlReparto, { download: true, complete: function(results) {
+                let hD = '', hAdmin = '', hAH = '';
+                results.data.slice(4).forEach(r => {
+                    if (r[1]) hD += `<tr><td><img src="${r[28]}" class="img-mini"></td><td>${r[1]}</td><td class="pts-orange">${r[3]}</td></tr>`;
+                    if (r[4]) hAdmin += `<tr><td>${r[4]}</td><td class="pts-orange">${r[6]}</td></tr>`;
+                    if (r[8]) hAH += `<tr><td><img src="${r[29]}" class="img-mini"></td><td>${r[8]}</td><td class="text-center">${r[9]}</td><td class="pts-orange">${r[10]}</td></tr>`;
+                });
+                $('#listaDiscord').html(hD); $('#listaAdmin').html(hAdmin); $('#listaAH').html(hAH);
+            }});
+        }
+
+        // --- FUNCIÓN ACTIVIDAD (RANKING)[cite: 2, 3] ---
+        function cargarActividad() {
+            const urlActividad = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTmqkTpsU-nFe_DmHlwG28zHEtZU_RkhD6VxNZGX4XdC2Di6JPSBrTXTF6pKeIP737mHOL6eZwqJuW6/pub?gid=801467735&single=true&output=csv';
+            Papa.parse(urlActividad, { download: true, complete: function(results) {
+                const data = results.data;
+                let lista = [];
+                for (let i = 4; i < data.length; i++) {
+                    const nick = data[i][7]; // Col H[cite: 2]
+                    const avg = data[i][16]; // Col Q[cite: 2]
+                    if (nick && avg && nick !== "Nick") {
+                        const valNum = parseFloat(avg.replace('%', '').replace(',', '.').trim()) || 0;
+                        lista.push({ nick, avg, valNum });
+                    }
+                }
+                lista.sort((a, b) => b.valNum - a.valNum); //[cite: 3]
+                let html = '';
+                lista.forEach((u, i) => {
+                    const color = u.valNum >= 50 ? 'pct-high' : 'pct-low';
+                    html += `<div class="ranking-row"><div style="font-family:Cinzel,serif;color:#c5a059;width:40px;">#${i+1}</div><div style="flex-grow:1;font-weight:bold;text-transform:uppercase;">${u.nick}</div><div class="${color}" style="padding:4px 12px;border-radius:4px;font-weight:900;min-width:85px;text-align:center;">${u.avg}</div></div>`;
+                });
+                $('#listaActividad').html(html);
+            }});
+        }
+
+        // --- FUNCIÓN DEUDORES (Puntos Negativos) ---
+        function cargarDeudores() {
+            // Usamos la URL de la pestaña de reparto/puntos (gid=854086504)
+            const urlPuntos = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTmqkTpsU-nFe_DmHlwG28zHEtZU_RkhD6VxNZGX4XdC2Di6JPSBrTXTF6pKeIP737mHOL6eZwqJuW6/pub?gid=854086504&single=true&output=csv';
+            
+            Papa.parse(urlPuntos, { 
+                download: true, 
+                complete: function(results) {
+                    const data = results.data;
+                    let deudores = [];
+                    
+                    // Empezamos desde la fila 4 (donde suelen empezar los nombres según la imagen)
+                    for (let i = 3; i < data.length; i++) {
+                        const nombre = data[i][12]; // Columna M
+                        const puntosStr = data[i][13]; // Columna N
+                        
+                        if (nombre && puntosStr) {
+                            const puntosVal = parseInt(puntosStr.replace('.', '').trim());
+                            
+                            // Solo tomamos a los que tienen puntos menores a 0
+                            if (puntosVal < 0) {
+                                deudores.push({ nombre, puntos: puntosVal });
+                            }
+                        }
+                    }
+                    
+                    // Ordenar de menos puntos negativos a más (ej: -200 antes que -1000)
+                    deudores.sort((a, b) => b.puntos - a.puntos);
+                    
+                    let html = '';
+                    deudores.forEach((d) => {
+                        html += `
+                        <div class="ranking-row" style="border-left: 4px solid #ef4444; margin-bottom: 5px; background: rgba(239, 68, 68, 0.05);">
+                            <div style="flex-grow:1; font-weight:bold; text-transform:uppercase; padding-left: 10px;">${d.nombre}</div>
+                            <div class="pct-low" style="padding:4px 12px; border-radius:4px; font-weight:900; min-width:85px; text-align:center;">
+                                ${d.puntos} PTS
+                            </div>
+                        </div>`;
+                    });
+                    
+                    if (deudores.length === 0) {
+                        html = '<p class="text-center text-slate-400 py-10">No hay miembros con saldo negativo.</p>';
+                    }
+                    
+                    $('#listaDeudores').html(html);
+                }
+            });
+        }
+
+        $(document).ready(function() {
+            cargarDatos();
+            cargarReparto();
+            cargarActividad();
+            cargarDeudores();
+
+            // Detectar la sección desde la URL limpia
+            // Obtenemos la última palabra de la ruta (ej: "deudores")
+            const path = window.location.pathname.split("/").pop();
+            const seccionesValidas = ['almacen', 'reparto', 'actividad', 'deudores'];
+
+            if (seccionesValidas.includes(path)) {
+                verSeccion(path);
+            } else {
+                // Por defecto si la URL está limpia o es "/"
+                verSeccion('almacen');
+            }
+
+            // Manejar cuando el usuario usa las flechas de "Atrás/Adelante" del navegador
+            window.onpopstate = function(event) {
+                if (event.state && event.state.seccion) {
+                    verSeccion(event.state.seccion);
+                }
+            };
+        });
+    </script>
+</body>
+</html>
