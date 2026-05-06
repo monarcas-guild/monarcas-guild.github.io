@@ -129,11 +129,23 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 
     <script>
+
         function verSeccion(id, btn) {
+            // 1. Cambiar visibilidad de secciones
             $('.content-section').removeClass('active');
             $(`#sec-${id}`).addClass('active');
+            
+            // 2. Cambiar estado del botón
             $('.btn-tab').removeClass('active');
-            $(btn).addClass('active');
+            if (btn) {
+                $(btn).addClass('active');
+            } else {
+                // Si no hay botón (carga inicial), buscamos el que coincida con el id
+                $(`.btn-tab[onclick*="'${id}'"]`).addClass('active');
+            }
+
+            // 3. Actualizar la URL sin recargar la página
+            window.location.hash = id;
         }
 
         // --- TU FUNCIÓN CARGAR DATOS ORIGINAL (ALMACÉN)[cite: 4] ---
@@ -255,10 +267,22 @@
         }
 
         $(document).ready(function() {
+            // Carga de datos de las APIs
             cargarDatos();
             cargarReparto();
             cargarActividad();
             cargarDeudores();
+
+            // Lógica de navegación por URL
+            const seccionInicial = window.location.hash.replace('#', '');
+            const seccionesValidas = ['almacen', 'reparto', 'actividad', 'deudores'];
+
+            if (seccionesValidas.includes(seccionInicial)) {
+                verSeccion(seccionInicial);
+            } else {
+                // Si la URL no tiene hash o es inválido, mostramos almacén por defecto
+                verSeccion('almacen');
+            }
         });
     </script>
 </body>
