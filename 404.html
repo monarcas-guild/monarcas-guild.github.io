@@ -57,14 +57,21 @@
         .ranking-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; border-bottom: 1px solid rgba(197,160,89,0.1); }
         .pct-high { background: rgba(34, 197, 94, 0.2); color: #4ade80; border: 1px solid #22c55e; }
         .pct-low { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid #ef4444; }
+        /* Ajuste para que las columnas de deudores no se desborden */
+        .grid > div {
+            min-width: 0; 
+        }
+        .ranking-row {
+            flex-wrap: wrap; /* Permite que el nombre y los puntos se acomoden en pantallas pequeñas */
+        }
     </style>
 </head>
 <body>
     <nav class="tabs-nav">
         <button class="btn-tab active" onclick="verSeccion('almacen', this)">ALMACÉN</button>
         <button class="btn-tab" onclick="verSeccion('reparto', this)">REPARTO</button>
-        <button class="btn-tab" onclick="verSeccion('actividad', this)">ACTIVIDAD</button>
-        <button class="btn-tab" onclick="verSeccion('deudores', this)">DEUDORES</button>
+        <button class="btn-tab" onclick="verSeccion('actividad', this)">RANKING ACTIVIDAD</button>
+        <button class="btn-tab" onclick="verSeccion('deudores', this)">PUNTOS</button>
     </nav>
 
     <div class="main-container">
@@ -111,18 +118,27 @@
             <div id="listaActividad"></div>
         </div>
 
-        <!-- SECCIÓN DEUDORES -->
         <div id="sec-deudores" class="content-section">
             <div class="logo-header">
-                <h1>LISTA DE DEUDORES</h1>
-                <p class="text-red-400 uppercase tracking-widest text-xs">Miembros con Saldo Negativo</p>
+                <h1>ESTADO DE CUENTA</h1>
+                <p class="text-slate-400 uppercase tracking-widest text-xs">Balance de Puntos de la Comunidad</p>
             </div>
-            <div id="listaDeudores"></div>
-            <div class="sticket-deudores">
-                <img src="https://i.imgur.com/0uni79p.png" alt="">
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 px-4">
+                <div>
+                    <h2 class="font-['Cinzel'] text-green-400 text-center mb-4 text-sm tracking-widest">Saldos Positivos</h2>
+                    <div id="listaPositivos"></div>
+                </div>
+                
+                <div>
+                    <h2 class="font-['Cinzel'] text-red-400 text-center mb-4 text-sm tracking-widest">Saldos Negativos</h2>
+                    <div id="listaDeudores"></div>
+                    <div class="sticket-deudores">
+                        <img src="https://i.imgur.com/0uni79p.png" alt="">
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
 
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
@@ -140,12 +156,12 @@
             if (btn) {
                 $(btn).addClass('active');
             } else {
+                // Busca el botón que tiene la función verSeccion con ese ID
                 $(`.btn-tab[onclick*="'${id}'"]`).addClass('active');
             }
 
-            // 3. CAMBIO: URL limpia sin el numeral (#)
-            // Esto cambia la URL a /almacen, /deudores, etc.
-            const nuevaUrl = window.location.origin + window.location.pathname + id;
+            // 3. Actualizar la URL limpia (ej: /deudores)
+            // Usamos history.pushState para que no aparezca el #
             window.history.pushState({ seccion: id }, "", id);
         }
 
@@ -218,9 +234,7 @@
             }});
         }
 
-        // --- FUNCIÓN DEUDORES (Puntos Negativos) ---
         function cargarDeudores() {
-            // Usamos la URL de la pestaña de reparto/puntos (gid=854086504)
             const urlPuntos = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTmqkTpsU-nFe_DmHlwG28zHEtZU_RkhD6VxNZGX4XdC2Di6JPSBrTXTF6pKeIP737mHOL6eZwqJuW6/pub?gid=854086504&single=true&output=csv';
             
             Papa.parse(urlPuntos, { 
@@ -228,67 +242,86 @@
                 complete: function(results) {
                     const data = results.data;
                     let deudores = [];
+                    let positivos = [];
                     
-                    // Empezamos desde la fila 4 (donde suelen empezar los nombres según la imagen)
                     for (let i = 3; i < data.length; i++) {
                         const nombre = data[i][12]; // Columna M
                         const puntosStr = data[i][13]; // Columna N
                         
                         if (nombre && puntosStr) {
-                            const puntosVal = parseInt(puntosStr.replace('.', '').trim());
-                            
-                            // Solo tomamos a los que tienen puntos menores a 0
+                            const puntosVal = parseInt(puntosStr.replace('.', '').trim()) || 0;
                             if (puntosVal < 0) {
                                 deudores.push({ nombre, puntos: puntosVal });
+                            } else if (puntosVal > 0) {
+                                positivos.push({ nombre, puntos: puntosVal });
                             }
                         }
                     }
                     
-                    // Ordenar de menos puntos negativos a más (ej: -200 antes que -1000)
-                    deudores.sort((a, b) => b.puntos - a.puntos);
+                    // Ordenar: Positivos de mayor a menor, Deudores de más negativo a menos
+                    positivos.sort((a, b) => b.puntos - a.puntos);
+                    deudores.sort((a, b) => a.puntos - b.puntos);
                     
-                    let html = '';
-                    deudores.forEach((d) => {
-                        html += `
-                        <div class="ranking-row" style="border-left: 4px solid #ef4444; margin-bottom: 5px; background: rgba(239, 68, 68, 0.05);">
-                            <div style="flex-grow:1; font-weight:bold; text-transform:uppercase; padding-left: 10px;">${d.nombre}</div>
-                            <div class="pct-low" style="padding:4px 12px; border-radius:4px; font-weight:900; min-width:85px; text-align:center;">
+                    // Generar HTML Positivos (Verde)
+                    let htmlPos = '';
+                    positivos.forEach(p => {
+                        htmlPos += `
+                        <div class="ranking-row" style="border-left: 4px solid #22c55e; margin-bottom: 5px; background: rgba(34, 197, 94, 0.05); padding: 8px 15px;">
+                            <div style="flex-grow:1; font-weight:bold; text-transform:uppercase; font-size: 0.85rem;">${p.nombre}</div>
+                            <div class="pct-high" style="padding:2px 8px; border-radius:4px; font-weight:900; min-width:70px; text-align:center; font-size: 0.85rem;">
+                                ${p.puntos} PTS
+                            </div>
+                        </div>`;
+                    });
+
+                    // Generar HTML Deudores (Rojo)
+                    let htmlDeu = '';
+                    deudores.forEach(d => {
+                        htmlDeu += `
+                        <div class="ranking-row" style="border-left: 4px solid #ef4444; margin-bottom: 5px; background: rgba(239, 68, 68, 0.05); padding: 8px 15px;">
+                            <div style="flex-grow:1; font-weight:bold; text-transform:uppercase; font-size: 0.85rem;">${d.nombre}</div>
+                            <div class="pct-low" style="padding:2px 8px; border-radius:4px; font-weight:900; min-width:70px; text-align:center; font-size: 0.85rem;">
                                 ${d.puntos} PTS
                             </div>
                         </div>`;
                     });
                     
-                    if (deudores.length === 0) {
-                        html = '<p class="text-center text-slate-400 py-10">No hay miembros con saldo negativo.</p>';
-                    }
-                    
-                    $('#listaDeudores').html(html);
+                    $('#listaPositivos').html(htmlPos || '<p class="text-center text-slate-500 py-4 text-xs">No hay saldos positivos.</p>');
+                    $('#listaDeudores').html(htmlDeu || '<p class="text-center text-slate-500 py-4 text-xs">No hay deudores.</p>');
                 }
             });
         }
 
+
         $(document).ready(function() {
+            // Carga de tus datos de Google Sheets
             cargarDatos();
             cargarReparto();
             cargarActividad();
             cargarDeudores();
 
-            // Detectar la sección desde la URL limpia
-            // Obtenemos la última palabra de la ruta (ej: "deudores")
-            const path = window.location.pathname.split("/").pop();
+            // LEER LA URL ACTUAL
+            // window.location.pathname devuelve algo como "/reparto" o "/tu-repo/reparto"
+            const pathParts = window.location.pathname.split("/");
+            const lastPart = pathParts.pop() || pathParts.pop(); // Maneja si termina en /
+            
             const seccionesValidas = ['almacen', 'reparto', 'actividad', 'deudores'];
 
-            if (seccionesValidas.includes(path)) {
-                verSeccion(path);
+            if (seccionesValidas.includes(lastPart)) {
+                verSeccion(lastPart);
             } else {
-                // Por defecto si la URL está limpia o es "/"
+                // Si la ruta es la raíz o no existe, mostrar Almacén
                 verSeccion('almacen');
             }
 
-            // Manejar cuando el usuario usa las flechas de "Atrás/Adelante" del navegador
+            // Permitir que funcionen las flechas de "Atrás" y "Adelante" del navegador
             window.onpopstate = function(event) {
                 if (event.state && event.state.seccion) {
-                    verSeccion(event.state.seccion);
+                    // Solo cambiamos la sección visualmente sin volver a ejecutar pushState
+                    $('.content-section').removeClass('active');
+                    $(`#sec-${event.state.seccion}`).addClass('active');
+                    $('.btn-tab').removeClass('active');
+                    $(`.btn-tab[onclick*="'${event.state.seccion}'"]`).addClass('active');
                 }
             };
         });
