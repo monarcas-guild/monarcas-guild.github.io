@@ -28,7 +28,46 @@
         }
 
         /* --- TABS NAV --- */
-        .tabs-nav { display: flex; justify-content: center; gap: 10px; margin-bottom: -151px; position: relative; z-index: 100; }
+        /* --- TABS NAV ADAPTATIVO --- */
+.tabs-nav { 
+    display: grid; 
+    grid-template-columns: repeat(2, 1fr); /* Por defecto: 2 columnas (Mobile) */
+    gap: 8px; 
+    margin: 0 auto -100px; 
+    position: relative; 
+    z-index: 100; 
+    max-width: 900px;
+    padding: 0 10px;
+}
+
+/* Solo si la pantalla es más grande que 768px (Desktop), vuelve a ser una fila */
+@media (min-width: 768px) {
+    .tabs-nav { 
+        display: flex; 
+        flex-direction: row;
+        justify-content: center; 
+        gap: 10px;
+    }
+    
+    .btn-tab {
+        font-size: 13px; /* Tamaño original para desktop */
+        padding: 12px 25px;
+    }
+}
+
+/* Ajuste extra para que los botones no se rompan en móviles muy pequeños */
+@media (max-width: 767px) {
+    .evil-gay{display:none}
+    .sticket-deudores img{max-width: 250px;}
+    .btn-tab {
+        font-size: 10px;
+        padding: 10px 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 45px;
+    }
+}
         .btn-tab { padding: 12px 25px; border: 1px solid var(--nordic-gold); background: #161b22; color: var(--nordic-gold); font-family: 'Cinzel', serif; cursor: pointer; text-transform: uppercase; font-size: 13px; transition: 0.3s; }
         .btn-tab.active { background: var(--nordic-gold); color: black; }
         .content-section { display: none; }
@@ -92,9 +131,9 @@
             <table id="tablaReapers" class="display w-full">
                 <thead>
                     <tr>
-                        <th class="text-center" style="width: 80px;">Icon</th>
-                        <th class="text-left">Artículo / Item</th>
-                        <th class="text-right">Existencia / Stock</th>
+                        <th id="th-icon" class="text-center" style="width: 80px;" data-key="th_icon">ICONO</th>
+                        <th id="th-item" class="text-left" data-key="th_item">ARTÍCULO / ITEM</th>
+                        <th id="th-stock" class="text-right" data-key="th_stock">EXISTENCIA / STOCK</th>
                     </tr>
                 </thead>
                 <tbody id="cuerpoTabla"></tbody>
@@ -229,19 +268,33 @@
 
         function changeLanguage(lang) {
             currentLang = lang;
+            
+            // 1. Traducir todos los elementos con [data-key] (Tabs, Títulos, etc)
             $('[data-key]').each(function() {
                 const key = $(this).data('key');
                 if (i18n[lang][key]) {
                     $(this).text(i18n[lang][key]);
                 }
             });
+
+            // 2. Traducir específicamente los textos de la tabla de Almacén
+            $('#th-icon').text(i18n[lang].th_icon);
+            $('#th-item').text(i18n[lang].th_item);
+            $('#th-stock').text(i18n[lang].th_stock);
             
-            // Especial para relanzar el DataTable con el nuevo idioma
+            // 3. Actualizar los textos de DataTables
             if ($.fn.DataTable.isDataTable('#tablaReapers')) {
                 const table = $('#tablaReapers').DataTable();
-                table.language.search = i18n[lang].search_label;
-                // Reiniciamos la tabla para que los textos internos cambien
-                cargarDatos(); 
+                
+                // Actualizamos la configuración de lenguaje del objeto DataTable
+                table.context[0].oLanguage.sSearch = i18n[lang].search_label;
+                table.context[0].oLanguage.sInfo = i18n[lang].info_table;
+                table.context[0].oLanguage.sZeroRecords = i18n[lang].zero_records;
+                
+                // Redibujar para aplicar cambios visuales en el buscador
+                $('.dataTables_filter label').contents().filter(function() {
+                    return this.nodeType === 3;
+                }).first().replaceWith(i18n[lang].search_label);
             }
         }
 
