@@ -111,18 +111,28 @@
             <div id="listaActividad"></div>
         </div>
 
-        <!-- SECCIÓN DEUDORES -->
         <div id="sec-deudores" class="content-section">
             <div class="logo-header">
-                <h1>LISTA DE DEUDORES</h1>
-                <p class="text-red-400 uppercase tracking-widest text-xs">Miembros con Saldo Negativo</p>
+                <h1>ESTADO DE CUENTA</h1>
+                <p class="text-slate-400 uppercase tracking-widest text-xs">Balance de Puntos de la Comunidad</p>
             </div>
-            <div id="listaDeudores"></div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 px-4">
+                <div>
+                    <h2 class="font-['Cinzel'] text-green-400 text-center mb-4 text-sm tracking-widest">Saldos Positivos</h2>
+                    <div id="listaPositivos"></div>
+                </div>
+                
+                <div>
+                    <h2 class="font-['Cinzel'] text-red-400 text-center mb-4 text-sm tracking-widest">Saldos Negativos</h2>
+                    <div id="listaDeudores"></div>
+                </div>
+            </div>
+
             <div class="sticket-deudores">
                 <img src="https://i.imgur.com/0uni79p.png" alt="">
             </div>
         </div>
-    </div>
 
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
@@ -218,7 +228,6 @@
             }});
         }
 
-        // --- FUNCIÓN DEUDORES ACTUALIZADA ---
         function cargarDeudores() {
             const urlPuntos = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTmqkTpsU-nFe_DmHlwG28zHEtZU_RkhD6VxNZGX4XdC2Di6JPSBrTXTF6pKeIP737mHOL6eZwqJuW6/pub?gid=854086504&single=true&output=csv';
             
@@ -227,39 +236,52 @@
                 complete: function(results) {
                     const data = results.data;
                     let deudores = [];
+                    let positivos = [];
                     
                     for (let i = 3; i < data.length; i++) {
                         const nombre = data[i][12]; // Columna M
                         const puntosStr = data[i][13]; // Columna N
                         
                         if (nombre && puntosStr) {
-                            const puntosVal = parseInt(puntosStr.replace('.', '').trim());
+                            const puntosVal = parseInt(puntosStr.replace('.', '').trim()) || 0;
                             if (puntosVal < 0) {
                                 deudores.push({ nombre, puntos: puntosVal });
+                            } else if (puntosVal > 0) {
+                                positivos.push({ nombre, puntos: puntosVal });
                             }
                         }
                     }
                     
-                    // CAMBIO AQUÍ: Ordenamos de menor a mayor valor numérico. 
-                    // Como son negativos, -4462 es "menor" que -214 y saldrá primero.
+                    // Ordenar: Positivos de mayor a menor, Deudores de más negativo a menos
+                    positivos.sort((a, b) => b.puntos - a.puntos);
                     deudores.sort((a, b) => a.puntos - b.puntos);
                     
-                    let html = '';
-                    deudores.forEach((d) => {
-                        html += `
-                        <div class="ranking-row" style="border-left: 4px solid #ef4444; margin-bottom: 5px; background: rgba(239, 68, 68, 0.05);">
-                            <div style="flex-grow:1; font-weight:bold; text-transform:uppercase; padding-left: 10px;">${d.nombre}</div>
-                            <div class="pct-low" style="padding:4px 12px; border-radius:4px; font-weight:900; min-width:85px; text-align:center;">
+                    // Generar HTML Positivos (Verde)
+                    let htmlPos = '';
+                    positivos.forEach(p => {
+                        htmlPos += `
+                        <div class="ranking-row" style="border-left: 4px solid #22c55e; margin-bottom: 5px; background: rgba(34, 197, 94, 0.05); padding: 8px 15px;">
+                            <div style="flex-grow:1; font-weight:bold; text-transform:uppercase; font-size: 0.85rem;">${p.nombre}</div>
+                            <div class="pct-high" style="padding:2px 8px; border-radius:4px; font-weight:900; min-width:70px; text-align:center; font-size: 0.85rem;">
+                                ${p.puntos} PTS
+                            </div>
+                        </div>`;
+                    });
+
+                    // Generar HTML Deudores (Rojo)
+                    let htmlDeu = '';
+                    deudores.forEach(d => {
+                        htmlDeu += `
+                        <div class="ranking-row" style="border-left: 4px solid #ef4444; margin-bottom: 5px; background: rgba(239, 68, 68, 0.05); padding: 8px 15px;">
+                            <div style="flex-grow:1; font-weight:bold; text-transform:uppercase; font-size: 0.85rem;">${d.nombre}</div>
+                            <div class="pct-low" style="padding:2px 8px; border-radius:4px; font-weight:900; min-width:70px; text-align:center; font-size: 0.85rem;">
                                 ${d.puntos} PTS
                             </div>
                         </div>`;
                     });
                     
-                    if (deudores.length === 0) {
-                        html = '<p class="text-center text-slate-400 py-10">No hay miembros con saldo negativo.</p>';
-                    }
-                    
-                    $('#listaDeudores').html(html);
+                    $('#listaPositivos').html(htmlPos || '<p class="text-center text-slate-500 py-4 text-xs">No hay saldos positivos.</p>');
+                    $('#listaDeudores').html(htmlDeu || '<p class="text-center text-slate-500 py-4 text-xs">No hay deudores.</p>');
                 }
             });
         }
