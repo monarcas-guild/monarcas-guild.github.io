@@ -201,19 +201,30 @@
         // Función para obtener el nombre traducido
         function obtenerNombreItem(nombreOriginal) {
             if (!nombreOriginal) return "";
-            const limpio = nombreOriginal.trim();
-            const item = itemsTraduccion[limpio];
-            if (item && item[currentLang]) return item[currentLang];
-            return nombreOriginal;
+            
+            // Limpiamos espacios extras que pueda traer el Excel
+            const nombreLimpio = nombreOriginal.trim();
+            
+            const item = itemsTraduccion[nombreLimpio];
+            if (item && item[currentLang]) {
+                return item[currentLang];
+            }
+            
+            return nombreLimpio; 
         }
 
         function changeLanguage(lang) {
             currentLang = lang;
+            
+            // Traducir textos estáticos (Tabs, encabezados)
             $('[data-key]').each(function() {
                 const key = $(this).data('key');
-                if (i18n[lang][key]) $(this).text(i18n[lang][key]);
+                if (i18n[lang][key]) {
+                    $(this).text(i18n[lang][key]);
+                }
             });
-            // Recargamos los datos para aplicar la traducción a lo que viene del Excel
+
+            // Forzar la recarga de las tablas y listas para aplicar la nueva traducción
             cargarDatos();
             cargarReparto();
         }
