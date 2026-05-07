@@ -7,8 +7,218 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap" rel="stylesheet">
     
     <style>
+         @media (max-width: 767px) {
+            #rocket-png {
+    width: 420px !important;
+}
+            .structure {
+    width: 450px !important;
+}
+.text-reapers {
+    font-size: 62px !important;
+}
+}
+        .text-reapers {
+    font-family: 'Cinzel', serif; /* Fuente estilo épico */
+    font-size: 80px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 12px; /* Espaciado amplio como inscripciones en piedra */
+    
+    /* Color base: degradado de metal oscuro a gris ceniza */
+    background: linear-gradient(to bottom, #cfc7b8 0%, #544a44 50%, #2e2925 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    /* Sombra para dar relieve y aspecto de grabado */
+    filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.8)) 
+            drop-shadow(0 0 15px rgba(0, 0, 0, 0.5));
+    
+    /* Efecto de resplandor rúnico muy tenue (opcional) */
+    text-shadow: 0 0 10px rgba(180, 160, 120, 0.2);
+    
+    position: relative;
+    display: inline-block;
+}
+
+/* Efecto de textura de piedra raspada */
+.text-reapers::after {
+    content: "REAPERS";
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: -1;
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.1);
+    opacity: 0.5;
+}
+        /* VARIABLES */
+        :root {
+            --background-color: #212526;
+            --particles-color: #fff;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            overflow: hidden; /* Evita scroll durante la carga */
+            font-family: 'Roboto Condensed', sans-serif;
+        }
+
+        /* CONTENEDOR PRINCIPAL DEL LOADER */
+        .loader-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                    linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), /* Capa negra al 60% */
+                    url('https://i.imgur.com/AWtRs1Z.png');
+            background-size: cover;
+            background-position: center;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.8s ease, visibility 0.8s;
+        }
+
+        /* CLASE PARA OCULTAR EL LOADER */
+        .loader-hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .rocket-container {
+            position: relative;
+            width: 900px;
+            height: 130px;
+        }
+
+        /* ESTRUCTURA Y NAVE PNG */
+        .structure {
+            position: absolute;
+            z-index: 1000;
+            width: 900px;
+            height: 130px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: shake 1s cubic-bezier(.36,.07,.19,.97) both infinite;
+        }
+
+        #rocket-png {
+            width: 900px; /* Ajusta el tamaño de tu imagen aquí */
+            height: auto;
+            transform: rotate(359deg); /* Rota la imagen si mira hacia arriba */
+        }
+
+        /* TEXTO LOADING */
+        .text-container {
+            position: absolute;
+            top: 150px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .text-container h2 {
+            margin: 0;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--particles-color);
+            letter-spacing: 2px;
+        }
+
+        /* HUMO (SMOKE) */
+        .smoke {
+            position: absolute;
+            z-index: 999;
+            width: 200px;
+            height: 130px;
+        }
+
+        .smoke span {
+            position: absolute;
+            width: 50px;
+            border-bottom: 2px solid var(--particles-color);
+            box-shadow: 0px 0px 5px var(--particles-color);
+            opacity: 0;
+        }
+
+        /* Humo más lento (ajustado de ~0.5s a ~2s) */
+        .smoke span:nth-child(1) { top: 30px; left: -50px; animation: smokeAnim 1.5s infinite; }
+        .smoke span:nth-child(2) { top: 40px; left: -50px; animation: smokeAnim 2.1s infinite 0.3s; }
+        .smoke span:nth-child(3) { top: 50px; left: -50px; animation: smokeAnim 1.2s infinite 0.6s; }
+        .smoke span:nth-child(4) { top: 60px; left: -50px; animation: smokeAnim 1.8s infinite 0.4s; }
+        .smoke span:nth-child(5) { top: 70px; left: -50px; animation: smokeAnim 1.5s infinite 0.9s; }
+        .smoke span:nth-child(6) { top: 80px; left: -50px; animation: smokeAnim 2.4s infinite; }
+        .smoke span:nth-child(7) { top: 90px; left: -50px; animation: smokeAnim 1.2s infinite 0.3s; }
+        .smoke span:nth-child(8) { top: 100px; left: -50px; animation: smokeAnim 1.8s infinite 0.6s; }
+        .smoke span:nth-child(9) { top: 110px; left: -50px; animation: smokeAnim 1.5s infinite 1.2s; }
+        .smoke span:nth-child(10) { top: 120px; left: -50px; animation: smokeAnim 2.1s infinite 0.15s; }
+        @keyframes smokeAnim {
+            0% { left: -50px; opacity: 1; }
+            100% { left: -150px; opacity: 0; }
+        }
+
+        /* METEOROS */
+        .meteors-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 998;
+        }
+
+        .meteors-container span {
+            position: absolute;
+            width: 75px;
+            border-bottom: 2px solid var(--particles-color);
+            box-shadow: 0px 0px 5px var(--particles-color);
+        }
+
+        /* Meteoros más lentos (ajustado de ~0.6s a ~3s) */
+        .meteors-container span:nth-child(1) { top: 15%; animation: meteorAnim 2.5s infinite; }
+        .meteors-container span:nth-child(2) { top: 35%; animation: meteorAnim 3.5s infinite 0.5s; }
+        .meteors-container span:nth-child(3) { top: 55%; animation: meteorAnim 2.0s infinite 1.0s; }
+        .meteors-container span:nth-child(4) { top: 75%; animation: meteorAnim 3.0s infinite 1.5s; }
+        .meteors-container span:nth-child(5) { top: 90%; animation: meteorAnim 4.0s infinite 0.8s; }
+        .meteors-container span:nth-child(6) { top: 5%; animation: meteorAnim 2.5s infinite 2.0s; }
+
+        @keyframes meteorAnim {
+            0% { left: 100%; }
+            75% { left: -75px; }
+            100% { left: -75px; }
+        }
+
+        /* ANIMACIÓN SHAKE */
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-1px, 1px, 0); }
+            20%, 80% { transform: translate3d(2px, 2px, 0); }
+            30%, 50%, 70% { transform: translate3d(-2px, -2px, 0); }
+            40%, 60% { transform: translate3d(2px, 2px, 0); }
+        }
+
+        /* CONTENIDO DE LA PÁGINA (OCULTO AL INICIO) */
+        #main-content {
+            padding: 50px;
+            text-align: center;
+        }
+
+
+
+
+
+
+
+
+
+
         /* Estilo para el contenedor del selector de DataTables */
 .dataTables_length select {
     background-color: #161b22 !important; /* El color de tus paneles */
@@ -134,6 +344,28 @@
     </style>
 </head>
 <body>
+
+        <div class='loader-container' id="loader">
+        <div class='rocket-container'>
+            <div class='structure'>
+                <img src="https://i.imgur.com/gmxJv6e.png" id="rocket-png" alt="Rocket">
+            </div>
+            <div class='text-container'>
+                <div>
+                    <h1 class="text-reapers">REAPERS</h1>
+                </div>
+            </div>
+            <div class='smoke'>
+                <span></span><span></span><span></span><span></span><span></span>
+                <span></span><span></span><span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class='meteors-container'>
+            <span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
+    </div>
+
+    
     <div class="flex justify-end p-4 max-w-5xl mx-auto">
         <select onchange="changeLanguage(this.value)" class="bg-[#161b22] border border-[#c5a059] text-[#c5a059] rounded p-1 font-['Cinzel'] text-xs outline-none">
             <option value="es">ESPAÑOL</option>
@@ -222,6 +454,24 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 
     <script>
+
+                // Esperamos a que cargue la ventana
+        window.addEventListener('load', () => {
+            // Esperamos 3 segundos antes de iniciar la desaparición
+            setTimeout(() => {
+                const loader = document.getElementById('loader');
+                
+                // Añadimos la clase que hace el fade-out (opacidad 0)
+                loader.classList.add('loader-hidden');
+                
+                // Opcional: habilitar scroll en el body después de la carga
+                document.body.style.overflow = 'auto';
+            }, 2100); // 3000 milisegundos = 3 segundos
+        });
+
+
+
+
                 const i18n = {
             es: {
                 tab_almacen: "ALMACÉN",
@@ -528,6 +778,8 @@
             }
             // Si es menor a 768px (Mobile), la función no hace nada
         }
+
+        
     </script>
 </body>
 </html>
