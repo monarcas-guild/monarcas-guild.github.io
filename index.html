@@ -68,11 +68,18 @@
     </style>
 </head>
 <body>
+    <div class="flex justify-end p-4 max-w-5xl mx-auto">
+        <select onchange="changeLanguage(this.value)" class="bg-[#161b22] border border-[#c5a059] text-[#c5a059] rounded p-1 font-['Cinzel'] text-xs outline-none">
+            <option value="es">ESPAÑOL</option>
+            <option value="en">ENGLISH</option>
+            <option value="pt">PORTUGUÊS</option>
+        </select>
+    </div>
     <nav class="tabs-nav">
-        <button class="btn-tab active" onclick="verSeccion('almacen', this)">ALMACÉN</button>
-        <button class="btn-tab" onclick="verSeccion('reparto', this)">REPARTO</button>
-        <button class="btn-tab" onclick="verSeccion('actividad', this)">RANKING ACTIVIDAD</button>
-        <button class="btn-tab" onclick="verSeccion('reaperspoints', this)">REAPERS POINTS</button>
+        <button class="btn-tab active" onclick="verSeccion('almacen', this)" data-key="tab_almacen">ALMACÉN</button>
+        <button class="btn-tab" onclick="verSeccion('reparto', this)" data-key="tab_reparto">REPARTO</button>
+        <button class="btn-tab" onclick="verSeccion('actividad', this)" data-key="tab_ranking">RANKING ACTIVIDAD</button>
+        <button class="btn-tab" onclick="verSeccion('reaperspoints', this)" data-key="tab_puntos">REAPERS POINTS</button>
     </nav>
 
     <div class="main-container">
@@ -149,6 +156,94 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 
     <script>
+                const i18n = {
+            es: {
+                tab_almacen: "ALMACÉN",
+                tab_reparto: "REPARTO",
+                tab_ranking: "RANKING ACTIVIDAD",
+                tab_puntos: "REAPERS POINTS",
+                header_almacen: "REAPERS ALMACÉN",
+                sub_almacen: "Registro Oficial de Suministros",
+                search_label: "BUSCAR EN EL TESORO:",
+                info_table: "Mostrando _TOTAL_ artículos",
+                zero_records: "No se han encontrado suministros",
+                th_icon: "Icono",
+                th_item: "Artículo / Item",
+                th_stock: "Existencia / Stock",
+                header_reparto: "REPARTO DE ITEMS",
+                header_actividad: "RANKING ACTIVIDAD",
+                header_puntos: "ESTADO DE CUENTA",
+                sub_puntos: "Balance de Puntos de la Comunidad",
+                label_positivos: "Saldos Positivos",
+                label_negativos: "Saldos Negativos",
+                no_data: "Sin datos registrados",
+                pts: "PTS"
+            },
+            en: {
+                tab_almacen: "STORAGE",
+                tab_reparto: "DISTRIBUTION",
+                tab_ranking: "ACTIVITY RANK",
+                tab_puntos: "REAPERS POINTS",
+                header_almacen: "REAPERS STORAGE",
+                sub_almacen: "Official Supply Registry",
+                search_label: "SEARCH TREASURE:",
+                info_table: "Showing _TOTAL_ items",
+                zero_records: "No supplies found",
+                th_icon: "Icon",
+                th_item: "Article / Item",
+                th_stock: "Stock / Inventory",
+                header_reparto: "ITEM DISTRIBUTION",
+                header_actividad: "ACTIVITY RANKING",
+                header_puntos: "ACCOUNT STATUS",
+                sub_puntos: "Community Points Balance",
+                label_positivos: "Positive Balances",
+                label_negativos: "Negative Balances",
+                no_data: "No data recorded",
+                pts: "PTS"
+            },
+            pt: {
+                tab_almacen: "ARMAZÉM",
+                tab_reparto: "DISTRIBUIÇÃO",
+                tab_ranking: "RANKING DE ATIVIDADE",
+                tab_puntos: "REAPERS POINTS",
+                header_almacen: "ARMAZÉM REAPERS",
+                sub_almacen: "Registro Oficial de Suprimentos",
+                search_label: "BUSCAR NO TESOURO:",
+                info_table: "Mostrando _TOTAL_ itens",
+                zero_records: "Nenhum suprimento encontrado",
+                th_icon: "Ícone",
+                th_item: "Artigo / Item",
+                th_stock: "Estoque",
+                header_reparto: "DISTRIBUIÇÃO DE ITENS",
+                header_actividad: "RANKING DE ATIVIDADE",
+                header_puntos: "ESTADO DA CONTA",
+                sub_puntos: "Balanço de Pontos da Comunidade",
+                label_positivos: "Saldos Positivos",
+                label_negativos: "Saldos Negativos",
+                no_data: "Sem dados registrados",
+                pts: "PTS"
+            }
+        };
+
+        let currentLang = 'es';
+
+        function changeLanguage(lang) {
+            currentLang = lang;
+            $('[data-key]').each(function() {
+                const key = $(this).data('key');
+                if (i18n[lang][key]) {
+                    $(this).text(i18n[lang][key]);
+                }
+            });
+            
+            // Especial para relanzar el DataTable con el nuevo idioma
+            if ($.fn.DataTable.isDataTable('#tablaReapers')) {
+                const table = $('#tablaReapers').DataTable();
+                table.language.search = i18n[lang].search_label;
+                // Reiniciamos la tabla para que los textos internos cambien
+                cargarDatos(); 
+            }
+        }
 
         function verSeccion(id, btn) {
             // 1. Cambiar visibilidad de secciones
