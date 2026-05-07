@@ -207,11 +207,15 @@
 
         function changeLanguage(lang) {
             currentLang = lang;
+            
             $('[data-key]').each(function() {
                 const key = $(this).data('key');
-                if (i18n[lang][key]) $(this).text(i18n[lang][key]);
+                if (i18n[lang][key]) {
+                    $(this).text(i18n[lang][key]);
+                }
             });
-            // Recargar datos para procesar traducciones
+
+            // RECARGAR DATOS para que se ejecute la lógica de traducción de los ítems
             cargarDatos();
             cargarReparto();
         }
@@ -238,25 +242,35 @@
                         const colItem = headers.findIndex(h => h.includes('Artículo'));
                         const colStock = headers.findIndex(h => h.includes('Existencia'));
                         rows.slice(headerRowIdx + 1).forEach(row => {
+                            /* --- CAMBIO AQUÍ --- */
                             const nombreOriginal = row[colItem] ? row[colItem].trim() : '';
-                            const nombre = obtenerNombreItem(nombreOriginal); 
+                            const nombreTraducido = obtenerNombreItem(nombreOriginal); 
+                            /* ------------------- */
                             const stock = row[colStock] ? row[colStock].trim() : '0';
                             const imgPath = row[32] ? row[32].trim() : ''; 
                             if (nombreOriginal && nombreOriginal !== "" && !nombreOriginal.includes('Total de puntos')) {
-                                html += `<tr><td class="text-center"><img src="${imgPath}" class="item-icon mx-auto" onerror="this.src='https://valhalla-rising.com/favicon.ico';"></td><td class="font-semibold text-slate-100">${nombre}</td><td class="text-right stock-number">${stock}</td></tr>`;
+                                html += `<tr><td class="text-center"><img src="${imgPath}" class="item-icon mx-auto" onerror="this.src='https://valhalla-rising.com/favicon.ico';"></td><td class="font-semibold text-slate-100">${nombreTraducido}</td><td class="text-right stock-number">${stock}</td></tr>`;
                             }
                         });
                     }
                     $('#cuerpoTabla').html(html);
-                    // IMPORTANTE: Destruir la tabla antes de recrearla con el nuevo idioma
-                    if ($.fn.DataTable.isDataTable('#tablaReapers')) $('#tablaReapers').DataTable().destroy();
+                    
+                    // Destruir tabla previa para aplicar nuevos textos de búsqueda
+                    if ($.fn.DataTable.isDataTable('#tablaReapers')) {
+                        $('#tablaReapers').DataTable().destroy();
+                    }
+
                     $('#tablaReapers').DataTable({
-                        pageLength: 50, order: [[2, 'desc']],
+                        pageLength: 50, 
+                        order: [[2, 'desc']],
                         language: { 
                             search: i18n[currentLang].search_label, 
                             info: i18n[currentLang].info_table, 
                             zeroRecords: i18n[currentLang].zero_records,
-                            paginate: { next: currentLang === 'es' ? "Sig" : "Next", previous: currentLang === 'es' ? "Ant" : "Prev" } 
+                            paginate: { 
+                                next: currentLang === 'es' ? "Sig" : "Next", 
+                                previous: currentLang === 'es' ? "Ant" : "Prev" 
+                            } 
                         }
                     });
                 }
@@ -268,6 +282,7 @@
             Papa.parse(urlReparto, { download: true, complete: function(results) {
                 let hD = '', hAdmin = '', hAH = '';
                 results.data.slice(4).forEach(r => {
+                    // Aplicando obtenerNombreItem a cada celda de nombre
                     if (r[1]) hD += `<tr><td><img src="${r[28]}" class="img-mini"></td><td>${obtenerNombreItem(r[1])}</td><td class="pts-orange">${r[3]}</td></tr>`;
                     if (r[4]) hAdmin += `<tr><td>${obtenerNombreItem(r[4])}</td><td class="pts-orange">${r[6]}</td></tr>`;
                     if (r[8]) hAH += `<tr><td><img src="${r[29]}" class="img-mini"></td><td>${obtenerNombreItem(r[8])}</td><td class="text-center">${r[9]}</td><td class="pts-orange">${r[10]}</td></tr>`;
