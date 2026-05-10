@@ -1514,30 +1514,48 @@ function cargarReparto() {
     Papa.parse(urlReparto, {
         download: true,
         complete: function (results) {
-            let hD = ''; // Para la tabla de la izquierda (Discord)
+            let hD = '', hAdmin = '', hAH = '';
             
-            // Empezamos desde la fila 4 para saltar encabezados
+            // Empezamos desde la fila 4 para saltar los encabezados del Excel
             results.data.slice(4).forEach(r => {
                 
-                // Solo procesamos si hay un nombre en la Columna C (índice 2)
-                if (r[2] && r[2].trim() !== "") {
+                // --- IZQUIERDA: REPARTO ---
+                // r[2] = Columna C (Imagen), r[3] = Columna D (Item), r[5] = Columna F (Puntos)
+                if (r[3] && r[3].trim() !== "") {
                     hD += `
                     <tr>
-                        <td class="text-center">
-                            <img src="${r[0]}" class="img-mini" onerror="this.src='https://valhalla-rising.com/favicon.ico';">
-                        </td>
-                        <td class="text-white font-medium">
-                            ${r[2]}
-                        </td>
-                        <td class="pts-orange text-right">
-                            ${r[3]}
-                        </td>
+                        <td><img src="${r[2]}" class="img-mini" onerror="this.src='https://valhalla-rising.com/favicon.ico';"></td>
+                        <td>${r[3]}</td>
+                        <td class="pts-orange">${r[5]}</td>
+                    </tr>`;
+                }
+
+                // --- CENTRO: ADMINISTRACIÓN ---
+                // r[6] = Columna G (Item), r[8] = Columna I (Puntos/Unidad)
+                if (r[6] && r[6].trim() !== "") {
+                    hAdmin += `
+                    <tr>
+                        <td>${r[6]}</td>
+                        <td class="pts-orange">${r[8]}</td>
+                    </tr>`;
+                }
+
+                // --- DERECHA: STOCK ---
+                // r[9] = Columna J (Imagen), r[11] = Columna L (Stock), r[12] = Columna M (Puntos)
+                // Nota: He usado r[11] para el nombre/stock que suele ir en la segunda celda de la fila
+                if (r[11] && r[11].trim() !== "") {
+                    hAH += `
+                    <tr>
+                        <td><img src="${r[9]}" class="img-mini" onerror="this.src='https://valhalla-rising.com/favicon.ico';"></td>
+                        <td>Stock: ${r[11]}</td>
+                        <td class="pts-orange">${r[12]}</td>
                     </tr>`;
                 }
             });
 
-            // Inyectamos el resultado en el contenedor de la izquierda
             $('#listaDiscord').html(hD);
+            $('#listaAdmin').html(hAdmin);
+            $('#listaAH').html(hAH);
         }
     });
 }
