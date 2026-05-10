@@ -1523,31 +1523,42 @@
                 });
             }
 
-            // --- FUNCIÓN ACTIVIDAD (RANKING)[cite: 2, 3] ---
-            function cargarActividad() {
-                const urlActividad = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTmqkTpsU-nFe_DmHlwG28zHEtZU_RkhD6VxNZGX4XdC2Di6JPSBrTXTF6pKeIP737mHOL6eZwqJuW6/pub?gid=801467735&single=true&output=csv';
-                Papa.parse(urlActividad, {
-                    download: true, complete: function (results) {
-                        const data = results.data;
-                        let lista = [];
-                        for (let i = 4; i < data.length; i++) {
-                            const nick = data[i][7]; // Col H[cite: 2]
-                            const avg = data[i][16]; // Col Q[cite: 2]
-                            if (nick && avg && nick !== "Nick") {
-                                const valNum = parseFloat(avg.replace('%', '').replace(',', '.').trim()) || 0;
-                                lista.push({ nick, avg, valNum });
-                            }
-                        }
-                        lista.sort((a, b) => b.valNum - a.valNum); //[cite: 3]
-                        let html = '';
-                        lista.forEach((u, i) => {
-                            const color = u.valNum >= 50 ? 'pct-high' : 'pct-low';
-                            html += `<div class="ranking-row"><div style="font-family:Cinzel,serif;color:#c5a059;width:40px;">#${i + 1}</div><div style="flex-grow:1;font-weight:bold;text-transform:uppercase;">${u.nick}</div><div class="${color}" style="padding:4px 12px;border-radius:4px;font-weight:900;min-width:85px;text-align:center;">${u.avg}</div></div>`;
-                        });
-                        $('#listaActividad').html(html);
-                    }
-                });
+// --- FUNCIÓN ACTIVIDAD (RANKING) ---
+function cargarActividad() {
+    const urlActividad = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTmqkTpsU-nFe_DmHlwG28zHEtZU_RkhD6VxNZGX4XdC2Di6JPSBrTXTF6pKeIP737mHOL6eZwqJuW6/pub?gid=801467735&single=true&output=csv';
+    Papa.parse(urlActividad, {
+        download: true, 
+        complete: function (results) {
+            const data = results.data;
+            let lista = [];
+            // Empezamos en la fila donde están los datos (ajusta si es necesario)
+            for (let i = 4; i < data.length; i++) {
+                const nick = data[i][0];   // Usualmente el Nombre/Nick está en la Col A (Índice 0)
+                const avg = data[i][6];    // CAMBIO: Ahora toma la Columna G (Índice 6)
+                
+                if (nick && avg && nick !== "Nick") {
+                    // Limpiamos el valor para poder ordenar numéricamente
+                    const valNum = parseFloat(avg.replace('%', '').replace(',', '.').trim()) || 0;
+                    lista.push({ nick, avg, valNum });
+                }
             }
+            
+            // Ordenamos de mayor a menor actividad
+            lista.sort((a, b) => b.valNum - a.valNum); 
+
+            let html = '';
+            lista.forEach((u, i) => {
+                const color = u.valNum >= 50 ? 'pct-high' : 'pct-low';
+                html += `<div class="ranking-row">
+                            <div style="font-family:Cinzel,serif;color:#c5a059;width:40px;">#${i + 1}</div>
+                            <div style="flex-grow:1;font-weight:bold;text-transform:uppercase;">${u.nick}</div>
+                            <div class="${color}" style="padding:4px 12px;border-radius:4px;font-weight:900;min-width:85px;text-align:center;">${u.avg}</div>
+                         </div>`;
+            });
+            $('#listaActividad').html(html);
+        }
+    });
+}
 
             function cargarDeudores() {
                 const urlPuntos = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTmqkTpsU-nFe_DmHlwG28zHEtZU_RkhD6VxNZGX4XdC2Di6JPSBrTXTF6pKeIP737mHOL6eZwqJuW6/pub?gid=854086504&single=true&output=csv';
