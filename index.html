@@ -1510,22 +1510,21 @@
             // --- FUNCIÓN REPARTO CORREGIDA ---
 function cargarReparto() {
     const urlReparto = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTmqkTpsU-nFe_DmHlwG28zHEtZU_RkhD6VxNZGX4XdC2Di6JPSBrTXTF6pKeIP737mHOL6eZwqJuW6/pub?gid=854086504&single=true&output=csv';
-
+    
     Papa.parse(urlReparto, {
         download: true,
         complete: function (results) {
             let hD = '', hAdmin = '', hAH = '';
-            // IMPORTANTE: Esta es la ruta a tu carpeta local donde están las fotos
-            const folderPath = "resource/"; 
+            // Ajustamos la ruta a tu carpeta local
+            const folderPath = "./resource/"; 
 
             results.data.slice(4).forEach(r => {
                 
-                // --- SECCIÓN DISCORD (Usa Columna A) ---
+                // --- COLUMNA DISCORD (Usa Código de Columna A -> r[0]) ---
                 if (r[3] && r[3].trim() !== "") {
-                    // Tomamos el nombre del archivo de la Columna A (r[0])
-                    let imgNameA = r[0] ? r[0].trim() : "";
-                    // Si tus celdas no tienen el ".png", agrégalo aquí: + ".png"
-                    let srcA = folderPath + imgNameA; 
+                    let codigoA = r[0] ? r[0].trim() : "";
+                    // Construye la ruta. Ejemplo: ./resource/M_76.jpg
+                    let srcA = folderPath + codigoA + ".jpg"; 
 
                     hD += `<tr>
                         <td><img src="${srcA}" class="img-mini" onerror="this.src='https://valhalla-rising.com/favicon.ico';"></td>
@@ -1534,7 +1533,7 @@ function cargarReparto() {
                     </tr>`;
                 }
 
-                // --- SECCIÓN ADMINISTRACIÓN ---
+                // --- COLUMNA ADMINISTRACIÓN ---
                 if (r[6] && r[6].trim() !== "") {
                     hAdmin += `<tr>
                         <td>${r[6]}</td>
@@ -1542,11 +1541,11 @@ function cargarReparto() {
                     </tr>`;
                 }
 
-                // --- SECCIÓN ACTION HOUSE (Usa Columna B) ---
+                // --- COLUMNA ACTION HOUSE (Usa Código de Columna B -> r[1]) ---
                 if (r[10] && r[10].trim() !== "") {
-                    // Tomamos el nombre del archivo de la Columna B (r[1])
-                    let imgNameB = r[1] ? r[1].trim() : "";
-                    let srcB = folderPath + imgNameB;
+                    let codigoB = r[1] ? r[1].trim() : "";
+                    // Construye la ruta. Ejemplo: ./resource/M_22.jpg
+                    let srcB = folderPath + codigoB + ".jpg";
 
                     hAH += `
                     <tr>
