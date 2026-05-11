@@ -1333,6 +1333,10 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 
         <script>
+            // Ejemplo de cómo construir la URL de la imagen
+            const folderPath = "resource/"; 
+            let nombreImagen = fila.columnaA; 
+            let imgSrc = folderPath + nombreImagen;
 
             // Esperamos a que cargue la ventana
             window.addEventListener('load', () => {
