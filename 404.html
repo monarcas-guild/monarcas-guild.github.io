@@ -1538,21 +1538,17 @@ function cargarReparto() {
                 // --- COLUMNA 3: STOCK / AH (J, K, L, M) ---
                 // J=9 (Imagen), K=10 (Item), L=11 (Stock), M=12 (Puntos)
                 if (r[10] && r[10].trim() !== "") {
-                    // Forzamos r[12] para los puntos de la columna M
-                    const puntosFinales = r[12] ? r[12].trim() : "0"; 
-                    
                     hAH += `
                     <tr>
-                        <td><img src="${r[9]}" class="img-mini" onerror="this.src='https://valhalla-rising.com/favicon.ico';"></td>
-                        <td>
-                            <div class="flex flex-col text-left">
-                                <span class="text-white font-bold">${r[10]}</span>
-                                <small class="text-gray-400">Stock: ${r[11]}</small>
-                            </div>
+                        <td class="text-center">
+                            <img src="${r[9]}" class="img-mini" onerror="this.src='https://valhalla-rising.com/favicon.ico';">
                         </td>
-                        <td class="pts-orange text-right" style="min-width: 60px;">
-                            ${puntosFinales}
-                        </td>
+                        <td class="text-white">
+                            ${r[10]} </td>
+                        <td class="text-center text-gray-400">
+                            ${r[11]} </td>
+                        <td class="pts-orange text-right">
+                            ${r[12] || '0'} </td>
                     </tr>`;
                 }
             });
