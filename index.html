@@ -1701,7 +1701,6 @@ function cargarReparto() {
     });
 }
 
-            // --- FUNCIÓN ACTIVIDAD (RANKING) ---
             function cargarActividad() {
                 const urlActividad = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTmqkTpsU-nFe_DmHlwG28zHEtZU_RkhD6VxNZGX4XdC2Di6JPSBrTXTF6pKeIP737mHOL6eZwqJuW6/pub?gid=801467735&single=true&output=csv';
                 
@@ -1711,20 +1710,25 @@ function cargarReparto() {
                         const data = results.data;
                         let lista = [];
                         
-                        // i=4 porque saltamos los encabezados del excel
+                        // Buscamos dinámicamente en qué columna está el "Nick" y el "%"
+                        // Suponiendo que los encabezados están en la fila 3 o 4 (índice 2 o 3)
+                        const headers = data[3]; // Ajusta este índice si los títulos están en otra fila
+                        const colNick = headers ? headers.indexOf("Nick") : 8; 
+                        const colAvg = headers ? headers.indexOf("%") : 6;
+
                         for (let i = 4; i < data.length; i++) {
-                            const nick = data[i][8];  // CAMBIO: Índice 8 es la Columna I (Nombres)
-                            const avg = data[i][6];   // CAMBIO: Índice 6 es la Columna G (%)
+                            let nick = data[i][colNick];
+                            let avg = data[i][colAvg];
                             
-                            // Verificamos que el nick no esté vacío y no sea el encabezado
-                            if (nick && avg && nick.trim() !== "" && nick !== "Nick") {
-                                // Limpiamos el valor para que sea un número (ej: "85%" -> 85)
-                                const valNum = parseFloat(avg.replace('%', '').replace(',', '.').trim()) || 0;
-                                lista.push({ nick, avg, valNum });
+                            if (nick && nick.trim() !== "") {
+                                // Si el porcentaje viene vacío, le ponemos 0% por defecto para que no desaparezca el nombre
+                                let displayAvg = (avg && avg.trim() !== "") ? avg : "0%";
+                                const valNum = parseFloat(displayAvg.replace('%', '').replace(',', '.').trim()) || 0;
+                                
+                                lista.push({ nick: nick.trim(), avg: displayAvg, valNum });
                             }
                         }
                         
-                        // Ordenar de mayor a menor actividad
                         lista.sort((a, b) => b.valNum - a.valNum);
 
                         let html = '';
