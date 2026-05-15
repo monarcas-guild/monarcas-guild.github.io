@@ -1701,50 +1701,46 @@ function cargarReparto() {
     });
 }
 
-            function cargarActividad() {
-                const urlActividad = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTmqkTpsU-nFe_DmHlwG28zHEtZU_RkhD6VxNZGX4XdC2Di6JPSBrTXTF6pKeIP737mHOL6eZwqJuW6/pub?gid=801467735&single=true&output=csv';
+function cargarActividad() {
+    const urlActividad = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTmqkTpsU-nFe_DmHlwG28zHEtZU_RkhD6VxNZGX4XdC2Di6JPSBrTXTF6pKeIP737mHOL6eZwqJuW6/pub?gid=801467735&single=true&output=csv';
+    
+    Papa.parse(urlActividad, {
+        download: true,
+        header: true, // <--- CAMBIO CRÍTICO: Lee los nombres de las columnas
+        skipEmptyLines: true,
+        complete: function (results) {
+            const data = results.data;
+            let lista = [];
+            
+            data.forEach(fila => {
+                // Buscamos las columnas por nombre exacto del Excel
+                const nick = fila["Nick"] || fila["NICK"] || fila["nick"];
+                const avg = fila["%"] || "0%";
                 
-                Papa.parse(urlActividad, {
-                    download: true,
-                    complete: function (results) {
-                        const data = results.data;
-                        let lista = [];
-                        
-                        // Buscamos dinámicamente en qué columna está el "Nick" y el "%"
-                        // Suponiendo que los encabezados están en la fila 3 o 4 (índice 2 o 3)
-                        const headers = data[3]; // Ajusta este índice si los títulos están en otra fila
-                        const colNick = headers ? headers.indexOf("Nick") : 8; 
-                        const colAvg = headers ? headers.indexOf("%") : 6;
+                if (nick && nick.trim() !== "" && nick.toLowerCase() !== "nick") {
+                    const valNum = parseFloat(avg.toString().replace('%', '').replace(',', '.').trim()) || 0;
+                    lista.push({ nick: nick.trim(), avg: avg, valNum: valNum });
+                }
+            });
+            
+            // Ordenamos de mayor a menor porcentaje
+            lista.sort((a, b) => b.valNum - a.valNum);
 
-                        for (let i = 4; i < data.length; i++) {
-                            let nick = data[i][colNick];
-                            let avg = data[i][colAvg];
-                            
-                            if (nick && nick.trim() !== "") {
-                                // Si el porcentaje viene vacío, le ponemos 0% por defecto para que no desaparezca el nombre
-                                let displayAvg = (avg && avg.trim() !== "") ? avg : "0%";
-                                const valNum = parseFloat(displayAvg.replace('%', '').replace(',', '.').trim()) || 0;
-                                
-                                lista.push({ nick: nick.trim(), avg: displayAvg, valNum });
-                            }
-                        }
-                        
-                        lista.sort((a, b) => b.valNum - a.valNum);
-
-                        let html = '';
-                        lista.forEach((u, i) => {
-                            const color = u.valNum >= 50 ? 'pct-high' : 'pct-low';
-                            html += `
-                                <div class="ranking-row">
-                                    <div style="font-family:Cinzel,serif;color:#c5a059;width:40px;">#${i + 1}</div>
-                                    <div style="flex-grow:1;font-weight:bold;text-transform:uppercase;">${u.nick}</div>
-                                    <div class="${color}" style="padding:4px 12px;border-radius:4px;font-weight:900;min-width:85px;text-align:center;">${u.avg}</div>
-                                </div>`;
-                        });
-                        $('#listaActividad').html(html);
-                    }
-                });
-            }
+            let html = '';
+            lista.forEach((u, i) => {
+                const colorClass = u.valNum >= 50 ? 'pct-high' : 'pct-low';
+                html += `
+                    <div class="ranking-row" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; border-bottom: 1px solid rgba(197, 160, 89, 0.1);">
+                        <div style="font-family:Cinzel,serif;color:#c5a059;width:40px;">#${i + 1}</div>
+                        <div style="flex-grow:1;font-weight:bold;text-transform:uppercase;color:white;">${u.nick}</div>
+                        <div class="${colorClass}" style="padding:4px 12px;border-radius:4px;font-weight:900;min-width:85px;text-align:center;">${u.avg}</div>
+                    </div>`;
+            });
+            
+            $('#listaActividad').html(html || '<p style="text-align:center;color:gray;">No hay datos de actividad disponibles</p>');
+        }
+    });
+}
 
             // --- FUNCIÓN DEUDORES CORREGIDA ---
             function cargarDeudores() {
@@ -1869,4 +1865,3 @@ function cargarReparto() {
 </body>
 
 </html>
- 
