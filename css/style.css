@@ -831,8 +831,8 @@
         /* --- AVIÓN CON BRILLO DORADO --- */
         .avion-reapers {
             position: absolute;
-            top: 50%;
-            left: 50%;
+            top: 70%;
+            left: 56%;
             width: 1200px;
             height: 700px;
             background-image: url(https://i.imgur.com/2FebaJk.png);
